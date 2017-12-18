@@ -1,22 +1,90 @@
-from django.contrib.auth.models import User, Group
 from rest_framework import serializers
-from .models import Project
+from django.contrib.auth.models import User, Group
+from .models import *
 
 """
-Notice use of hyperlinked relations with HyperlinkedModelSerializer. You can also use primary key and various other relationships, but hyperlinking is good RESTful design.
+Override RelatedField with custom relational fields
 """
+class TitleField(serializers.RelatedField):
+
+    def to_representation(self, model):
+        return '{}'.format(model.title)
+
+    def to_internal_value(self, model):
+        try:
+            try:
+                return model.objects.get(title=model.title)
+            except KeyError:
+                raise serializers.ValidationError(
+                    'Title is a required field.'
+                )
+            except ValueError:
+                raise serializers.ValidationError(
+                    'Title must be a string.'
+                )
+        except Obj.DoesNotExist:
+            raise serializers.ValidationError(
+            'Obj does not exist.'
+            )
+
+class NameField(serializers.RelatedField):
+    def to_representation(self, model):
+        return '{} {}'.format(model.first_name, model.last_name)
+
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
+    teams = TitleField(many=True)
+    teams_led = TitleField(many=True)
+    managed_projects = TitleField(many=True)
+    assigned_projects = TitleField(many=True)
+    
     class Meta:
         model = User
-        fields = ('url', 'username', 'email', 'groups')
+        fields = (
+            'url',
+            'id',
+            'username',
+            'email',
+            'first_name',
+            'last_name',
+            'date_joined',
+            'last_login',
+            'teams',
+            'teams_led',
+            'assigned_projects',
+            'managed_projects',
+        )
 
-class GroupSerializer(serializers.HyperlinkedModelSerializer):
+class ProjectGroupSerializer(serializers.HyperlinkedModelSerializer):
+    projects = TitleField(many=True)
+
     class Meta:
-        model = Group
-        fields = ('url', 'name')
+        model = ProjectGroup
+        fields = ('__all__')
 
 class ProjectSerializer(serializers.HyperlinkedModelSerializer):
+    project_group = TitleField()
+    team = TitleField()
+    manager = NameField()
+    members = NameField(many=True)
+    
     class Meta:
         model = Project
-        fields = ('url', 'title', 'description')
+        fields = ('__all__')
+
+class TeamSerializer(serializers.HyperlinkedModelSerializer):
+    lead = NameField()
+    members = NameField(many=True)
+    projects = TitleField(many=True)
+
+    class Meta:
+        model = Team
+        fields = (
+            'url',
+            'id',
+            'title',
+            'description',
+            'lead',
+            'members',
+            'projects'
+        )

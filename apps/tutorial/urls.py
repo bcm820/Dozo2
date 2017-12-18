@@ -8,15 +8,14 @@ Using viewsets means we can automatically generate the URL conf for our API by s
 """
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
-router.register(r'groups', views.GroupViewSet)
+router.register(r'teams', views.TeamViewSet)
 router.register(r'projects', views.ProjectViewSet)
+router.register(r'project_groups', views.ProjectGroupViewSet)
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
     path('', include(router.urls)),
-    path('projects/', views.project_list),
-    path('projects/' + r'?P<pk>[0-9]+)/$', views.show_project),
     path('auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
 """
