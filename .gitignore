@@ -1,9 +1,0 @@
-/env
-/_prep
-/.vscode
-**/migrations
-*.pyc
-
-secret_key.py
-db.sqlite3
-settings.py
