@@ -8,8 +8,8 @@ const TeamSchema = new Schema({
     description: { type: String },
 
     // associations
-    lead: { type: Object, ref: 'User' },
-    members: [{ type: Object, ref: 'User' }]
+    lead: { type: Object, ref: 'Profile' },
+    members: [{ type: Object, ref: 'Profile' }]
     
 });
 

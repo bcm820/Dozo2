@@ -4,16 +4,16 @@ const Schema = mongoose.Schema;
 const Object = Schema.ObjectId;
 const bcrypt = require('bcrypt');
 const uniqueCheck = require('mongoose-unique-validator');
+const Profile = mongoose.Model('Profile'); // import to cascade delete
+
+/*
+    NOTE: Project-related data located in Profile schema
+*/ 
 
 const UserSchema = new Schema({
     
-    // associations
-    teams_led: [{ type: Object, ref: 'Team' }],
-    teams_joined: [{ type: Object, ref: 'Team' }],
-    projects_managed: [{ type: Object, ref: 'Project' }],
-    projects_joined: [{ type: Object, ref: 'Project' }],
-    tasks_assigned: [{ type: Object, ref: 'Task' }],
-    tasks_contributed: [{ type: Object, ref: 'Task' }],
+    profiles: [{ type: Object, ref: 'Profile' }],
+    isManager: { type: Boolean },
 
     email: {
         type: String, unique: [true], trim: true,
@@ -66,15 +66,18 @@ UserSchema.pre('save', function(next){
     });
 });
 
+// on remove, delete all profiles linked to user
+// note: all events and tasks will remain on DB
+UserSchema.pre('remove', function(next) {
+    Profile.remove({info: this._id}).exec();
+    next();
+});
+
 // check password prior to login
-UserSchema.methods.checkPW = function(pw){
-    const self = this;
-    return new Promise((resolve, reject) => {
-        bcrypt.compare(pw, this._pw)
-        .then(res => {
-            if(!res) reject();
-            else resolve();
-        })
+UserSchema.methods.checkPW = function(password, cb){
+    bcrypt.compare(password, this._pw, (err, good) => {
+        if(err){ return cb(err) }
+        else { cb(null, good); }
     });
 }
 

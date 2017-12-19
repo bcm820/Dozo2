@@ -14,8 +14,8 @@ const TaskSchema = new Schema({
     // associations
     category: { type: Object, ref: 'Category' },
     project: { type: Object, ref: 'Project' },
-    manager: { type: Object, ref: 'User' },
-    contributor: [{ type: Object, ref: 'User' }]
+    lead: { type: Object, ref: 'Profile' },
+    member: { type: Object, ref: 'Profile' }
     
 }, {timestamps: true});
 

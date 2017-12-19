@@ -1,26 +1,34 @@
 
-const main = require('../controllers/main');
-const user = require('../controllers/user');
+const auth = require('../controllers/auth');
+const profiles = require('../controllers/profiles');
 
 module.exports = (router) => {
 
-    router.use(main.logRoute);
-    router.param('id', main.routeParam);
-    router.param('email', main.routeParam);
+    router.use(auth.logRoute);
+    router.param('id', auth.routeParam);
+    router.param('email', auth.routeParam);
 
     // api/auth
     router.route('/auth')
-    .post(main.login)
-    .delete(main.logout)
-    .get('/:email', main.checkEmail)
-    .post('/register', main.register)
+    .get(auth.reqUser) // get user info
+    .post(auth.register)
+    .put(auth.login)
+    .delete(auth.logout);
 
-    // api/user
-    router.route('/user')
-    .all(main.authenticate)
-    .get(user.list)
-    .get('/:id', user.lookup)
-    .put('/:id', user.update)
-    .delete('/:id', user.update)
+    // api/auth/:email - to check for unique email
+    router.get('/auth/:email', auth.checkEmail)
+
+    // api/manager
+    router.route('/manager/profiles')
+    .all(auth.authenticateManager)
+    .get(profiles.list) // list limited user profiles
+
+    // api/manager/:id
+    router.route('/manager/profiles/:id')
+    .all(auth.authenticateManager)
+    .get(profiles.lookup) // lookup full user profile
+    .post(profiles.assign) // assign new profile to user
+    .put(profiles.addNote) // add note to user profile
+    .delete(profiles.remove) // delete profile (not user)
 
 };
