@@ -4,27 +4,48 @@ const Schema = mongoose.Schema;
 const Object = Schema.ObjectId;
 
 /*
-    Depending on profile, relationship to teams, projects, tasks change
-    - Team Lead: Teams led, projects led, tasks assigned
-    - Member: Teams joined, projects contributed to, tasks assigned to
+    Depending on profile, relationship projects and tasks change
+    - Lead: Projects led, tasks assigned
+    - Member: Projects contributed to, tasks assigned to
 */ 
 
 const ProfileSchema = new Schema({
 
     type: { 
         type: String, required: [true],
-        enum: ['Lead', 'Member']
+        enum: ['lead', 'member']
     },
 
-    info: { type: Object, ref: 'User' },
     note: { type: String },
 
-    teams: [{ type: Object, ref: 'Team' }],
-    projects: [{ type: Object, ref: 'Project' }],
-    tasks: [{ type: Object, ref: 'Task' }],
+    info: { 
+        type: Object, ref: 'User',
+        $through: 'profiles',
+        $cascadeDelete: true
+        },
 
-    events: [{ type: Object, ref: 'Event' }],
+    projects: [{
+        type: Object, ref: 'Project',
+        $through: 'members',
+        $cascadeDelete: true
+    }],
+
+    tasks: [{
+        type: Object, ref: 'Task',
+        $through: 'member',
+        $cascadeDelete: true
+    }],
+
+    events: [{
+        type: Object, ref: 'Event',
+        $through: 'profile',
+        $cascadeDelete: true
+    }],
     
-}, {timestamps: true});
+});
 
 mongoose.model('Profile', ProfileSchema);
+
+// import for cascading relations
+const cascade = require('cascading-relations');
+ProfileSchema.plugin(cascade);

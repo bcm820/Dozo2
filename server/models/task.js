@@ -11,12 +11,29 @@ const TaskSchema = new Schema({
     start_date: { type: Date },
     end_date: { type: Date },
 
-    // associations
-    category: { type: Object, ref: 'Category' },
-    project: { type: Object, ref: 'Project' },
-    lead: { type: Object, ref: 'Profile' },
-    member: { type: Object, ref: 'Profile' }
+    // associations\
+    project: {
+        type: Object, ref: 'Project',
+        $through: 'tasks',
+        $cascadeDelete: true
+    },
     
-}, {timestamps: true});
+    member: {
+        type: Object, ref: 'Profile',
+        $through: 'tasks',
+        $cascadeDelete: true
+    },
+
+    events: [{
+        type: Object, ref: 'Event',
+        $through: 'task',
+        $cascadeDelete: true
+    }],
+    
+});
 
 mongoose.model('Task', TaskSchema);
+
+// import for cascading relations
+const cascade = require('cascading-relations');
+TaskSchema.plugin(cascade);

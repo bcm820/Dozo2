@@ -3,6 +3,10 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const Object = Schema.ObjectId;
 
+/*
+    Searchable tags for projects?
+*/
+
 const CategorySchema = new Schema({
     title: { type: String, required: [true] },
     description: { type: String },

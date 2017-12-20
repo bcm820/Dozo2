@@ -11,7 +11,9 @@ require('./server/config/mongoose');
 
 // specify routers and routes
 const router = express.Router();
-require('./server/config/routes.js')(router);
+require('./server/routes/auths.js')(router);
+require('./server/routes/user.js')(router);
+require('./server/routes/manager.js')(router);
 app.use('/api', router);
 
 // redirect all URL errors to Angular index

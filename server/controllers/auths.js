@@ -25,9 +25,9 @@ module.exports = {
 
     // primary route to get user object
     // requires user info in session
-    reqUser(req, res){
+    getUser(req, res){
         if(req.session.uid){
-            User.findById(req.session.uid)
+            User.findById(req.session.uid, {_pw:0, __v:0})
             .then(user => res.json(user));
         }
         else res.json(false);
@@ -92,7 +92,7 @@ module.exports = {
     // sends array of errors if invalid
     register(req, res){
         const user = new User(req.body);
-        user.save()
+        user.cascadeSave()
         .then(user => res.json(true))
         .catch(err => res.json(listErrors(err)));
     }

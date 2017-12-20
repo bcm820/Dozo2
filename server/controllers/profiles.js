@@ -12,25 +12,42 @@ function listErrors(err){
 }
 
 module.exports = {
+
+    /*
+        - Build out events
+    */
     
-    // manager to view all users by profile
+    // view all users
     list(req, res){
-        User.find({})
-        // .populate('profiles')
+        User.find({}, {_pw:0, __v:0}).sort({last:asc})
+        .populate('profiles')
         .then(list => res.json(list));
     },
 
+    // lookup a profile
+    lookupFull(req, res){
+        User.findById(req.param, {_pw:0, __v:0})
+        .populate('profiles')
+        .then(user => res.json(user))
+    },
+    
+    // limited user lookup
+    lookup(req, res){
+        User.findById(req.param, {_pw:0, __v:0})
+        .then(user => res.json(user))
+    },
+    
     // manager to assign lead/member profile to user
     assign(req, res){
         User.findById(req.param, (err, user) => {
         // on front-end, determine type (lead/member)
             let profile = new Profile(req.body);
             profile.info = user._id;
-            profile.save((err) => {
+            profile.cascadeSave((err) => {
                 if(err) res.json(listErrors(err));
                 else {
                     user.profiles.push(profile);
-                    user.save((err) => {
+                    user.cascadeSave((err) => {
                         return res.json(true);
                     });
                 }
@@ -38,70 +55,20 @@ module.exports = {
         });
     },
 
-    // lookup 
-    lookup(req, res){
-        User.findById(req.param)
-        // .populate('profiles')
-        .then(user => res.json(user))
-    },
-
-    updaassignte(req, res){},
-
-    delete(req, res){},
-
-    // POST: api/questions/:id
-    answer(req, res){
-        Question.findById(req.id, (err, question) => {
-            let answer = new Answer(req.body);
-            answer._question = question._id;
-            answer.save((err) => {
-                if(err) { res.json(listErrs(err)); }
-                else {
-                    question.answers.push(answer);
-                    question.count += 1;
-                    question.save((err) => {
-                        return res.json('Answer added');
-                    });
-                }
-            });
-        });
-    },
-
-    // GET: api/questions
-    // list(req, res){
-    //     Question.find({}).sort({count:-1})
-    //     .populate('answers').exec()
-    //     .then(list => res.json(list))
-    //     .catch(err => {
-    //         res.status(404).json('none found');
-    //         console.log(err);
-    //     });
-    // },
-
-    // // POST: api/questions
-    // create(req, res){
-    //     const question = new Question(req.body);
-    //     question.save()
-    //     .then(question => res.json(question))
-    //     .catch(err => res.json(listErrs(err)));
-    // },
-
-    // POST: api/questions/a/:id
-    like(req, res){
-        Answer.findById(req.id)
-        .then(answer => {
-            answer.likes += 1;
-            answer.save()
-            .then(answer => {
-                Question.findById(answer._question)
-                .populate('answers').exec()
-                .then(question => res.json(question));
-            })
+    addNote(req, res){
+        Profile.findById(req.param)
+        .then(profile => {
+            // on front-end, store in {note} key
+            profile.note = req.body.note;
+            profile.cascadeSave()
+            .then(profile => res.json(profile))
+            .catch(err => res.json(listErrors(err)));
         })
-        .catch(err => {
-            res.status(500).json('DB error');
-            console.log(err);
-        });
-    }
+    },
 
+    remove(req, res){
+        Profile.findByIdAndRemove(req.param).exec();
+        res.json(true);
+    }
+    
 }
