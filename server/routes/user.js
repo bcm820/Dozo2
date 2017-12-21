@@ -15,12 +15,9 @@ module.exports = (router) => {
     .post(account.updateUser)
     .delete(account.unregister)
     
-    // api/profiles/...:/id
+    // api/.../:id
     router.get('/users/:id', profiles.lookupUser)
     router.get('/profiles/:id', profiles.lookupProfile)
-
-    // api/projects/:id
-    router.route('/projects/:id')
-    .get(projects.lookup)
+    router.get('/projects/:id', projects.lookup)
 
 };

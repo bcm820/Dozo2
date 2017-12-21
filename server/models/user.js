@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const Object = Schema.ObjectId;
 const bcrypt = require('bcrypt');
+const shortid = require('shortid');
 
 /*
     NOTE: Project-related data located in Profile schema
@@ -10,18 +11,18 @@ const bcrypt = require('bcrypt');
 
 const UserSchema = new Schema({
     
+    id: { type: String, default: shortid.generate },
+    
     member_profile: {
         type: Object, ref: 'Profile',
-        $through: 'member_info', // defines path via _related in .populate()
-        $cascadeDelete: true,
-        default: null // deletes related sub-docs in Profile
+        $through: 'info', // defines path via _related in .populate()
+        $cascadeDelete: true // deletes related sub-docs in Profile
     },
 
     lead_profile: {
         type: Object, ref: 'Profile',
-        $through: 'lead_info',
-        $cascadeDelete: true,
-        default: null
+        $through: 'info',
+        $cascadeDelete: true
     },
 
     isManager: { type: Boolean },

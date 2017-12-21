@@ -2,8 +2,12 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const Object = Schema.ObjectId;
+const shortid = require('shortid');
 
 const TaskSchema = new Schema({
+    
+    id: { type: String, default: shortid.generate },
+    
     title: { type: String, required: [true] },
     description: { type: String },
     targetDuration: { type: Number, required:[true] }, // in days

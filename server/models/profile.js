@@ -2,6 +2,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const Object = Schema.ObjectId;
+const shortid = require('shortid');
 
 /*
     Depending on profile, relationship projects and tasks change
@@ -11,20 +12,24 @@ const Object = Schema.ObjectId;
 
 const ProfileSchema = new Schema({
 
+    id: { type: String, default: shortid.generate },
+    
     type: { 
         type: String, required: [true],
         enum: ['lead', 'member']
     },
 
+    name: { type: String },
+
     notes: { type: String },
 
-    member_info: { 
+    account: { 
         type: Object, ref: 'User',
         $through: 'member_profile',
         $cascadeDelete: true
     },
 
-    lead_info: { 
+    account: { 
         type: Object, ref: 'User',
         $through: 'lead_profile',
         $cascadeDelete: true

@@ -41,12 +41,15 @@ module.exports = {
         if(req.session.uid){
             User.findById(req.session.uid)
             .then(user => {
-                if(user.isManager) next();
-                else {
-                    console.log('AUTH: Could not authenticate manager')
-                    res.json(false)
+                if(user !== null){
+                    if(user.isManager) next();
+                    else {
+                        console.log('AUTH: Could not authenticate manager')
+                        res.json(false)
+                    }
                 }
-            });
+            })
+            .catch(err => res.json(['Access forbidden.']))
         }
     },
 

@@ -13,6 +13,7 @@ module.exports = (router) => {
     router.route('/manager/users/:id')
     .get(profiles.lookupFull) // lookup full user info
     .post(profiles.assign) // assign new profile to user
+    .put(profiles.promote) // promote user to manager
 
     // api/manager/profiles...
     router.get('/manager/profiles/leads', profiles.listLeads)
@@ -23,9 +24,14 @@ module.exports = (router) => {
     .post(profiles.addNotes) // add notes to user profile
     .delete(profiles.remove) // delete profile (not user)
 
-
 /*
-    ------
+    Project:
+    - Create project with detailed info
+    - Add notes viewable by leads only
+    - Assign lead to projects
+    - Assign members to projects
+    - Update project status
+    - Prioritize tasks
 */
 
 

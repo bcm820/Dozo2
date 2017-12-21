@@ -2,14 +2,29 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const Object = Schema.ObjectId;
+const shortid = require('shortid');
+
+/*
+    At some point, sprint larger project into sprints
+*/
 
 const ProjectSchema = new Schema({
+    
+    id: { type: String, default: shortid.generate },
+    
     title: { type: String, required: [true] },
     description: { type: String },
-    targetDuration: { type: Number, required:[true] }, // in days
-    actualDuration: { type: Number, required:[true] },
-    start_date: { type: Date },
+    features: [{ type: String }], // backlog
+    notes: { type: String }, // for leads only
+
+    start_date: { type: Date, required:[true] },
+    target_date: { type: Date, required:[true] },
     end_date: { type: Date },
+
+    stage: { 
+        type: String,
+        enum: ['plan', 'sprint', 'review', 'done']
+    },
 
     // associations
     tasks: [{
@@ -17,7 +32,7 @@ const ProjectSchema = new Schema({
         $through: 'project',
         $cascadeDelete: true
     }],
-
+    
     members: [{
         type: Object, ref: 'Profile',
         $through: 'projects',

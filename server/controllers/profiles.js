@@ -13,6 +13,26 @@ function listErrors(err){
 
 module.exports = {
     
+    /*
+        User Routes
+    */
+    
+    // limited user lookup
+    lookupUser(req, res){
+        User.findById(req.param, {_pw:0, __v:0})
+        .then(user => res.json(user))
+    },
+
+    // limited profile lookup
+    lookupProfile(req, res){
+        Profile.findById(req.param, {notes:0})
+        .then(profile => res.json(profile))
+    },
+    
+    /*
+        Manager Routes
+    */
+    
     // view all users
     listUsers(req, res){
         User.find({}, {_pw:0, __v:0}).sort({last:1})
@@ -30,18 +50,6 @@ module.exports = {
         Profile.find({type:'member'})
         .then(list => res.json(list));
     },
-
-    // limited user lookup
-    lookupUser(req, res){
-        User.findById(req.param, {_pw:0, __v:0})
-        .then(user => res.json(user))
-    },
-
-    // limited profile lookup
-    lookupProfile(req, res){
-        Profile.findById(req.param)
-        .then(profile => res.json(profile))
-    },
     
     // full user lookup
     lookupFull(req, res){
@@ -51,32 +59,42 @@ module.exports = {
         .then(user => res.json(user))
     },
     
-    // manager to assign lead/member profile to user
+    // assign lead/member profile to user
     // on front-end, only give option if not yet member/lead
     assign(req, res){
         User.findById(req.param, (err, user) => {
         // on front-end, determine type (lead/member)
             let profile = new Profile(req.body);
-            let infoKey = `${profile.type}_info`;
             let profileKey = `${profile.type}_profile`
             // use bracket notation to set proper key/value pairs
-            profile[infoKey] = user._id;
+            profile.account = user._id;
+            profile.name = `${user.name}`
             profile.cascadeSave()
-            .then(result => {
+            .then(profile => {
                 user[profileKey] = profile._id;
                 user.cascadeSave()
                 .then(user => {
                     console.log(`${user.name} assigned ${profile.type} profile`)
                     res.json(true);
                 });
-            });
+            })
+            .catch(err => res.json(listErrors(err)));
+        });
+    },
+
+    // promote user to manager account
+    promote(req, res){
+        User.findById(req.param)
+        .then(user => {
+            user.isManager = true;
+            user.cascadeSave()
+            .then(user => res.json(true));
         });
     },
 
     addNotes(req, res){
         Profile.findById(req.param)
         .then(profile => {
-            // on front-end, store in {notes} key
             profile.notes = req.body.notes;
             profile.cascadeSave()
             .then(profile => res.json(profile))
@@ -86,9 +104,17 @@ module.exports = {
 
     remove(req, res){
         Profile.findByIdAndRemove(req.param)
-        .then(result => {
-            console.log(`PROFILES: Profile deleted`)
-            res.json(true);
+        .then(profile => {
+            let profileKey = `${profile.type}_profile`
+            User.findById(profile.account)
+            .then(user => {
+                user[profileKey] = undefined;
+                user.cascadeSave()
+                .then(user => {
+                    console.log(`PROFILES: ${user.first}'s profile deleted`)
+                    res.json(true);
+                })
+            })
         })
     }
     
