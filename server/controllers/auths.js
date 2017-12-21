@@ -1,5 +1,6 @@
 
 const User = require('mongoose').model('User');
+const bcrypt = require('bcrypt');
 
 function listErrors(err){
     let list = [];
@@ -22,23 +23,16 @@ module.exports = {
         req.param = param;
         next();
     },
-
-    // primary route to get user object
-    // requires user info in session
-    getUser(req, res){
-        if(req.session.uid){
-            User.findById(req.session.uid, {_pw:0, __v:0})
-            .then(user => res.json(user));
-        }
-        else res.json(false);
-    },
     
     // checks session prior to accessing info
     // returns false if user ID not in session
     // false will update user subject in Angular
     authenticate(req, res, next){
         if(req.session.uid) next();
-        else res.json(false);
+        else {
+            console.log('AUTH: Could not authenticate user')
+            res.json(false);
+        }
     },
 
     // checks if manager before allowing access
@@ -48,7 +42,10 @@ module.exports = {
             User.findById(req.session.uid)
             .then(user => {
                 if(user.isManager) next();
-                else res.json(false)
+                else {
+                    console.log('AUTH: Could not authenticate manager')
+                    res.json(false)
+                }
             });
         }
     },
@@ -58,15 +55,22 @@ module.exports = {
         User.findOne({email:req.body.email})
         .then(user => {
             // if 404, no user found
-            if(user === null){ res.status(404).json(false); }
+            if(user === null){
+                console.log('AUTH: Could not verify user')
+                res.status(404).json(false);
+            }
             else {
                 user.checkPW(req.body._pw, (err, good) => {
                     if(good){
                         req.session.uid = user._id;
+                        console.log(`AUTH: ${user.name} logged in`)
                         res.json(true);
                     }
                     // if 403, password invalid
-                    else { res.status(403).json(false) }
+                    else {
+                        console.log('AUTH: Could not verify password')
+                        res.status(403).json(false)
+                    }
                 })
             }
         })
@@ -76,6 +80,7 @@ module.exports = {
     // returns false to update user subject
     logout(req, res){
         req.session.uid = undefined;
+        console.log(`AUTH: User has logged out`)
         res.json(false);
     },
 
@@ -92,9 +97,30 @@ module.exports = {
     // sends array of errors if invalid
     register(req, res){
         const user = new User(req.body);
-        user.cascadeSave()
-        .then(user => res.json(true))
-        .catch(err => res.json(listErrors(err)));
+        // if email is not unique, send error
+        User.count({email:req.body.email})
+        .then(count => {
+            if(count === 1) res.json(['Email address already in use.'])
+            else {
+                // if no manager yet, make first user a manager
+                User.count({isManager:true})
+                .then(count => {
+                    if(count === 0) user.isManager = true;
+                });
+                // hash password and discard pwconf
+                bcrypt.hash(user._pw, 10, (err, hashedPass) => {
+                    user._pw = hashedPass;
+                    user._pwconf = undefined;
+                    // finally, save user
+                    user.cascadeSave()
+                    .then(user => {
+                        console.log(`AUTH: ${user.name} registered`)
+                        res.json(true)
+                    })
+                    .catch(err => res.json(listErrors(err)));
+                });
+            }
+        });
     }
 
 }

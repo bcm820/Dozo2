@@ -6,7 +6,6 @@ const projects = require('../controllers/projects');
 
 module.exports = (router) => {
 
-    router.use(auth.logRoute);
     router.use(auth.authenticate);
     router.param('id', auth.routeParam);
 
@@ -16,16 +15,12 @@ module.exports = (router) => {
     .post(account.updateUser)
     .delete(account.unregister)
     
-    // api/profiles/:id
-    router.route('/profiles/:id')
-    .get(profiles.lookup)
-    // lookup limited profile
-    // for user dashboard
+    // api/profiles/...:/id
+    router.get('/users/:id', profiles.lookupUser)
+    router.get('/profiles/:id', profiles.lookupProfile)
 
     // api/projects/:id
     router.route('/projects/:id')
     .get(projects.lookup)
-    // lookup project info
-    // for user to view their project
 
 };

@@ -11,7 +11,7 @@ require('./server/config/mongoose');
 
 // specify routers and routes
 const router = express.Router();
-require('./server/routes/auths.js')(router);
+require('./server/routes/auth.js')(router);
 require('./server/routes/user.js')(router);
 require('./server/routes/manager.js')(router);
 app.use('/api', router);

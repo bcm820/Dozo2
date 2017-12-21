@@ -16,13 +16,19 @@ const ProfileSchema = new Schema({
         enum: ['lead', 'member']
     },
 
-    note: { type: String },
+    notes: { type: String },
 
-    info: { 
+    member_info: { 
         type: Object, ref: 'User',
-        $through: 'profiles',
+        $through: 'member_profile',
         $cascadeDelete: true
-        },
+    },
+
+    lead_info: { 
+        type: Object, ref: 'User',
+        $through: 'lead_profile',
+        $cascadeDelete: true
+    },
 
     projects: [{
         type: Object, ref: 'Project',
@@ -36,16 +42,16 @@ const ProfileSchema = new Schema({
         $cascadeDelete: true
     }],
 
-    events: [{
-        type: Object, ref: 'Event',
-        $through: 'profile',
-        $cascadeDelete: true
-    }],
+    // events: [{
+    //     type: Object, ref: 'Event',
+    //     $through: 'profile',
+    //     $cascadeDelete: true
+    // }],
     
-});
-
-mongoose.model('Profile', ProfileSchema);
+}, {usePushEach:true});
 
 // import for cascading relations
 const cascade = require('cascading-relations');
 ProfileSchema.plugin(cascade);
+
+mongoose.model('Profile', ProfileSchema);

@@ -24,16 +24,16 @@ const ProjectSchema = new Schema({
         $cascadeDelete: true
     }],
     
-    events: [{
-        type: Object, ref: 'Event',
-        $through: 'project',
-        $cascadeDelete: true
-    }],
+    // events: [{
+    //     type: Object, ref: 'Event',
+    //     $through: 'project',
+    //     $cascadeDelete: true
+    // }],
     
-});
-
-mongoose.model('Project', ProjectSchema);
+}, {usePushEach:true});
 
 // import for cascading relations
 const cascade = require('cascading-relations');
 ProjectSchema.plugin(cascade);
+
+mongoose.model('Project', ProjectSchema);

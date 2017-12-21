@@ -10,7 +10,6 @@ module.exports = (router) => {
     router.route('/auth')
     .post(auth.register)
     .put(auth.login)
-    .get(auth.getUser) // get basic user via UID
     .delete(auth.logout);
 
     // api/auth/:email

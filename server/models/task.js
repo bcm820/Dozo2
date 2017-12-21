@@ -24,16 +24,16 @@ const TaskSchema = new Schema({
         $cascadeDelete: true
     },
 
-    events: [{
-        type: Object, ref: 'Event',
-        $through: 'task',
-        $cascadeDelete: true
-    }],
+    // events: [{
+    //     type: Object, ref: 'Event',
+    //     $through: 'task',
+    //     $cascadeDelete: true
+    // }],
     
-});
-
-mongoose.model('Task', TaskSchema);
+}, {usePushEach:true});
 
 // import for cascading relations
 const cascade = require('cascading-relations');
 TaskSchema.plugin(cascade);
+
+mongoose.model('Task', TaskSchema);
