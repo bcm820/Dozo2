@@ -17,12 +17,6 @@ module.exports = {
         console.log(req.method, req.url);
         next();
     },
-
-    // stores URL param in req.param key
-    routeParam(req, res, next, param){
-        req.param = param;
-        next();
-    },
     
     // checks session prior to accessing info
     // returns false if user ID not in session
@@ -90,7 +84,7 @@ module.exports = {
     // checks if email unique
     // returns false if email found
     checkEmail(req, res){
-        User.count({email:req.param})
+        User.count({email:req.params.email})
         .then(count => {
             if(count === 1) res.json(false)
             else res.json(true)
@@ -115,7 +109,7 @@ module.exports = {
                     user._pw = hashedPass;
                     user._pwconf = undefined;
                     // finally, save user
-                    user.cascadeSave()
+                    user.save()
                     .then(user => {
                         console.log(`AUTH: ${user.name} registered`)
                         res.json(true)

@@ -14,16 +14,20 @@ const ProjectSchema = new Schema({
     
     title: { type: String, required: [true] },
     description: { type: String },
-    features: [{ type: String }], // backlog
-    notes: { type: String }, // for leads only
 
-    start_date: { type: Date, required:[true] },
-    target_date: { type: Date, required:[true] },
+    features: [{ type: String }],
+    notes: [{ type: String }],
+    // managers to add, but only for leads to see
+    // *ngIf check on profile.type
+
+    start_date: { type: Date, default: new Date() },
+    target_date: { type: Date },
     end_date: { type: Date },
 
-    stage: { 
+    status: { 
         type: String,
-        enum: ['plan', 'sprint', 'review', 'done']
+        enum: ['1', '2', '3', '4'],
+        default: '1'
     },
 
     // associations
@@ -32,6 +36,8 @@ const ProjectSchema = new Schema({
         $through: 'project',
         $cascadeDelete: true
     }],
+    
+    manager: { type: Object, ref: 'User' },
     
     members: [{
         type: Object, ref: 'Profile',

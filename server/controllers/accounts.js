@@ -45,7 +45,7 @@ module.exports = {
                 user._pw = hashedPass;
                 user._pwconf = undefined;
                 // save new user info
-                user.cascadeSave()
+                user.save()
                 .then(user => {
                     console.log(`AUTH: ${user.name}'s account updated`)
                     res.json(true)

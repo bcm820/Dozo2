@@ -8,15 +8,30 @@ const TaskSchema = new Schema({
     
     id: { type: String, default: shortid.generate },
     
-    title: { type: String, required: [true] },
+    title: { type: String, required:[true] },
     description: { type: String },
-    targetDuration: { type: Number, required:[true] }, // in days
-    actualDuration: { type: Number, required:[true] },
-    start_date: { type: Date },
+
+    notes: [{ type: String }],
+    // two-way channel between lead and member
+
+    start_date: { type: Date, default: new Date() },
+    target_date: { type: Date },
     end_date: { type: Date },
 
-    // associations\
+    priority: {
+        type: String,
+        enum: ['1', '2', '3', '4', '5']
+    },
+
+    status: {
+        type: String,
+        enum: ['1','2','3','4'],
+        default: '1'
+    },
+
+    // associations
     project: {
+        required:[true],
         type: Object, ref: 'Project',
         $through: 'tasks',
         $cascadeDelete: true
