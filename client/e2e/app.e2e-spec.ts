@@ -1,6 +1,6 @@
 import { AppPage } from './app.po';
 
-describe('belt App', () => {
+describe('dozo2 App', () => {
   let page: AppPage;
 
   beforeEach(() => {

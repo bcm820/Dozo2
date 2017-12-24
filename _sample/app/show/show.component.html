@@ -1,0 +1,26 @@
+
+<nav>
+    <button class="btn btn-default" (click)="home()">Home</button>
+    <button class="btn btn-default" (click)="answer(question._id)">Answer This</button>
+</nav>
+
+<h2>{{question.text}}</h2>
+<h4>{{question.support}}</h4>
+
+<span *ngIf="question.answers.length > 0">
+<span *ngFor="let a of question.answers">
+<div class=row>
+<div class=col-sm-6>
+    {{a.author}}<br>
+    {{a.text}}<br>
+    {{a.support}}
+</div>
+<div class=col-sm-3>
+    {{a.likes}} likes
+</div>
+<div class=col-sm-3>
+    <button class="btn btn-default" (click)=like(a._id)>Like!</button>
+</div>
+</div>
+</span>
+</span>

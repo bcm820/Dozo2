@@ -1,0 +1,53 @@
+
+<span *ngIf="!user">
+
+<h2>Q&A</h2>
+<form (submit)="login()" #form="ngForm" class=form-horizontal>
+
+  <div class=form-group>
+    <div class="col-sm-4 text-right"><label class="control-label">Name:</label></div>
+    <div class=col-sm-4>
+      <input class=form-control type=text name=name required
+      [(ngModel)]='guest.name' #name='ngModel'/>
+    </div>
+    <div class="col-sm-4 form-control-static">
+      <span *ngIf="name.errors && name.dirty">
+        <span class="error glyphicon glyphicon-remove" [hidden]="!name.errors"></span>
+        <span class=error [hidden]="!name.errors.required">Name required</span>
+      </span>
+      <span *ngIf="name.valid" class="glyphicon glyphicon-ok valid"></span>
+    </div>
+  </div>
+
+  <div class=form-group>
+    <div class=col-sm-4></div>
+    <div class=col-sm-4>
+      <input *ngIf="!form.valid" type=submit value=Enter class="btn btn-block btn-danger disabled" [disabled]="!form.valid">
+      <input *ngIf="form.valid" type=submit value=Enter class="btn btn-block btn-primary">
+    </div>
+  </div>
+
+  <div *ngIf="flashes" class="form-group text-center">
+    <div class=col-sm-3></div>
+    <div class=col-sm-6>
+      <div class="alert alert-danger">
+        <span *ngFor="let flash of flashes">{{flash}}<br></span>
+      </div>
+    </div>
+    <div class=col-sm-3></div>
+  </div>
+
+</form>
+
+</span>
+
+<span *ngIf="user">
+<div class=row>
+  <div class=text-right>
+    <a href=# (click)=logout()>Logout</a>
+  </div>
+  <div class=col-sm-12>
+    <router-outlet></router-outlet>
+  </div>
+</div>
+</span>

@@ -1,0 +1,31 @@
+
+<mat-toolbar>
+  <div class=col-1></div>
+  <div class=col-1>Dozo</div>
+  <div class=col-7></div>
+  <div class="col-2">
+    <button mat-raised-button
+      [routerLink]="[{outlets:{a:['register']}}]">Register</button>
+    <button mat-raised-button
+      [routerLink]="['']">Login</button>
+    <!-- For switching between manager and member view -->
+    <span *ngIf=user>
+    <button *ngIf=user.isManager mat-icon-button [mat-menu-trigger-for]="menu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    </span>
+  </div>
+  <div class=col-1></div>
+</mat-toolbar>
+
+<!-- Menu to switch views -->
+<mat-menu x-position="before" #menu="matMenu">
+  <button mat-menu-item>Manager</button>
+  <button mat-menu-item>Member</button>
+</mat-menu>
+
+<router-outlet *ngIf=!user name=a></router-outlet>
+<span *ngIf=user>
+  <router-outlet *ngIf=user.isManager name=b></router-outlet>
+  <router-outlet *ngIf="!user.isManager" name=c></router-outlet>
+</span>

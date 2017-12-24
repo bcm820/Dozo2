@@ -1,0 +1,65 @@
+
+<div class=row>&nbsp;</div>
+<div class=col-4>&nbsp;</div>
+<mat-card class=col-4>
+  <h3 align=center>Create An Account</h3>
+  <form (submit)="register(thisForm)" #thisForm=ngForm>
+
+    <mat-form-field>
+      <input matInput placeholder="First Name"
+        name=first [(ngModel)]='user.first' #first='ngModel'
+        required minlength=3>
+      <mat-hint align=end>({{first.value?.length}})</mat-hint>
+        <mat-error align=right *ngIf=first.errors [hidden]=!first.errors.minlength>
+          Must be 3 characters minimum.
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Last Name"
+        name=last [(ngModel)]='user.last' #last='ngModel'
+        required minlength=3>
+      <mat-hint align=end>({{last.value?.length}})</mat-hint>
+        <mat-error align=right *ngIf=last.errors [hidden]=!last.errors.minlength>
+          Must be 3 characters minimum.
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Email Address"
+        name=email required [formControl]=email>
+      <mat-hint align=end>({{email.value.length}})</mat-hint>
+        <mat-error align=right *ngIf=email.invalid>{{getEmailError()}}</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input [type]="hidePW ? 'password' : 'text'"
+        matInput placeholder="Password"
+        name=_pw [(ngModel)]='user._pw' #_pw='ngModel'
+        required minlength=8>
+      <mat-icon matSuffix (click)="hidePW = !hidePW">
+        {{hidePW ? 'visibility' : 'visibility_off'}}
+      </mat-icon>
+      <mat-hint align=end>({{_pw.value?.length}})</mat-hint>
+        <mat-error align=right *ngIf=_pw.errors [hidden]=!_pw.errors.minlength>
+          Must be 8 characters minimum.
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input [type]="hidePWC ? 'password' : 'text'"
+        matInput placeholder="Password Confirmation"
+        name=_pwconf [(ngModel)]='user._pwconf' #_pwconf='ngModel'
+        required pattern={{user._pw}}>
+      <mat-icon matSuffix (click)="hidePWC = !hidePWC">
+        {{hidePWC ? 'visibility' : 'visibility_off'}}
+      </mat-icon>
+      <mat-hint align=end>({{_pwconf.value?.length}})</mat-hint>
+        <mat-error align=right *ngIf=_pwconf.errors [hidden]=!_pwconf.errors.pattern>
+          Must be exact match with password.
+        </mat-error>
+    </mat-form-field>
+
+  </form>
+</mat-card>
+<div class=col-4>&nbsp;</div>
