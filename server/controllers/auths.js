@@ -2,12 +2,11 @@
 const User = require('mongoose').model('User');
 const bcrypt = require('bcrypt');
 
-function listErrors(err){
-    let list = [];
-    for(let x in err.errors){
-        list.push(err.errors[x].message);
+function sendMsg(type, msg){
+    return {
+        type: type,
+        msg: msg
     }
-    return list.reverse();
 }
 
 module.exports = {
@@ -24,7 +23,6 @@ module.exports = {
     authenticate(req, res, next){
         if(req.session.uid) next();
         else {
-            console.log('AUTH: Could not authenticate user')
             res.json(false);
         }
     },
@@ -38,12 +36,11 @@ module.exports = {
                 if(user !== null){
                     if(user.isManager) next();
                     else {
-                        console.log('AUTH: Could not authenticate manager')
                         res.json(false)
                     }
                 }
             })
-            .catch(err => res.json(['Access forbidden.']))
+            .catch(err => sendMsg(false, 'Error: Access forbidden.'));
         }
     },
 
@@ -53,20 +50,16 @@ module.exports = {
         .then(user => {
             // if 404, no user found
             if(user === null){
-                console.log('AUTH: Could not verify user')
-                res.status(404).json(false);
+                res.json(sendMsg(false, 'Error: No account found for this email address.'));
             }
             else {
                 user.checkPW(req.body._pw, (err, good) => {
                     if(good){
                         req.session.uid = user._id;
-                        console.log(`AUTH: ${user.name} logged in`)
-                        res.json(true);
+                        res.json(sendMsg(true, `Welcome, ${user.first}! Logging you into Dozo...`));
                     }
-                    // if 403, password invalid
                     else {
-                        console.log('AUTH: Could not verify password')
-                        res.status(403).json(false)
+                        res.json(sendMsg(false, 'Error: You entered an invalid password.'));
                     }
                 })
             }
@@ -77,8 +70,7 @@ module.exports = {
     // returns false to update user subject
     logout(req, res){
         req.session.uid = undefined;
-        console.log(`AUTH: User has logged out`)
-        res.json(false);
+        res.json(sendMsg(true, `Successful log out! See you again next time!`));
     },
 
     // checks if email unique
@@ -97,7 +89,7 @@ module.exports = {
         // if email is not unique, send error
         User.count({email:req.body.email})
         .then(count => {
-            if(count === 1) res.json(['Email address already in use.'])
+            if(count === 1) res.json(sendMsg(false, 'Error: Email address already in use.'));
             else {
                 // if no manager yet, make first user a manager
                 User.count({isManager:true})
@@ -111,10 +103,10 @@ module.exports = {
                     // finally, save user
                     user.save()
                     .then(user => {
-                        console.log(`AUTH: ${user.name} registered`)
-                        res.json(true)
+                        req.session.uid = user._id;
+                        res.json(sendMsg(true, `Welcome, ${user.first}! Logging you into Dozo...`));
                     })
-                    .catch(err => res.json(listErrors(err)));
+                    .catch(err => res.json(sendMsg(false, 'Error: One or more fields invalid.')));
                 });
             }
         });

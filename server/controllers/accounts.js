@@ -2,13 +2,13 @@
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
 const Profile = mongoose.model('Profile');
+const bcrypt = require('bcrypt');
 
-function listErrors(err){
-    let list = [];
-    for(let x in err.errors){
-        list.push(err.errors[x].message);
+function sendMsg(type, msg){
+    return {
+        type: type,
+        msg: msg
     }
-    return list.reverse();
 }
 
 module.exports = {
@@ -29,13 +29,13 @@ module.exports = {
                 User.count({email:req.body.email})
                 .then(count => {
                     if(count === 1)
-                        res.json(['Email address already in use.'])
+                        res.json(sendMsg(false, 'Error: Email address already in use.'));
                 })
             }
             // if 'isManager' is set, remove from user obj
-            if(user.hasOwnProperty('isManager')){
-                user.isManager = undefined;
-            }
+            // if(user.hasOwnProperty('isManager')){
+            //     user.isManager = undefined;
+            // }
             // iterate through updates and set values to user obj
             for(let x in req.body){
                 user[x] = req.body[x];
@@ -44,13 +44,11 @@ module.exports = {
             bcrypt.hash(user._pw, 10, (err, hashedPass) => {
                 user._pw = hashedPass;
                 user._pwconf = undefined;
-                // save new user info
                 user.save()
                 .then(user => {
-                    console.log(`AUTH: ${user.name}'s account updated`)
-                    res.json(true)
+                    res.json(sendMsg(true, `Information updated. Thanks, ${user.first}!`));
                 })
-                .catch(err => res.json(listErrors(err)));
+                .catch(err => res.json(sendMsg(false, 'One or more fields invalid.')));
             });
         })
     },

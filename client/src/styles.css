@@ -1,12 +1,23 @@
 @import '~https://fonts.googleapis.com/icon?family=Material+Icons';
+@import url('https://fonts.googleapis.com/css?family=Orienta|Open+Sans+Condensed:275');
 
-* {
-  box-sizing: border-box;
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+    background-color: rgb(235, 235, 235);
+    font-family: 'Open Sans Condensed', sans-serif;
+    text-shadow: 0.25px 0.25px black
 }
 
-body {
-    margin: 0px auto;
-    font-family: Helvetica, sans-serif;
+body { 
+    /* position: relative; */
+    box-sizing: border-box;
+}
+
+.full {
+    background-color: white;
+    height: 85%;
 }
 
 /* For mobile phones: */
@@ -16,7 +27,6 @@ body {
 }
 
 @media only screen and (min-width: 768px) {
-    /* For desktop: */
     .col-1 {width: 8.33%;}
     .col-2 {width: 16.66%;}
     .col-3 {width: 25%;}
@@ -41,3 +51,5 @@ img {
     max-width: 100%;
     height: auto;
 }
+
+mat-form-field{ width:100% }

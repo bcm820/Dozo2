@@ -1,36 +1,53 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material';
+import { AuthService } from '../services/auth.service';
+import { RegisterComponent } from './auth/register/register.component';
+import { LoginComponent } from './auth/login/login.component';
+import { AccountComponent } from './auth/account/account.component';
+import { MatDialog } from '@angular/material';
+import 'hammerjs';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
 
-  guest = {email:'', _pw:''}
   user;
-  errors;
 
   constructor(
-    private _router: Router
-    // insert auth service
+    private _router: Router,
+    private dialog: MatDialog,
+    private snackbar: MatSnackBar,
+    private _as: AuthService
   ){}
 
   ngOnInit(){
-    this.errors = false;
-    // invoke auth getUser to update Subject
-    // set this.user to = return value of subscription to Subject
+    this._as.updateStatus();
+    this._as.status$
+      .subscribe(result => this.user = result);
   }
 
-  login(){
-    // invoke auth login
-    // if no form errors, update this user
+  openSignUp(){
+    this.dialog.open(RegisterComponent, {width: '350px'});
+  }
+
+  openLogIn(){
+    this.dialog.open(LoginComponent, {width:'350px'})
+  }
+
+  openAccount(){
+    this.dialog.open(AccountComponent,
+      {width:'75%', height:'75%', data: this.user})
   }
 
   logout(){
-    // invoke auth logout
-    // invoke auth getUser to update Subject
+    this._as.logout()
+      .subscribe(result => {
+        this.snackbar.open(result['msg'], 'x', {duration: 3000})
+      });
   }
 
 }

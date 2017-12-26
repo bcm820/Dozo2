@@ -1,31 +1,24 @@
 
-<mat-toolbar>
+<mat-toolbar color=primary>
   <div class=col-1></div>
-  <div class=col-1>Dozo</div>
-  <div class=col-7></div>
-  <div class="col-2">
-    <button mat-raised-button
-      [routerLink]="[{outlets:{a:['register']}}]">Register</button>
-    <button mat-raised-button
-      [routerLink]="['']">Login</button>
-    <!-- For switching between manager and member view -->
+  <div class="col-1"><h1>Dozo</h1></div>
+  <div class=col-9 align=right>
+    <span *ngIf=!user>
+      <button mat-raised-button color=accent (click)=openLogIn()>Log In</button>
+      <button mat-raised-button color=accent (click)=openSignUp()>Sign Up</button>
+    </span>
     <span *ngIf=user>
-    <button *ngIf=user.isManager mat-icon-button [mat-menu-trigger-for]="menu">
-      <mat-icon>more_vert</mat-icon>
-    </button>
+      <!-- Insert user router links here -->
+      <button mat-raised-button color=accent (click)=openAccount()>Account</button>
+      <button mat-raised-button color=accent (click)=logout()>Log Out</button>
     </span>
   </div>
   <div class=col-1></div>
 </mat-toolbar>
 
-<!-- Menu to switch views -->
-<mat-menu x-position="before" #menu="matMenu">
-  <button mat-menu-item>Manager</button>
-  <button mat-menu-item>Member</button>
-</mat-menu>
-
-<router-outlet *ngIf=!user name=a></router-outlet>
-<span *ngIf=user>
-  <router-outlet *ngIf=user.isManager name=b></router-outlet>
-  <router-outlet *ngIf="!user.isManager" name=c></router-outlet>
-</span>
+<div class=col-1>&nbsp;</div>
+<div class="col-10 full">
+  <app-landing *ngIf=!user></app-landing>
+  <router-outlet *ngIf=user></router-outlet>
+</div>
+<div class=col-1>&nbsp;</div>

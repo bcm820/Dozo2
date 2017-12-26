@@ -3,12 +3,11 @@ const mongoose = require('mongoose');
 const User = mongoose.model('User');
 const Profile = mongoose.model('Profile');
 
-function listErrors(err){
-    let list = [];
-    for(let x in err.errors){
-        list.push(err.errors[x].message);
+function sendMsg(stat, msg){
+    return {
+        stat: msg,
+        msg: msg
     }
-    return list.reverse();
 }
 
 module.exports = {

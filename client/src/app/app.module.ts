@@ -8,11 +8,16 @@ import { MaterialModule } from './material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './components/app.component';
-import { RegisterComponent } from './components/register/register.component';
-import { LoginComponent } from './components/login/login.component';
+import { LandingComponent } from './components/landing/landing.component';
 import { NavComponent } from './components/nav/nav.component';
-import { ManagerComponent } from './components/manager/manager.component';
-import { MemberComponent } from './components/member/member.component';
+
+import { UserFormComponent } from './components/auth/user-form/user-form.component';
+import { RegisterComponent } from './components/auth/register/register.component';
+import { AccountComponent } from './components/auth/account/account.component';
+import { LoginComponent } from './components/auth/login/login.component';
+
+import { AuthService } from './services/auth.service';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
@@ -20,8 +25,10 @@ import { MemberComponent } from './components/member/member.component';
     RegisterComponent,
     LoginComponent,
     NavComponent,
-    ManagerComponent,
-    MemberComponent,
+    LandingComponent,
+    AccountComponent,
+    DashboardComponent,
+    UserFormComponent,
   ],
   imports: [
     BrowserModule,
@@ -32,7 +39,12 @@ import { MemberComponent } from './components/member/member.component';
     MaterialModule,
     BrowserAnimationsModule,
   ],
-  providers: [],
+  entryComponents: [
+    RegisterComponent,
+    LoginComponent,
+    AccountComponent
+  ],
+  providers: [AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
