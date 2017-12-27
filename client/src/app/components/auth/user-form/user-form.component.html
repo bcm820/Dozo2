@@ -28,7 +28,7 @@
         required [formControl]=email
         (keyup)="user.email = user.email.toLowerCase()"
         (keyup)="address$.next($event.target.value)">
-        <mat-hint align=end *ngIf=!unique class=warn>
+        <mat-hint align=end *ngIf=!unique color=warn>
           Email address already in use.
         </mat-hint>
         <mat-error align=right *ngIf=email.invalid>{{getEmailError()}}</mat-error>
@@ -42,13 +42,14 @@
       <mat-icon matSuffix (click)="hidePW = !hidePW">
         {{hidePW ? 'visibility' : 'visibility_off'}}
       </mat-icon>
-        <mat-hint align=end>Minimum 8 characters</mat-hint>
+        <mat-hint *ngIf="action === 'Sign Up'" align=end>Minimum 8 characters</mat-hint>
+        <mat-hint *ngIf="action === 'Update'" align=end>Enter password to confirm changes.</mat-hint>
         <mat-error align=right *ngIf=_pw.errors [hidden]=!_pw.errors.minlength>
-          Must be 8 characters minimum.
+          <span *ngIf="action === 'Sign Up'">Must be 8 characters minimum.</span>
         </mat-error>
     </mat-form-field>
 
-    <mat-form-field>
+    <mat-form-field *ngIf="action === 'Sign Up'">
       <input [type]="hidePWC ? 'password' : 'text'"
         matInput placeholder="Confirm Password"
         name=_pwconf [(ngModel)]='user._pwconf' #_pwconf='ngModel'
@@ -64,8 +65,8 @@
 </div>
 
 <div mat-dialog-actions align=center>
-<button mat-raised-button *ngIf="!form.valid || !unique" disabled>Submit</button>
-<button type=submit mat-raised-button *ngIf="form.valid && unique" color=accent>Submit</button>
+<button mat-raised-button *ngIf="!form.valid || !unique" disabled>{{action}}</button>
+<button type=submit mat-raised-button color=accent *ngIf="form.valid && unique">{{action}}</button>
 </div>
 
 </form>

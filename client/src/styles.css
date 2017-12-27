@@ -15,8 +15,20 @@ img {
     height: auto;
 }
 
+
+/* Custom Material/Covalent Theming */
+
 mat-form-field{ width:100% }
 
 .mat-tooltip {
   font-size: 11px !important;
+}
+
+.card-header {
+    color: white;
+}
+
+.card-heading {
+    font-size: 20px;
+    padding-bottom: 12px;
 }

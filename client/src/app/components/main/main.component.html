@@ -1,0 +1,36 @@
+
+<td-layout>
+
+  <!-- other attrs: sidenavTitle="Company", logo="assets:logo" -->
+  <td-navigation-drawer *ngIf=user.status sidenavTitle="Your Company" flex name="{{user.name}}" email="{{user.email}}" color=accent>
+    <app-main-nav [user]=user></app-main-nav>
+  </td-navigation-drawer>
+
+  <!-- For individual project pages, have a stationary list on the side? -->
+  <!-- other attrs: logo="assets:logo",  toolbarTitle="Title" -->
+  <td-layout-nav navigationRoute="/">
+    <button *ngIf=user.status mat-icon-button td-menu-button tdLayoutToggle>
+      <mat-icon>menu</mat-icon>
+    </button>
+    <div td-toolbar-content layout="row" layout-align="center center" flex>
+      <span>Dozo</span>
+      <span flex></span>
+      <span *ngIf=!user.status>
+        <a mat-icon-button matTooltip="Log In" (click)=openLogIn()><mat-icon>exit_to_app</mat-icon></a>
+        <a mat-icon-button matTooltip="Sign Up" (click)=openSignUp()><mat-icon>description</mat-icon></a>
+      </span>
+      <span *ngIf=user.status>
+        <a mat-icon-button matTooltip="My Account" (click)=openAccount()><mat-icon>account_box</mat-icon></a>
+        <a mat-icon-button matTooltip="Log Out" (click)=logout()><mat-icon>exit_to_app</mat-icon></a>
+      </span>
+    </div>
+    <router-outlet></router-outlet>
+    <td-layout-footer color="primary">
+      <div layout=row layout-margin>
+        <div flex><strong>Copyright © 2017. All rights reserved.</strong></div>
+        <div flex align=right><strong>Powered by Dozo</strong></div>
+      </div>
+    </td-layout-footer>
+  </td-layout-nav>
+
+</td-layout>

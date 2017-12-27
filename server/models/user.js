@@ -12,6 +12,7 @@ const shortid = require('shortid');
 const UserSchema = new Schema({
     
     id: { type: String, default: shortid.generate },
+    status: { type: Boolean, default: true },
     
     member_profile: {
         type: Object, ref: 'Profile',
@@ -29,33 +30,33 @@ const UserSchema = new Schema({
 
     email: {
         type: String, trim: true,
-        required: [true, 'Email required'],
-        match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Invalid email']
+        required: [true],
+        match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/]
     },
 
     first: {
         type: String, trim: true,
-        required: [true, 'First name missing'],
-        minlength: [2, 'First name input invalid']
+        required: [true],
+        minlength: [2]
     },
 
     last: {
         type: String, trim: true,
-        required: [true, 'Last name missing'],
-        minlength: [2, 'Last name input invalid']
+        required: [true],
+        minlength: [2]
     },
 
     _pw: {
         type: String,
-        required: [true, 'Password missing'],
-        minlength: [8, 'Password input invalid']
+        required: [true],
+        minlength: [8]
     },
 
     _pwconf: {
         type: String,
         validate: function(_pwconf){
             if(_pwconf !== this._pw){
-                this.invalidate('pwconf', 'Confirmation input invalid');
+                this.invalidate('pwconf');
             }
         }
     }

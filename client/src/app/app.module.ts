@@ -11,19 +11,21 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './ui/material.module';
 import { CovalentModule } from './ui/covalent.module';
 
+// Services
+import { AuthService } from './services/auth.service';
+
 // Components
 import { AppComponent } from './components/app.component';
-import { LandingComponent } from './components/landing/landing.component';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
 
-// Auth components
 import { UserFormComponent } from './components/auth/user-form/user-form.component';
 import { RegisterComponent } from './components/auth/register/register.component';
 import { AccountComponent } from './components/auth/account/account.component';
 import { LoginComponent } from './components/auth/login/login.component';
 
-// Services
-import { AuthService } from './services/auth.service';
+import { MainComponent } from './components/main/main.component';
+import { MainNavComponent } from './components/main/main-nav/main-nav.component';
+import { LandingComponent } from './components/main/landing/landing.component';
+import { DashboardComponent } from './components/main/dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +36,8 @@ import { AuthService } from './services/auth.service';
     AccountComponent,
     DashboardComponent,
     UserFormComponent,
+    MainNavComponent,
+    MainComponent,
   ],
   imports: [
     MaterialModule,

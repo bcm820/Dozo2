@@ -16,6 +16,12 @@ module.exports = {
         User Routes
     */
     
+    // view all users
+    list(req, res){
+        User.find({}, {first:1, last:1, name:1, email:1}).sort({last:1})
+        .then(list => res.json(list));
+    },
+    
     // limited user lookup
     lookupUser(req, res){
         User.findById(req.params.id, {_pw:0, __v:0})

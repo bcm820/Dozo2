@@ -13,5 +13,22 @@ $typography: mat-typography-config(
   $headline: mat-typography-level(32px, 48px, 700)
 );
 
+// Color classes
+@mixin dozo-theme($theme) {
+  $primary: map-get($theme, primary);
+  $accent:  map-get($theme, accent);
+  $warn:    map-get($theme, warn);
+
+  .bg-primary { background-color: mat-color($primary); }
+  .bg-accent { background-color: mat-color($accent); }
+  .bg-warn { background-color: mat-color($warn); }
+  .txt-primary { color: mat-color($primary); }
+  .txt-accent { color: mat-color($accent); }
+  .txt-warn { color: mat-color($warn); }
+  
+}
+
+// includes
 @include angular-material-theme($theme);
 @include covalent-theme($theme, $typography);
+@include dozo-theme($theme);

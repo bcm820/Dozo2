@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
 import { Subject } from 'Rxjs';
@@ -10,10 +10,14 @@ import { Subject } from 'Rxjs';
 })
 export class UserFormComponent implements OnInit {
 
+  subscription;
+  
   @Input() user;
+  @Input() action;
   @Output() send = new EventEmitter;
 
   // form controls/validations
+  // I might later want to make the entire form reactive
   email = new FormControl('', [Validators.email])
   getEmailError(){
     return this.email.hasError('email')
@@ -27,8 +31,12 @@ export class UserFormComponent implements OnInit {
   constructor(private _as: AuthService) { }
 
   checkEmail(){
-    this._as.checkEmail(this.address$)
-      .subscribe(result => this.unique = result);
+    if(this.action === 'Sign up'){
+      this.subscription = this._as.checkEmail(this.address$)
+      .subscribe(result => {
+        this.unique = result;
+      });
+    }
   }
 
   ngOnInit() {
@@ -37,6 +45,10 @@ export class UserFormComponent implements OnInit {
 
   sendUser(){
     this.send.emit(this.user);
+  }
+
+  ngOnDestroy(){
+    this.subscription.unsubscribe();
   }
 
 }

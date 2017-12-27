@@ -2,9 +2,9 @@
 const User = require('mongoose').model('User');
 const bcrypt = require('bcrypt');
 
-function sendMsg(type, msg){
+function sendMsg(status, msg){
     return {
-        type: type,
+        status: status,
         msg: msg
     }
 }
@@ -23,7 +23,7 @@ module.exports = {
     authenticate(req, res, next){
         if(req.session.uid) next();
         else {
-            res.json(false);
+            res.json(sendMsg(false, 'Error: Credentials required. Please log in.'));
         }
     },
 
@@ -40,7 +40,7 @@ module.exports = {
                     }
                 }
             })
-            .catch(err => sendMsg(false, 'Error: Access forbidden.'));
+            .catch(err => res.json(sendMsg(false, 'Error: Manager credentials required.')));
         }
     },
 

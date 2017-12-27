@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
 import { MatSnackBar } from '@angular/material';
 import { AuthService } from '../../../services/auth.service';
@@ -10,7 +10,9 @@ import { AuthService } from '../../../services/auth.service';
 })
 export class RegisterComponent {
 
+  subscription;
   user = { first:'', last:'', email:'', _pw:'', _pwconf:'' }
+  action = 'Sign Up'
 
   constructor(
     private dialog: MatDialogRef<RegisterComponent>,
@@ -19,12 +21,16 @@ export class RegisterComponent {
   ){}
 
   register(user){
-    this._as.register(user)
+    this.subscription = this._as.register(user)
       .subscribe(result => {
         this.snackbar.open(result['msg'], 'x', {duration: 3000})
         this._as.updateStatus(); // if success, update user
         if(result['type']) this.dialog.close();
       });
+  }
+
+  ngOnDestroy(){
+    this.subscription.unsubscribe();
   }
 
 }

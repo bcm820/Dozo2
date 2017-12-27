@@ -1,14 +1,67 @@
 
-<div layout=row layout-margin layout-padding>
+<div layout=row layout-padding>
 
     <div flex>
-        <h2 mat-dialog-title>{{user.name}}</h2>
+        <h4>{{user.name}}</h4>
         <td-json-formatter [data]="user" [levelsOpen]="1"></td-json-formatter>
     </div>
 
     <div flex=30>
-        <h2 mat-dialog-title>Update My Information</h2>
-        <user-form [user]=user (send)=update($event)></user-form>
+
+        <h4>Change Password</h4>
+        <form #pwForm=ngForm (submit)=changePW()>
+
+            <mat-form-field>
+            <input [type]="hidePW ? 'password' : 'text'"
+                matInput placeholder="Password"
+                name=_pw [(ngModel)]='pwField._pw' #_pw='ngModel'
+                required minlength=8>
+            <mat-icon matSuffix (click)="hidePW = !hidePW">
+                {{hidePW ? 'visibility' : 'visibility_off'}}
+            </mat-icon>
+            </mat-form-field>
+
+            <mat-form-field>
+            <input [type]="hidePWC ? 'password' : 'text'"
+                matInput placeholder="Confirm Password"
+                name=_pwconf [(ngModel)]='pwField._pwconf' #_pwconf='ngModel'
+                required pattern={{pwField._pw}}>
+            <mat-icon matSuffix (click)="hidePWC = !hidePWC">
+                {{hidePWC ? 'visibility' : 'visibility_off'}}
+            </mat-icon>
+            <mat-error align=right *ngIf=_pwconf.errors [hidden]=!_pwconf.errors.pattern>
+                Must be exact match.
+            </mat-error>
+            </mat-form-field>
+            
+            <button mat-raised-button *ngIf="!pwForm.valid" disabled>Change Password</button>
+            <button type=submit mat-raised-button color=accent *ngIf="pwForm.valid">Change Password</button>
+        </form>
+
+        <div>&nbsp;</div>
+
+        <h4>Delete Account</h4>
+        <form #delForm=ngForm (submit)=unregister()>
+            <mat-form-field>
+            <input [type]="hidePWD ? 'password' : 'text'"
+            matInput placeholder="Password"
+            name=_pw [(ngModel)]='pwDel._pw' #_pw='ngModel'
+            required minlength=8>
+            <mat-icon matSuffix (click)="hidePWD = !hidePWD">
+            {{hidePW ? 'visibility' : 'visibility_off'}}
+            </mat-icon>
+            <mat-error align=right>{{pwError}}</mat-error>
+            </mat-form-field>
+
+            <button mat-raised-button *ngIf="!delForm.valid" disabled>Delete</button>
+            <button type=submit mat-raised-button color=accent *ngIf="delForm.valid">Delete</button> 
+        </form>
+
+    </div>
+
+    <div flex=30>
+        <h4>Update My Information</h4>
+        <user-form [user]=user [action]=action (send)=update($event)></user-form>
     </div>
 
 </div>

@@ -32,25 +32,42 @@ module.exports = {
                         res.json(sendMsg(false, 'Error: Email address already in use.'));
                 })
             }
-            // if 'isManager' is set, remove from user obj
-            // if(user.hasOwnProperty('isManager')){
-            //     user.isManager = undefined;
-            // }
-            // iterate through updates and set values to user obj
-            for(let x in req.body){
-                user[x] = req.body[x];
-            }
-            // hash password and discard pwconf
+            // check PW prior to updating info
+            user.checkPW(req.body._pw, (err, good) => {
+                if(good){
+                    // iterate through updates and set values to user obj
+                    for(let x in req.body){
+                        user[x] = req.body[x];
+                    }
+                    // hash password and discard pwconf
+                    bcrypt.hash(user._pw, 10, (err, hashedPass) => {
+                        user._pw = hashedPass;
+                        if(user._pwconf) user._pwconf = undefined;
+                        user.save()
+                        .then(user => {
+                            res.json(sendMsg(true, `Information updated. Thanks, ${user.first}!`));
+                        })
+                        .catch(err => res.json(sendMsg(false, 'Error: One or more fields invalid.')));
+                    });
+                } else {
+                    res.json(sendMsg(false, `Error: You entered an invalid password.`))
+                }
+            })
+        })
+    },
+
+    updatePW(req, res){
+        User.findById(req.session.uid)
+        .then(user => {
+            user._pw = req.body._pw;
             bcrypt.hash(user._pw, 10, (err, hashedPass) => {
                 user._pw = hashedPass;
-                user._pwconf = undefined;
                 user.save()
                 .then(user => {
-                    res.json(sendMsg(true, `Information updated. Thanks, ${user.first}!`));
+                    res.json(sendMsg(true, `Password updated. Thanks, ${user.first}!`));
                 })
-                .catch(err => res.json(sendMsg(false, 'One or more fields invalid.')));
             });
-        })
+        });
     },
 
     // user must enter PW to unregister
@@ -64,7 +81,7 @@ module.exports = {
                         res.json(sendMsg(true, `Account deleted. Thanks, ${user.first}!`));
                     })
                 }
-                else { res.json(false) }
+                else { res.json(sendMsg(false, `Error: You entered an invalid password.`)) }
             })
         });
     }

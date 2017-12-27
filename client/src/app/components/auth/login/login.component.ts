@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
 import { MatSnackBar } from '@angular/material';
 import { AuthService } from '../../../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -10,6 +11,7 @@ import { AuthService } from '../../../services/auth.service';
 })
 export class LoginComponent implements OnInit {
 
+  subscription;
   guest = {email:'', _pw:''}
   hidePW = true;
   emailError;
@@ -18,19 +20,27 @@ export class LoginComponent implements OnInit {
   constructor(
     private _as: AuthService,
     private snackbar: MatSnackBar,
-    private dialog: MatDialogRef<LoginComponent>
+    private dialog: MatDialogRef<LoginComponent>,
+    private _router: Router
   ) { }
 
   ngOnInit() {
   }
 
   login(){
-    this._as.login(this.guest)
+    this.subscription = this._as.login(this.guest)
       .subscribe(result => {
         this.snackbar.open(result['msg'], 'x', {duration: 3000})
-        this._as.updateStatus(); // if success, update user
-        if(result['type']) this.dialog.close();
+        this._as.updateStatus();
+        if(result['status']){
+          this.dialog.close();
+          this._router.navigate(['dashboard']);
+        }
       });
+  }
+
+  ngOnDestroy(){
+    this.subscription.unsubscribe();
   }
 
 }
