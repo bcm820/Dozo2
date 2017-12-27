@@ -1,30 +1,34 @@
 
-<h3 mat-dialog-title align=center>Log In</h3>
+<div layout=column layout-margin layout-padding>
 
-<div mat-dialog-content>
+  <h3 mat-dialog-title align=center>Log In</h3>
 
-  <form>
+  <form (submit)=login()>
 
-    <mat-form-field>
-      <input matInput placeholder="Email Address"
-        name=email [(ngModel)]='guest.email'>
-        <mat-error align=right>{{emailError}}</mat-error>
-    </mat-form-field>
+  <div mat-dialog-content>
 
-    <mat-form-field>
-      <input [type]="hidePW ? 'password' : 'text'"
-        matInput placeholder="Password"
-        name=_pw [(ngModel)]='guest._pw' #_pw='ngModel'>
-      <mat-icon matSuffix (click)="hidePW = !hidePW">
-        {{hidePW ? 'visibility' : 'visibility_off'}}
-      </mat-icon>
-        <mat-error align=right>{{pwError}}</mat-error>
-    </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Email Address"
+          name=email [(ngModel)]='guest.email'>
+          <mat-error align=right>{{emailError}}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input [type]="hidePW ? 'password' : 'text'"
+          matInput placeholder="Password"
+          name=_pw [(ngModel)]='guest._pw' #_pw='ngModel'>
+        <mat-icon matSuffix (click)="hidePW = !hidePW">
+          {{hidePW ? 'visibility' : 'visibility_off'}}
+        </mat-icon>
+          <mat-error align=right>{{pwError}}</mat-error>
+      </mat-form-field>
+
+  </div>
+
+  <div mat-dialog-actions align=center>
+  <button type=submit mat-raised-button color=accent>Log In</button>
+  </div>
 
   </form>
 
-</div>
-
-<div mat-dialog-actions align=center>
-<button mat-raised-button color=accent (click)="login()">Log In</button>
 </div>

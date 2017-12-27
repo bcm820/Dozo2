@@ -1,4 +1,8 @@
 
-<h2 mat-dialog-title align=center>Create a User Account</h2>
+<div layout=column layout-margin layout-padding>
 
-<user-form [user]=user (send)=register($event)></user-form>
+    <h2 mat-dialog-title align=center>Create a New Account</h2>
+
+    <user-form [user]=user (send)=register($event)></user-form>
+
+</div>

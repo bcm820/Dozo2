@@ -70,7 +70,7 @@ module.exports = {
     // returns false to update user subject
     logout(req, res){
         req.session.uid = undefined;
-        res.json(sendMsg(true, `Successful log out! See you again next time!`));
+        res.json(sendMsg(true, `Session ended. See you again next time!`));
     },
 
     // checks if email unique

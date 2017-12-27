@@ -16,6 +16,7 @@ import 'hammerjs';
 export class AppComponent implements OnInit {
 
   user;
+  label = {name:'', email:''};
 
   constructor(
     private _router: Router,
@@ -27,7 +28,15 @@ export class AppComponent implements OnInit {
   ngOnInit(){
     this._as.updateStatus();
     this._as.status$
-      .subscribe(result => this.user = result);
+      .subscribe(result => {
+        this.user = result;
+        if(typeof(result) === 'object'){
+          this.label.name = result['name'];
+          this.label.email = result['email'];
+        } else {
+          this.label = {name:'', email:''};
+        }
+      });
   }
 
   openSignUp(){
@@ -40,7 +49,7 @@ export class AppComponent implements OnInit {
 
   openAccount(){
     this.dialog.open(AccountComponent,
-      {width:'75%', height:'75%', data: this.user})
+      {width:'60%', data: this.user})
   }
 
   logout(){

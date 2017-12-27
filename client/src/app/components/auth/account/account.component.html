@@ -1,8 +1,14 @@
 
-<div align=right>
-    <button mat-raised-button mat-dialog-close color=accent>Close</button>
+<div layout=row layout-margin layout-padding>
+
+    <div flex>
+        <h2 mat-dialog-title>{{user.name}}</h2>
+        <td-json-formatter [data]="user" [levelsOpen]="1"></td-json-formatter>
+    </div>
+
+    <div flex=30>
+        <h2 mat-dialog-title>Update My Information</h2>
+        <user-form [user]=user (send)=update($event)></user-form>
+    </div>
+
 </div>
-
-<h2 mat-dialog-title align=center>My Info</h2>
-
-<user-form [user]=user (send)=update($event)></user-form>

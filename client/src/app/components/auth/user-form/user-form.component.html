@@ -1,6 +1,6 @@
-<div mat-dialog-content>
+<form #form=ngForm (submit)=sendUser()>
 
-  <form #form=ngForm>
+<div mat-dialog-content>
 
     <mat-form-field>
       <input matInput placeholder="First Name"
@@ -61,11 +61,11 @@
         </mat-error>
     </mat-form-field>
 
-  </form>
-
 </div>
 
 <div mat-dialog-actions align=center>
 <button mat-raised-button *ngIf="!form.valid || !unique" disabled>Submit</button>
-<button mat-raised-button *ngIf="form.valid && unique" color=accent (click)="sendUser()">Submit</button>
+<button type=submit mat-raised-button *ngIf="form.valid && unique" color=accent>Submit</button>
 </div>
+
+</form>

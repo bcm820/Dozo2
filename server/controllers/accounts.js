@@ -61,8 +61,7 @@ module.exports = {
                 if(good){
                     user.remove()
                     .then(result => {
-                        console.log(`AUTH: ${user.name}'s account deleted`)
-                        res.json(true);
+                        res.json(sendMsg(true, `Account deleted. Thanks, ${user.first}!`));
                     })
                 }
                 else { res.json(false) }

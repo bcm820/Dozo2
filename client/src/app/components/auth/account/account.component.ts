@@ -10,11 +10,15 @@ import { AuthService } from '../../../services/auth.service';
 })
 export class AccountComponent {
   
+  // typically, we retrieve user data from the service
+  // but here inject user data from app.cmp into dialog
+  // this user data will be input into our user-form
+  
   constructor(
     private dialog: MatDialogRef<AccountComponent>,
     private snackbar: MatSnackBar,
     private _as: AuthService,
-    @Inject(MAT_DIALOG_DATA) private user;
+    @Inject(MAT_DIALOG_DATA) private user
   ) { }
   
   update(user){
