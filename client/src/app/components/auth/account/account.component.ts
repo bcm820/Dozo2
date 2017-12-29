@@ -1,7 +1,7 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { AuthService } from '../../../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-account',
@@ -9,8 +9,7 @@ import { AuthService } from '../../../services/auth.service';
   styleUrls: ['./account.component.css']
 })
 export class AccountComponent implements OnInit {
-
-  subscription;
+  
   action = 'Update';
   pwField = {_pw:'', _pwconf:''};
   pwDel = {_pw:''};
@@ -21,28 +20,25 @@ export class AccountComponent implements OnInit {
   user: any = {name:''};
   
   constructor(
-    private dialog: MatDialogRef<AccountComponent>,
     private snackbar: MatSnackBar,
-    private _as: AuthService
+    private _as: AuthService,
+    private _router: Router
   ) { }
 
   ngOnInit(){
     this._as.updateStatus();
-    this.subscription = this._as.status$
-      .subscribe(result => {
-        this.user = result;
-      });
+    this.user = this._as.status$
   }
 
   changePW(){
-    this.subscription = this._as.updatePW(this.pwField)
+    this._as.updatePW(this.pwField)
       .subscribe(result => {
         this.snackbar.open(result['msg'], 'x', {duration: 3000});
       });
   }
   
   update(user){
-    this.subscription = this._as.update(user)
+    this._as.update(user)
       .subscribe(result => {
         this.snackbar.open(result['msg'], 'x', {duration: 3000});
         this._as.updateStatus();
@@ -50,15 +46,12 @@ export class AccountComponent implements OnInit {
   }
 
   unregister(){
-    this.subscription = this._as.unregister(this.pwDel)
+    this._as.unregister(this.pwDel)
       .subscribe(result => {
         this.snackbar.open(result['msg'], 'x', {duration: 3000})
-        if(result['type']) this._as.updateStatus();
+        this._as.updateStatus();
+        this._router.navigate(['']);
       });
-  }
-
-  ngOnDestroy(){
-    this.subscription.unsubscribe();
   }
 
 }

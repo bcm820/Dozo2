@@ -1,0 +1,27 @@
+
+<div layout=column layout-padding layout-margin>
+    
+    <mat-card flex class="card-header bg-accent">
+        <mat-card-title>My Tasks</mat-card-title>
+        <mat-card-subtitle>Tasks from all my current projects</mat-card-subtitle>
+        <mat-divider></mat-divider>
+    </mat-card>
+
+    <mat-card flex class="card-header bg-accent">
+        <mat-card-title>Project Title 1</mat-card-title>
+        <mat-card-subtitle>Description</mat-card-subtitle>
+        <mat-divider></mat-divider>
+    </mat-card>
+
+
+    <mat-card>
+    <mat-nav-list>
+        <a mat-list-item (click)=openNewProject() style=height:100px;>
+        <mat-card-title class=padding-center>
+            New Project 
+            <mat-icon matListIcon>playlist_add</mat-icon>
+        </mat-card-title></a>
+    </mat-nav-list>
+    </mat-card>
+
+</div>

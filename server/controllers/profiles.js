@@ -3,9 +3,9 @@ const mongoose = require('mongoose');
 const User = mongoose.model('User');
 const Profile = mongoose.model('Profile');
 
-function sendMsg(stat, msg){
+function sendMsg(type, msg){
     return {
-        stat: msg,
+        type: type,
         msg: msg
     }
 }
@@ -21,10 +21,26 @@ module.exports = {
         User.find({}, {first:1, last:1, name:1, email:1}).sort({last:1})
         .then(list => res.json(list));
     },
+
+    // view all leads
+    listLeads(req, res){
+        Profile.find({type:'lead'}, {__v:0})
+        .populate('account', {email:1})
+        .then(list => res.json(list));
+    },
+
+    // view all members
+    listMembers(req, res){
+        Profile.find({type:'member'}, {__v:0})
+        .populate('account', {email:1})
+        .then(list => res.json(list));
+    },
     
-    // limited user lookup
+    // user lookup
     lookupUser(req, res){
         User.findById(req.params.id, {_pw:0, __v:0})
+        .populate('member_profile', {__v:0})
+        .populate('lead_profile', {__v:0})
         .then(user => res.json(user))
     },
 
@@ -40,30 +56,10 @@ module.exports = {
         Manager Routes
     */
     
-    // view all users
-    listUsers(req, res){
+    // view all users on one page
+    listFull(req, res){
         User.find({}, {_pw:0, __v:0}).sort({last:1})
         .then(list => res.json(list));
-    },
-
-    // view all users
-    listLeads(req, res){
-        Profile.find({type:'lead'}, {__v:0})
-        .then(list => res.json(list));
-    },
-
-    // view all users
-    listMembers(req, res){
-        Profile.find({type:'member'}, {__v:0})
-        .then(list => res.json(list));
-    },
-    
-    // full user lookup
-    lookupFull(req, res){
-        User.findById(req.params.id, {_pw:0, __v:0})
-        .populate('member_profile', {__v:0})
-        .populate('lead_profile', {__v:0})
-        .then(user => res.json(user))
     },
     
     // assign lead/member profile to user
@@ -81,8 +77,7 @@ module.exports = {
                 user[profileKey] = profile._id;
                 user.save()
                 .then(user => {
-                    console.log(`${user.name} assigned ${profile.type} profile.`)
-                    res.json(true);
+                    res.json(sendMsg(true, `${user.name} assigned ${profile.type} profile.`));
                 });
             })
             .catch(err => res.json(listErrors(err)));
@@ -95,7 +90,7 @@ module.exports = {
         .then(user => {
             user.isManager = true;
             user.save()
-            .then(user => res.json(true));
+            .then(user => res.json(sendMsg(true, `${user.name} promoted to manager.`)));
         });
     },
 
@@ -105,7 +100,7 @@ module.exports = {
             profile.notes = req.body.notes;
             profile.save()
             .then(profile => res.json(profile))
-            .catch(err => res.json(listErrors(err)));
+            .catch(err => res.json(sendMsg(false, `Error: Invalid input.`)));
         })
     },
 
@@ -118,8 +113,7 @@ module.exports = {
                 user[profileKey] = undefined;
                 user.save()
                 .then(user => {
-                    console.log(`${user.first}'s profile deleted.`)
-                    res.json(true);
+                    res.json(sendMsg(true, `${user.first}'s profile deleted.`));
                 })
             })
         })

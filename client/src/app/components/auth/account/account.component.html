@@ -1,14 +1,16 @@
 
+<span *ngIf="user | async as user">
+
 <div layout=row layout-padding>
 
     <div flex>
-        <h4>{{user.name}}</h4>
+        <h3>{{user.name}}</h3>
         <td-json-formatter [data]="user" [levelsOpen]="1"></td-json-formatter>
     </div>
 
-    <div flex=30>
+    <div flex>
 
-        <h4>Change Password</h4>
+        <h3>Change Password</h3>
         <form #pwForm=ngForm (submit)=changePW()>
 
             <mat-form-field>
@@ -40,7 +42,7 @@
 
         <div>&nbsp;</div>
 
-        <h4>Delete Account</h4>
+        <h3>Delete Account</h3>
         <form #delForm=ngForm (submit)=unregister()>
             <mat-form-field>
             <input [type]="hidePWD ? 'password' : 'text'"
@@ -59,9 +61,11 @@
 
     </div>
 
-    <div flex=30>
-        <h4>Update My Information</h4>
+    <div flex>
+        <h3>Update My Information</h3>
         <user-form [user]=user [action]=action (send)=update($event)></user-form>
     </div>
 
 </div>
+
+</span>

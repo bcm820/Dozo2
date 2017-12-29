@@ -17,6 +17,8 @@ module.exports = (router) => {
     
     router.get('/users', profiles.list) // general name and email list, maybe profiles
     router.get('/users/:id', profiles.lookupUser) // contact info, profile links
+    router.get('/profiles/leads', profiles.listLeads)
+    router.get('/profiles/members', profiles.listMembers)
     router.get('/profiles/:id', profiles.lookupProfile) // profile with projects/tasks
     router.get('/projects/:id', projects.lookup) // general project overview
     

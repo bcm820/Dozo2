@@ -1,7 +1,6 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Subject } from 'Rxjs';
-import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 
 @Injectable()
@@ -10,12 +9,11 @@ export class AuthService {
   // if not logged in, status$ = false
   // if logged in, status$ = user object
   status$ = new Subject();
-  subscription;
   
   constructor(private _http: HttpClient) { }
 
   updateStatus(){
-    this.subscription = this._http.get('/api/account')
+    this._http.get('/api/account')
       .subscribe(result => this.status$.next(result));
   }
 
@@ -40,7 +38,7 @@ export class AuthService {
   }
 
   logout(){
-    this.status$.next(false);
+    this.status$.next({status: false});
     return this._http.delete('/api/auth');
   }
 
@@ -55,10 +53,6 @@ export class AuthService {
   check(email){
     if(email === ''){ return of(true) }
     return this._http.get(`/api/auth/${email}`);
-  }
-
-  ngOnDestroy(){
-    this.subscription.unsubscribe();
   }
 
 }

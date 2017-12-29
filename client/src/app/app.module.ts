@@ -13,6 +13,9 @@ import { CovalentModule } from './ui/covalent.module';
 
 // Services
 import { AuthService } from './services/auth.service';
+import { ProfileService } from './services/profile.service';
+import { ProjectService } from './services/project.service';
+import { TaskService } from './services/task.service';
 
 // Components
 import { AppComponent } from './components/app.component';
@@ -26,6 +29,12 @@ import { MainComponent } from './components/main/main.component';
 import { MainNavComponent } from './components/main/main-nav/main-nav.component';
 import { LandingComponent } from './components/main/landing/landing.component';
 import { DashboardComponent } from './components/main/dashboard/dashboard.component';
+import { UserComponent } from './components/main/user/user.component';
+import { ProfileComponent } from './components/main/profile/profile.component';
+import { ProjectNewComponent } from './components/main/project-new/project-new.component';
+import { MainNav2Component } from './components/main/main-nav2/main-nav2.component';
+import { SidebarComponent } from './components/main/sidebar/sidebar.component';
+
 
 @NgModule({
   declarations: [
@@ -38,6 +47,11 @@ import { DashboardComponent } from './components/main/dashboard/dashboard.compon
     UserFormComponent,
     MainNavComponent,
     MainComponent,
+    UserComponent,
+    ProjectNewComponent,
+    ProfileComponent,
+    MainNav2Component,
+    SidebarComponent,
   ],
   imports: [
     MaterialModule,
@@ -52,9 +66,17 @@ import { DashboardComponent } from './components/main/dashboard/dashboard.compon
   entryComponents: [
     RegisterComponent,
     LoginComponent,
-    AccountComponent
+    AccountComponent,
+    UserComponent,
+    ProfileComponent,
+    ProjectNewComponent
   ],
-  providers: [AuthService],
+  providers: [
+    AuthService,
+    ProfileService,
+    ProjectService,
+    TaskService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

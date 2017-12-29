@@ -2,17 +2,21 @@ import { NgModule } from '@angular/core';
 
 import {
   CovalentLayoutModule,
-  CovalentJsonFormatterModule
+  CovalentJsonFormatterModule,
 } from '@covalent/core';
+
+import { CovalentDynamicFormsModule } from '@covalent/dynamic-forms';
 
 @NgModule({
   imports: [
     CovalentLayoutModule,
-    CovalentJsonFormatterModule
+    CovalentJsonFormatterModule,
+    CovalentDynamicFormsModule
   ],
   exports: [
     CovalentLayoutModule,
-    CovalentJsonFormatterModule
+    CovalentJsonFormatterModule,
+    CovalentDynamicFormsModule
   ]
 })
 

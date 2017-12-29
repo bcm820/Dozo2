@@ -1,0 +1,16 @@
+
+<mat-nav-list>
+
+  <h5 matSubheader class=bg-accent>Employees</h5>
+  <mat-divider></mat-divider>
+
+  <span *ngFor="let user of users|async">
+    <a mat-list-item (click)=viewUser(user._id)>
+      <mat-icon matListIcon>person</mat-icon>
+      <span matLine>{{user.name}}</span>
+      <span matLine>{{user.email}}</span>
+    </a>
+    <mat-divider></mat-divider>
+  </span>
+  
+</mat-nav-list>

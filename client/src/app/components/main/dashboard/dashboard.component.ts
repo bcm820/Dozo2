@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
@@ -10,7 +10,6 @@ import { MatSnackBar } from '@angular/material';
 })
 export class DashboardComponent implements OnInit {
 
-  subscription;
   user;
   
   constructor(
@@ -20,7 +19,7 @@ export class DashboardComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.subscription = this._as.status$
+    this._as.status$
       .subscribe(result => {
         if(!result['status']) {
           this._router.navigate(['']);
@@ -28,10 +27,6 @@ export class DashboardComponent implements OnInit {
         }
         this.user = result;
       });
-  }
-
-  ngOnDestroy(){
-    this.subscription.unsubscribe();
   }
 
 }

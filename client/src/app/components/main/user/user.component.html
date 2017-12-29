@@ -1,0 +1,48 @@
+
+<span *ngIf="employee | async as employee">
+
+  <div mat-dialog-content>
+    <td-json-formatter [data]="employee" [levelsOpen]="1"></td-json-formatter>
+  </div>
+
+  <br><mat-divider></mat-divider>
+  
+  <div align=center mat-dialog-actions *ngIf=user.isManager>
+
+    <button mat-raised-button color=accent
+      *ngIf=!employee.member_profile
+      (click)="assignProfile('member')">
+      Assign Member Profile
+    </button>
+
+    <button mat-raised-button color=accent
+      *ngIf=employee.member_profile disabled>
+      Assign Member Profile
+    </button>
+
+    <button mat-raised-button color=accent
+      *ngIf=!employee.lead_profile
+      (click)="assignProfile('lead')">
+      Assign Team Lead Profile
+    </button>
+
+    <button mat-raised-button color=accent
+      *ngIf=employee.lead_profile disabled>
+      Assign Team Lead Profile
+    </button>
+
+    <button mat-raised-button color=accent
+      *ngIf=!employee.isManager
+      (click)=promote()>
+      Promote to Manager
+    </button>
+
+    <button mat-raised-button color=accent
+      *ngIf=employee.isManager disabled>
+      Promote to Manager
+    </button>
+
+  </div>
+
+</span>
+

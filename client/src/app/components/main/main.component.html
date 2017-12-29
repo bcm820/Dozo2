@@ -1,19 +1,27 @@
 
 <td-layout>
 
-  <!-- other attrs: sidenavTitle="Company", logo="assets:logo" -->
-  <td-navigation-drawer *ngIf=user.status sidenavTitle="Your Company" flex name="{{user.name}}" email="{{user.email}}" color=accent>
+  <!-- other attrs: logo="assets:logo" -->
+  <td-navigation-drawer *ngIf=user.status flex sidenavTitle="Your Company" name="{{user.name}}" email="{{user.email}}" color=primary>
     <app-main-nav [user]=user></app-main-nav>
+    <div *ngIf=user.isManager td-navigation-drawer-menu>
+      <app-main-nav2 [user]=user></app-main-nav2>
+    </div>
   </td-navigation-drawer>
 
   <!-- For individual project pages, have a stationary list on the side? -->
-  <!-- other attrs: logo="assets:logo",  toolbarTitle="Title" -->
-  <td-layout-nav navigationRoute="/">
-    <button *ngIf=user.status mat-icon-button td-menu-button tdLayoutToggle>
+  <!-- other attrs:  navigationRoute="/", logo="assets:logo",  toolbarTitle="Title" -->
+  <td-layout-nav-list toolbarTitle="Dozo" opened={{user.status}} mode=side>
+    <button mat-icon-button td-menu-button tdLayoutToggle matTooltip="Menu">
       <mat-icon>menu</mat-icon>
     </button>
+    <div td-sidenav-content>
+      <app-sidebar></app-sidebar>
+    </div>
+
     <div td-toolbar-content layout="row" layout-align="center center" flex>
-      <span>Dozo</span>
+      <a *ngIf=user.status mat-icon-button tdLayoutNavListToggle matTooltip="Toggle"><mat-icon>view_list</mat-icon></a>
+      <h1 *ngIf=!user.status>Dozo</h1>
       <span flex></span>
       <span *ngIf=!user.status>
         <a mat-icon-button matTooltip="Log In" (click)=openLogIn()><mat-icon>exit_to_app</mat-icon></a>
@@ -31,6 +39,6 @@
         <div flex align=right><strong>Powered by Dozo</strong></div>
       </div>
     </td-layout-footer>
-  </td-layout-nav>
+  </td-layout-nav-list>
 
 </td-layout>

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
 import { Subject } from 'Rxjs';
@@ -9,8 +9,6 @@ import { Subject } from 'Rxjs';
   styleUrls: ['./user-form.component.css']
 })
 export class UserFormComponent implements OnInit {
-
-  subscription;
   
   @Input() user;
   @Input() action;
@@ -32,7 +30,7 @@ export class UserFormComponent implements OnInit {
 
   checkEmail(){
     if(this.action === 'Sign up'){
-      this.subscription = this._as.checkEmail(this.address$)
+      this._as.checkEmail(this.address$)
       .subscribe(result => {
         this.unique = result;
       });
@@ -45,10 +43,6 @@ export class UserFormComponent implements OnInit {
 
   sendUser(){
     this.send.emit(this.user);
-  }
-
-  ngOnDestroy(){
-    this.subscription.unsubscribe();
   }
 
 }
