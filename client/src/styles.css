@@ -16,13 +16,20 @@ img {
     height: auto;
 }
 
+@media only screen and (max-width: 768px) {
+    /* For mobile phones: */
+    div {
+        width: 100%;
+    }
+}
+
 
 /* Custom Material/Covalent Theming */
 
-mat-form-field{ width:100% }
+mat-form-field { width:100% }
 
 .mat-tooltip {
-  font-size: 11px !important;
+    font-size: 11px !important;
 }
 
 .card-header {

@@ -30,7 +30,10 @@ export class MainComponent implements OnInit {
 
   getStatus(){
     this._as.status$
-      .subscribe(result => this.user = result);
+      .subscribe(result => {
+        if(!result['status']) this._router.navigate(['']);
+        this.user = result;
+      });
   }
   
   openSignUp(){

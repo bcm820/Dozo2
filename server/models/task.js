@@ -11,17 +11,12 @@ const TaskSchema = new Schema({
     title: { type: String, required:[true] },
     description: { type: String },
 
-    notes: [{ type: String }],
+    notes: { type: String },
     // two-way channel between lead and member
 
-    start_date: { type: Date, default: new Date() },
+    start_date: { type: Date },
     target_date: { type: Date },
     end_date: { type: Date },
-
-    priority: {
-        type: String,
-        enum: ['1', '2', '3', '4', '5']
-    },
 
     status: {
         type: String,

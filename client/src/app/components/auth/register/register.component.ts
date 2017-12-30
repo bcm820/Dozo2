@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
 import { MatSnackBar } from '@angular/material';
 import { AuthService } from '../../../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -11,12 +12,13 @@ import { AuthService } from '../../../services/auth.service';
 export class RegisterComponent {
 
   user = { first:'', last:'', email:'', _pw:'', _pwconf:'' }
-  action = 'Sign Up'
+  action = 'Sign Up';
 
   constructor(
     private dialog: MatDialogRef<RegisterComponent>,
     private snackbar: MatSnackBar,
-    private _as: AuthService
+    private _as: AuthService,
+    private _router: Router
   ){}
 
   register(user){
@@ -24,7 +26,10 @@ export class RegisterComponent {
       .subscribe(result => {
         this.snackbar.open(result['msg'], 'x', {duration: 3000})
         this._as.updateStatus(); // if success, update user
-        if(result['status']) this.dialog.close();
+        if(result['status']){
+          this.dialog.close();
+          this._router.navigate(['dashboard']);
+        }
       });
   }
 

@@ -19,12 +19,9 @@ export class DashboardComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this._as.updateStatus();
     this._as.status$
       .subscribe(result => {
-        if(!result['status']) {
-          this._router.navigate(['']);
-          this.snackbar.open(result['msg'], 'x', {duration: 3000})
-        }
         this.user = result;
       });
   }

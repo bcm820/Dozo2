@@ -17,23 +17,28 @@ import { ProfileService } from './services/profile.service';
 import { ProjectService } from './services/project.service';
 import { TaskService } from './services/task.service';
 
-// Components
+// AppComponent
 import { AppComponent } from './components/app.component';
 
+// Auth Components
 import { UserFormComponent } from './components/auth/user-form/user-form.component';
 import { RegisterComponent } from './components/auth/register/register.component';
 import { AccountComponent } from './components/auth/account/account.component';
 import { LoginComponent } from './components/auth/login/login.component';
 
+// Layout Components
 import { MainComponent } from './components/main/main.component';
 import { MainNavComponent } from './components/main/main-nav/main-nav.component';
+import { MainNav2Component } from './components/main/main-nav2/main-nav2.component';
+import { SidebarComponent } from './components/main/sidebar/sidebar.component';
 import { LandingComponent } from './components/main/landing/landing.component';
 import { DashboardComponent } from './components/main/dashboard/dashboard.component';
 import { UserComponent } from './components/main/user/user.component';
 import { ProfileComponent } from './components/main/profile/profile.component';
-import { ProjectNewComponent } from './components/main/project-new/project-new.component';
-import { MainNav2Component } from './components/main/main-nav2/main-nav2.component';
-import { SidebarComponent } from './components/main/sidebar/sidebar.component';
+
+// Project Components
+import { ProjectFormComponent } from './components/project/project-form/project-form.component';
+import { NewProjectComponent } from './components/project/new-project/new-project.component';
 
 
 @NgModule({
@@ -48,10 +53,11 @@ import { SidebarComponent } from './components/main/sidebar/sidebar.component';
     MainNavComponent,
     MainComponent,
     UserComponent,
-    ProjectNewComponent,
+    ProjectFormComponent,
     ProfileComponent,
     MainNav2Component,
     SidebarComponent,
+    NewProjectComponent,
   ],
   imports: [
     MaterialModule,
@@ -69,7 +75,7 @@ import { SidebarComponent } from './components/main/sidebar/sidebar.component';
     AccountComponent,
     UserComponent,
     ProfileComponent,
-    ProjectNewComponent
+    NewProjectComponent
   ],
   providers: [
     AuthService,

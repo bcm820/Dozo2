@@ -1,0 +1,54 @@
+<form #form=ngForm (submit)=sendProject()>
+
+<div mat-dialog-content>
+
+    <mat-form-field>
+      <input matInput placeholder="Project Title"
+        name=title [(ngModel)]='project.title' #title='ngModel'
+        required minlength=5>
+        <mat-hint align=end>Minimum 5 characters</mat-hint>
+        <mat-error align=right *ngIf=title.errors [hidden]=!title.errors.minlength>
+          Must be 5 characters minimum.
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Description"
+        name=description [(ngModel)]='project.description' #description='ngModel'
+        required minlength=10>
+        <mat-hint align=end>Minimum 10 characters</mat-hint>
+        <mat-error align=right *ngIf=description.errors [hidden]=!description.errors.minlength>
+          Must be 10 characters minimum.
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <textarea matInput placeholder="Notes for Project Lead(s)" rows=3
+        name=notes [(ngModel)]='project.notes' #notes='ngModel'></textarea>
+        <mat-hint align=end>(Optional)</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput [matDatepicker]="start_date" placeholder="Start Date"
+        name=start_date [(ngModel)]='project.start_date'
+        #start_date='ngModel' required [min]="minDate">
+      <mat-datepicker-toggle matSuffix [for]="start_date"></mat-datepicker-toggle>
+      <mat-datepicker #start_date touchUi=true></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput [matDatepicker]="target_date" placeholder="Target Date"
+        name=target_date [(ngModel)]='project.target_date'
+        #target_date='ngModel' required [min]="minDate">
+      <mat-datepicker-toggle matSuffix [for]="target_date"></mat-datepicker-toggle>
+      <mat-datepicker #target_date touchUi=true [startAt]=project.start_date></mat-datepicker>
+    </mat-form-field>
+
+</div>
+
+<div mat-dialog-actions align=center>
+<button mat-raised-button *ngIf=!form.valid disabled>{{action}}</button>
+<button type=submit mat-raised-button color=accent *ngIf=form.valid>{{action}}</button>
+</div>
+
+</form>

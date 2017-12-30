@@ -1,27 +1,39 @@
 
 <div layout=column layout-padding layout-margin>
-    
-    <mat-card flex class="card-header bg-accent">
-        <mat-card-title>My Tasks</mat-card-title>
-        <mat-card-subtitle>Tasks from all my current projects</mat-card-subtitle>
-        <mat-divider></mat-divider>
+
+    <mat-card class="card-header bg-accent">
+        <mat-card-title class=card-heading align=center>Categories</mat-card-title>
     </mat-card>
 
-    <mat-card flex class="card-header bg-accent">
-        <mat-card-title>Project Title 1</mat-card-title>
-        <mat-card-subtitle>Description</mat-card-subtitle>
-        <mat-divider></mat-divider>
+    <mat-card class=bg-accent>
+        <a mat-button class=card-button>
+        <span class=card-title>Personal Tasks</span>
+        <span class=card-subtitle>My To Do List</span>
+        </a>
     </mat-card>
 
+    <mat-card class=bg-accent>
+        <a mat-button class=card-button>
+        <span class=card-title>Assigned Tasks</span>
+        <span class=card-subtitle>From My Projects</span>
+        </a>
+    </mat-card>
 
-    <mat-card>
-    <mat-nav-list>
-        <a mat-list-item (click)=openNewProject() style=height:100px;>
-        <mat-card-title class=padding-center>
-            New Project 
-            <mat-icon matListIcon>playlist_add</mat-icon>
-        </mat-card-title></a>
-    </mat-nav-list>
+    <span *ngIf="projects | async as projects">
+    <span *ngIf="projects?.length > 0">
+    <mat-card *ngFor="let project of projects" class=bg-accent>
+        <a mat-button class=card-button>
+        <span class=card-title>{{project.title}}</span>
+        <span class=card-subtitle>{{project.description}}</span>
+        </a>
+    </mat-card>
+    </span>
+    </span>
+
+    <mat-card class=card-blank>
+        <a mat-button (click)=openNewProject() class=card-blank-button>
+            New Project <mat-icon>playlist_add</mat-icon>
+        </a>
     </mat-card>
 
 </div>

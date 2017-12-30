@@ -14,7 +14,9 @@ export class AuthService {
 
   updateStatus(){
     this._http.get('/api/account')
-      .subscribe(result => this.status$.next(result));
+      .subscribe(result => {
+        this.status$.next(result);
+      });
   }
 
   register(user){

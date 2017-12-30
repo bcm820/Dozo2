@@ -12,6 +12,7 @@ const shortid = require('shortid');
 const UserSchema = new Schema({
     
     id: { type: String, default: shortid.generate },
+    
     status: { type: Boolean, default: true },
     
     member_profile: {

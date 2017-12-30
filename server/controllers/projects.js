@@ -3,12 +3,11 @@ const mongoose = require('mongoose');
 const Project = mongoose.model('Project');
 const Profile = mongoose.model('Profile');
 
-function listErrors(err){
-    let list = [];
-    for(let x in err.errors){
-        list.push(err.errors[x].message);
+function sendMsg(type, msg){
+    return {
+        type: type,
+        msg: msg
     }
-    return list.reverse();
 }
 
 module.exports = {
@@ -42,10 +41,9 @@ module.exports = {
         project.manager = req.session.uid;
         project.save()
         .then(project => {
-            console.log(`Project "${project.title}" created.`)
-            res.json(true);
+            res.json(sendMsg(true, `${project.title} created.`));
         })
-        .catch(err => res.json(listErrors(err)));
+        .catch(err => console.log(err));
     },
 
     // update project info
