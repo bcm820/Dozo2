@@ -1,7 +1,6 @@
 
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
-const Profile = mongoose.model('Profile');
 const bcrypt = require('bcrypt');
 
 function sendMsg(type, msg){
@@ -83,6 +82,40 @@ module.exports = {
                 }
                 else { res.json(sendMsg(false, `Error: You entered an invalid password.`)) }
             })
+        });
+    },
+
+    // list all users
+    list(req, res){
+        User.find({}, {_pw:0, __v:0}).sort({last:1})
+        .then(list => res.json(list));
+    },
+    
+    // user lookup
+    lookup(req, res){
+        User.findById(req.params.id, {_pw:0, __v:0})
+        .populate('projects', {title:1})
+        .then(user => res.json(user))
+    },
+
+    // manager add notes
+    addNotes(req, res){
+        User.findById(req.params.id)
+        .then(user => {
+            user.details = req.body.details;
+            user.save()
+            .then(user => res.json(user))
+            .catch(err => res.json(sendMsg(false, `Error: Invalid input.`)));
+        })
+    },
+
+    // promote user to manager account
+    promote(req, res){
+        User.findById(req.params.id)
+        .then(user => {
+            user.isManager = true;
+            user.save()
+            .then(user => res.json(sendMsg(true, `${user.name} promoted to manager.`)));
         });
     }
     

@@ -1,29 +1,36 @@
 
 const mongoose = require('mongoose');
 const Project = mongoose.model('Project');
+const User = mongoose.model('User');
 const Task = mongoose.model('Task');
-const Profile = mongoose.model('Profile');
 
-function listErrors(err){
-    let list = [];
-    for(let x in err.errors){
-        list.push(err.errors[x].message);
+function sendMsg(status, msg){
+    return {
+        status: status,
+        msg: msg
     }
-    return list.reverse();
 }
 
 module.exports = {
-    
-    // list project tasks in order of priority
-    list(req, res){
-        Task.find({project: req.params.id},
-            {__v:0}).sort({priority:-1, status:-1})
-        .populate('member', {name:1})
-        .then(user => res.json(user))
-    },
 
-    // create task for project
-    create(req, res){
+    // create task for lane
+    createTask(req, res){
+        Lane.findById(req.params.id)
+        .then(lane => {
+            let task = new Task(req.body);
+            task._related = {};
+            task.lane = lane._id;
+            task._related.lane = lane;
+            task.cascadeSave()
+            .then(task => {
+                res.json(sendMsg(true, `Task "${task.title}" created.`));
+            })
+            .catch(err => res.json(sendMsg(false, `Error: Input invalid.`)));
+        });
+    }, 
+
+    // create lane for project
+    createLane(req, res){
         Project.findById(req.params.id)
         .then(project => {
             let task = new Task(req.body);

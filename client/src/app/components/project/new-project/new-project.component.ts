@@ -22,9 +22,10 @@ export class NewProjectComponent {
   createProject(project){
     this._ps.create(project)
       .subscribe(result => {
-        console.log(result);
         this.snackbar.open(result['msg'], 'x', {duration: 3000});
-        if(result['status']) this.dialog.close();
+        if(result['status']) {
+          this.dialog.close();
+        }
       });
   }
 

@@ -4,46 +4,53 @@ const Schema = mongoose.Schema;
 const Object = Schema.ObjectId;
 const shortid = require('shortid');
 
-/*
-    At some point, sprint larger project into sprints
-*/
-
 const ProjectSchema = new Schema({
     
     id: { type: String, default: shortid.generate },
     
+    // Create
     title: { type: String, required: [true] },
     description: { type: String },
-    notes: { type: String },
-    // managers to add, but only for leads to see
-    // *ngIf check on profile.type
-
+    details: { type: String },
     start_date: { type: Date },
     target_date: { type: Date },
-    end_date: { type: Date },
 
-    manager: { type: Object, ref: 'User' },
+    owner: { type: Object, ref: 'User' },
+    controller: { type: Object, ref: 'User' },
 
-    // associations
-    tasks: [{
-        type: Object, ref: 'Task',
-        $through: 'project',
-        $cascadeDelete: true
-    }],
-    
+    /*
+        Managers create projects
+        Controllers approve projects
+        Leads can assign tasks in projects
+    */
+
+    // Assign
+    lead: { type: Object, ref: 'User' },
     members: [{
-        type: Object, ref: 'Profile',
+        type: Object, ref: 'User',
         $through: 'projects',
         $cascadeDelete: true
     }],
+
+    // Update
+    status: {
+        type: String,
+        enum: ['pending', 'rejected', 'approved', 'in progress', 'completed']
+    },
+    end_date: { type: Date },
+    time: { type: Number },
+
+    // contains all lanes for a project
+    grid: [{
+        type: Object, ref: 'Lane',
+        $through: 'project',
+        $cascadeDelete: true
+    }],
+    // navigate via:
+    // 'let lane = index'
+    // 'let task = index'
     
-    // events: [{
-    //     type: Object, ref: 'Event',
-    //     $through: 'project',
-    //     $cascadeDelete: true
-    // }],
-    
-}, {usePushEach:true});
+}, {timestamps:true, usePushEach:true});
 
 // import for cascading relations
 const cascade = require('cascading-relations');

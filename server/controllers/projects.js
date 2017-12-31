@@ -1,36 +1,37 @@
 
 const mongoose = require('mongoose');
 const Project = mongoose.model('Project');
-const Profile = mongoose.model('Profile');
+const User = mongoose.model('User');
 
-function sendMsg(type, msg){
+function sendMsg(status, msg){
     return {
-        type: type,
+        status: status,
         msg: msg
     }
 }
 
 module.exports = {
     
-    /*
-        User Routes
-    */
-    
     // project lookup
     lookup(req, res){
-        Project.findById(req.params.id, {__v:0})
-        .populate('members', {name:1})
-        .populate('tasks', {title:1})
-        .then(user => res.json(user))
+        Project.findById(req.params.id, {__v:0, grid:0})
+        .populate('owner')
+        .populate('controller')
+        .populate('lead')
+        .populate('members')
+        .then(user => res.json(user));
     },
-    
-    /*
-        Manager Routes
-    */
+
+    // get full project grid
+    getGrid(req, res){
+        Project.findById(req.params.id, {grid:1})
+        .populate({path:'grid', populate:{path:'tasks'}})
+        .then(grid => res.json(grid));
+    },
     
     // view all projects
     list(req, res){
-        Project.find({}).sort({target_date:-1})
+        Project.find({}, {grid:0}).sort({target_date:-1})
         .then(list => res.json(list));
     },
 
@@ -41,7 +42,7 @@ module.exports = {
         project.manager = req.session.uid;
         project.save()
         .then(project => {
-            res.json(sendMsg(true, `${project.title} created.`));
+            res.json(sendMsg(true, `"${project.title}" created.`));
         })
         .catch(err => console.log(err));
     },
@@ -51,57 +52,57 @@ module.exports = {
         Project.findByIdAndUpdate(req.params.id, req.body,
             {runValidators:true, new:true, context: 'query'})
         .then(project => {
-            console.log(`"${project.title}" updated.`);
-            res.json(true);
+            res.json(sendMsg(true, `"${project.title}" updated.`));
         })
-    },
-    
-    // assign lead/member profile to project
-    assign(req, res){
-        Project.findById(req.params.project)
-        .then(project => {
-            Profile.findById(req.params.profile)
-            .then(profile => {
-                profile.projects.push(project);
-                profile.save()
-                .then(profile => {
-                    project.members.push(profile);
-                    project.save()
-                    .then(project => {
-                        console.log(`Profile assigned to "${project.title}."`);
-                        res.json(true)
-                    })
-                    .catch(err => res.json(listErrors(err)));
-                })
-                .catch(err => res.json(listErrors(err)));
-            });
-        });
-    },
-    
-    // unassign lead/member profile from project
-    unassign(req, res){
-        Project.findById(req.params.project)
-        .then(project => {
-            project.members.pull(req.params.profile);
-            project.save()
-            .then(project => console.log(`Profile removed from "${project.title}."`))
-        });
-        Profile.findById(req.params.profile)
-        .then(profile => {
-            profile.projects.pull(req.params.project);
-            profile.save()
-            .then(profile => console.log(`Project removed from ${profile.name}'s list.`))
-        })
-        res.json(true);
     },
 
     // delete project
     remove(req, res){
         Project.findByIdAndRemove(req.params.id)
         .then(project => {
-            console.log(`Project "${project.title}" deleted.`)
-            res.json(true);
+            res.json(sendMsg(true, `Project "${project.title}" deleted.`));
         })
-    }
+    },
+
+    
+    // REFACTOR ASSIGNMENT TO SELECT MANY FROM LIST AND ASSIGN
+    
+    // assign role to project
+    assign(req, res){
+        Project.findById(req.params.project)
+        .then(project => {
+            User.findById(req.params.user)
+            .then(user => {
+                user.projects.push(project);
+                user.save()
+                .then(user => {
+                    project.members.push(user);
+                    project.save()
+                    .then(project => {
+                        res.json(sendMsg(true, `Profile assigned to "${project.title}."`))
+                    })
+                    .catch(err => res.json(sendMsg(false, `Error: Input invalid.`)));
+                })
+                .catch(err => res.json(sendMsg(false, `Error: Input invalid.`)));
+            });
+        });
+    },
+    
+    // unassign role from project
+    unassign(req, res){
+        Project.findById(req.params.project)
+        .then(project => {
+            project.members.pull(req.params.user);
+            project.save()
+            .then(project => console.log(`Profile removed from "${project.title}."`))
+        });
+        Profile.findById(req.params.user)
+        .then(user => {
+            user.projects.pull(req.params.project);
+            user.save()
+            .then(user => console.log(`Project removed from ${user.name}'s list.`))
+        })
+        res.json(sendMsg(true, `Profile removed from "${project.title}."`));
+    },
     
 }

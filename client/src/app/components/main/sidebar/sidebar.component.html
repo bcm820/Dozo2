@@ -1,39 +1,39 @@
 
+<span *ngIf="projects | async as projects">
+
 <div layout=column layout-padding layout-margin>
 
-    <mat-card class="card-header bg-accent">
-        <mat-card-title class=card-heading align=center>Categories</mat-card-title>
-    </mat-card>
-
-    <mat-card class=bg-accent>
+    <mat-card class="bg-accent sidebar-button">
         <a mat-button class=card-button>
         <span class=card-title>Personal Tasks</span>
         <span class=card-subtitle>My To Do List</span>
         </a>
     </mat-card>
 
-    <mat-card class=bg-accent>
+    <mat-card class="bg-accent sidebar-button">
         <a mat-button class=card-button>
         <span class=card-title>Assigned Tasks</span>
         <span class=card-subtitle>From My Projects</span>
         </a>
     </mat-card>
 
-    <span *ngIf="projects | async as projects">
     <span *ngIf="projects?.length > 0">
-    <mat-card *ngFor="let project of projects" class=bg-accent>
+    <span *ngFor="let project of projects">
+    <mat-card class="bg-accent sidebar-button" layout-margin>
         <a mat-button class=card-button>
-        <span class=card-title>{{project.title}}</span>
-        <span class=card-subtitle>{{project.description}}</span>
+        <span class="card-title text-truncate">{{project.title}}</span>
+        <span class="card-subtitle text-truncate">{{project.description}}</span>
         </a>
     </mat-card>
     </span>
     </span>
 
-    <mat-card class=card-blank>
+    <mat-card class="card-blank sidebar-button">
         <a mat-button (click)=openNewProject() class=card-blank-button>
             New Project <mat-icon>playlist_add</mat-icon>
         </a>
     </mat-card>
 
 </div>
+
+</span>

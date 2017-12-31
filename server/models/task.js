@@ -7,44 +7,24 @@ const shortid = require('shortid');
 const TaskSchema = new Schema({
     
     id: { type: String, default: shortid.generate },
-    
-    title: { type: String, required:[true] },
+
+    // Create
+    title: { type: String, required: [true] },
     description: { type: String },
-
-    notes: { type: String },
-    // two-way channel between lead and member
-
+    details: { type: String },
     start_date: { type: Date },
     target_date: { type: Date },
+
+    // Update
     end_date: { type: Date },
+    time: { type: Number },
 
-    status: {
-        type: String,
-        enum: ['1','2','3','4'],
-        default: '1'
-    },
-
-    // associations
-    project: {
-        required:[true],
-        type: Object, ref: 'Project',
-        $through: 'tasks',
-        $cascadeDelete: true
-    },
+    // labels
+    member: { type: String },
+    project: { type: String },
+    lane: { type: String }
     
-    member: {
-        type: Object, ref: 'Profile',
-        $through: 'tasks',
-        $cascadeDelete: true
-    },
-
-    // events: [{
-    //     type: Object, ref: 'Event',
-    //     $through: 'task',
-    //     $cascadeDelete: true
-    // }],
-    
-}, {usePushEach:true});
+}, {timestamps:true, usePushEach:true});
 
 // import for cascading relations
 const cascade = require('cascading-relations');

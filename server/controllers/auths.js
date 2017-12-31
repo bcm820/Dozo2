@@ -36,7 +36,7 @@ module.exports = {
                 if(user !== null){
                     if(user.isManager) next();
                     else {
-                        res.json(false)
+                        res.json(sendMsg(false, 'Error: Manager credentials required.'))
                     }
                 }
             })
@@ -56,7 +56,7 @@ module.exports = {
                 user.checkPW(req.body._pw, (err, good) => {
                     if(good){
                         req.session.uid = user._id;
-                        res.json(sendMsg(true, `Welcome, ${user.first}! Logging you into Dozo...`));
+                        res.json(sendMsg(true, `Welcome, ${user.first}! Logging in...`));
                     }
                     else {
                         res.json(sendMsg(false, 'Error: You entered an invalid password.'));
@@ -70,7 +70,7 @@ module.exports = {
     // returns false to update user subject
     logout(req, res){
         req.session.uid = undefined;
-        res.json(sendMsg(true, `Session ended. See you again next time!`));
+        res.json(sendMsg(true, `Session ended. See you next time!`));
     },
 
     // checks if email unique
@@ -104,7 +104,7 @@ module.exports = {
                     user.save()
                     .then(user => {
                         req.session.uid = user._id;
-                        res.json(sendMsg(true, `Welcome, ${user.first}! Logging you into Dozo...`));
+                        res.json(sendMsg(true, `Welcome, ${user.first}! Logging in...`));
                     })
                     .catch(err => res.json(sendMsg(false, 'Error: One or more fields invalid.')));
                 });

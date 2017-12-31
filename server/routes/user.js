@@ -1,7 +1,6 @@
 
 const auth = require('../controllers/auths');
-const account = require('../controllers/accounts');
-const profiles = require('../controllers/profiles');
+const users = require('../controllers/users');
 const projects = require('../controllers/projects');
 const tasks = require('../controllers/tasks');
 
@@ -10,42 +9,80 @@ module.exports = (router) => {
     router.use(auth.authenticate);
 
     router.route('/account')
-    .get(account.getUser)
-    .post(account.updateUser)
-    .put(account.updatePW)
-    .delete(account.unregister)
+    .get(users.getUser)
+    .post(users.updateUser)
+    .put(users.updatePW)
+    .delete(users.unregister)
     
-    router.get('/users', profiles.list) // general name and email list, maybe profiles
-    router.get('/users/:id', profiles.lookupUser) // contact info, profile links
-    router.get('/profiles/leads', profiles.listLeads)
-    router.get('/profiles/members', profiles.listMembers)
-    router.get('/profiles/:id', profiles.lookupProfile) // profile with projects/tasks
-    router.get('/projects/:id', projects.lookup) // general project overview
+    router.get('/users', users.list)
+    router.get('/users/:id', users.lookup)
+
+    router.get('/projects/:id', projects.lookup)
     
     router.route('/projects/:id/tasks')
-    .get(tasks.list) // view all tasks of a project
-    .post(tasks.create) // create new task for a project
+    .get(projects.getGrid)
+    .post(tasks.createTask)
+    .put(tasks.createLane)
 
     router.route('/tasks/:id')
-    .get(tasks.lookup) // detailed task info
-    .post(tasks.update) // update task details, status, priority, etc.
-    .delete(tasks.remove) // delete task
+    .get(tasks.lookupTask)
+    .post(tasks.updateTask)
+    .delete(tasks.removeTask)
 
-    router.route('/tasks/:task/:profile')
-    .post(tasks.assign) // assign task to a profile
-    .delete(tasks.unassign) // unassign task from profile
-    
-    router.get('/tasks/:project/all/:status', tasks.listByStatus) // by profile
-    router.get('/tasks/:project/:profile/:status', tasks.listFilter) // by profile
-
-    /*
-        1. LEAD VIEW: All tasks, or select by member
-        2. MEMBER VIEW: Their tasks only
-        - Leads can create and assign tasks to members
-        - Members can create tasks for themselves
-        - Users can update a log for each task
-        - Leads can prioritize tasks
-        - Users can prioritize tasks
-    */
+    router.route('/lanes/:id')
+    .get(tasks.lookupLane)
+    .post(tasks.updateLane)
+    .delete(tasks.removeLane)
 
 };
+
+
+/*
+
+USER:
+id
+status
+isManager
+details
+agenda (Project, thru 'owner')
+[projects] (Project, thru 'members')
+email, first, last, _pw, _pwconf, name
+
+PROJECT:
+id
+title
+description
+details
+start_date
+target_date
+owner (User)
+controller (User)
+lead (User)
+[members] (User, thru 'projects')
+status
+end_date
+time (for timer)
+[grid] (Lane, thru 'project') - lanes in array
+    // navigate via:
+    // 'let lane = index'
+    // 'let task = index'
+
+LANE:
+id
+title
+[tasks] (Task, thru 'lane')
+
+TASK:
+id
+title
+description
+details
+start_date
+target_date
+end_date
+time
+member
+project
+lane
+
+*/

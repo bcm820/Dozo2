@@ -2,32 +2,27 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const Object = Schema.ObjectId;
-const bcrypt = require('bcrypt');
 const shortid = require('shortid');
-
-/*
-    NOTE: Project-related data located in Profile schema
-*/ 
+const bcrypt = require('bcrypt');
 
 const UserSchema = new Schema({
-    
-    id: { type: String, default: shortid.generate },
-    
-    status: { type: Boolean, default: true },
-    
-    member_profile: {
-        type: Object, ref: 'Profile',
-        $through: 'info', // defines path via _related in .populate()
-        $cascadeDelete: true // deletes related sub-docs in Profile
-    },
 
-    lead_profile: {
-        type: Object, ref: 'Profile',
-        $through: 'info',
+    id: { type: String, default: shortid.generate },
+    status: { type: Boolean, default: true }, // for auth
+    isManager: { type: Boolean },
+    details: { type: String },
+
+    agenda: {
+        type: Object, ref: 'Project',
+        $through: 'owner',
         $cascadeDelete: true
     },
-
-    isManager: { type: Boolean },
+    
+    projects: [{
+        type: Object, ref: 'Project',
+        $through: 'members',
+        $cascadeDelete: true
+    }],
 
     email: {
         type: String, trim: true,
@@ -60,8 +55,8 @@ const UserSchema = new Schema({
                 this.invalidate('pwconf');
             }
         }
-    }
-
+    },
+    
 }, {timestamps:true, usePushEach:true});
 
 // import for cascading relations
