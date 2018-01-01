@@ -10,10 +10,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // UI modules
 import { MaterialModule } from './ui/material.module';
 import { CovalentModule } from './ui/covalent.module';
+import { DragulaModule } from 'ng2-dragula';
 
 // Services
 import { AuthService } from './services/auth.service';
-import { ProfileService } from './services/profile.service';
+import { UserService } from './services/user.service';
 import { ProjectService } from './services/project.service';
 import { TaskService } from './services/task.service';
 
@@ -29,12 +30,12 @@ import { LoginComponent } from './components/auth/login/login.component';
 // Layout Components
 import { MainComponent } from './components/main/main.component';
 import { MainNavComponent } from './components/main/main-nav/main-nav.component';
+import { ProfileComponent } from './components/main/main-nav/profile/profile.component';
 import { MainNav2Component } from './components/main/main-nav2/main-nav2.component';
+import { UserComponent } from './components/main/main-nav2/user/user.component';
 import { SidebarComponent } from './components/main/sidebar/sidebar.component';
 import { LandingComponent } from './components/main/landing/landing.component';
 import { DashboardComponent } from './components/main/dashboard/dashboard.component';
-import { UserComponent } from './components/main/user/user.component';
-import { ProfileComponent } from './components/main/profile/profile.component';
 
 // Project Components
 import { ProjectFormComponent } from './components/project/project-form/project-form.component';
@@ -68,6 +69,7 @@ import { NewProjectComponent } from './components/project/new-project/new-projec
     ReactiveFormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    DragulaModule,
   ],
   entryComponents: [
     RegisterComponent,
@@ -79,7 +81,7 @@ import { NewProjectComponent } from './components/project/new-project/new-projec
   ],
   providers: [
     AuthService,
-    ProfileService,
+    UserService,
     ProjectService,
     TaskService
   ],

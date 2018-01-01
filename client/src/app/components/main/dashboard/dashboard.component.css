@@ -1,0 +1,62 @@
+
+.lane {
+    width: 260px;
+}
+
+.card-heading {
+    width: 212px;
+    font-size: 20px;
+    padding-bottom: 12px;
+    color: white;
+}
+
+.mat-card-button {
+    width: 244px;
+    height: 100%;
+}
+
+.card-title {
+    text-align: left;
+    display: block;
+    font-size: 20px;
+    font-weight: 400;
+    margin-top: 8px;
+}
+
+.card-subtitle {
+    text-align: left;
+    display: block;
+    color: gray;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 14px;
+    margin-bottom: 10px;
+}
+
+.card-blank-button {
+    text-align: center;
+    height: 76px;
+    line-height: 75px;
+    width: 100%;
+    font-size: 18px;
+}
+
+.card-blank {
+    margin-top: 8px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border: 0.5px dashed;
+}
+
+.lane-blank {
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.5);
+    border: 0.5px dashed;
+}
+
+.lane-blank-button {
+    text-align: center;
+    height: 100%;
+    width: 100%;
+    font-size: 18px;
+    padding: 35% 0;
+}

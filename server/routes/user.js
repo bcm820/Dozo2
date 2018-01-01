@@ -13,11 +13,17 @@ module.exports = (router) => {
     .post(users.updateUser)
     .put(users.updatePW)
     .delete(users.unregister)
-    
-    router.get('/users', users.list)
-    router.get('/users/:id', users.lookup)
 
-    router.get('/projects/:id', projects.lookup)
+    router.get('/users', users.list);
+    router.get('/users/:id', users.lookup);
+
+    router.route('/projects')
+    .get(projects.getUserProjects)
+    .post(projects.updateUserProjects)
+
+    router.route('/projects/:id')
+    .get(projects.lookup)
+    // .post(projects.updateGrid)
     
     router.route('/projects/:id/tasks')
     .get(projects.getGrid)
@@ -40,49 +46,39 @@ module.exports = (router) => {
 /*
 
 USER:
-id
 status
 isManager
 details
-agenda (Project, thru 'owner')
-[projects] (Project, thru 'members')
+[projects] (via manager, lead, contributors)
 email, first, last, _pw, _pwconf, name
 
 PROJECT:
-id
 title
 description
 details
-start_date
-target_date
-owner (User)
-controller (User)
-lead (User)
-[members] (User, thru 'projects')
-status
+startDate
+targetDate
+manager (User, thru 'projects')
+lead (User, thru 'projects')
+[contributors] (User, thru 'projects')
 end_date
-time (for timer)
-[grid] (Lane, thru 'project') - lanes in array
-    // navigate via:
-    // 'let lane = index'
-    // 'let task = index'
+[grid] (Lane, thru 'project')
+[tasks] (Task, thru 'project')
 
 LANE:
-id
 title
+project (Project, thru 'grid')
 [tasks] (Task, thru 'lane')
 
 TASK:
-id
 title
 description
 details
-start_date
-target_date
-end_date
-time
-member
-project
-lane
+startDate
+targetDate
+endDate
+contributor (User, thru 'tasks')
+project (Project, thru 'tasks')
+lane (Lane, thru 'tasks')
 
 */

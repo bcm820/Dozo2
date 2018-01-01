@@ -12,16 +12,27 @@ const UserSchema = new Schema({
     isManager: { type: Boolean },
     details: { type: String },
 
-    agenda: {
+    projects: [{
         type: Object, ref: 'Project',
-        $through: 'owner',
+        $through: 'manager',
         $cascadeDelete: true
-    },
+    }],
+
+    projects: [{
+        type: Object, ref: 'Project',
+        $through: 'lead',
+        $cascadeDelete: true
+    }],
     
     projects: [{
         type: Object, ref: 'Project',
-        $through: 'members',
+        $through: 'contributors',
         $cascadeDelete: true
+    }],
+
+    tasks: [{
+        type: Object, ref: 'Task',
+        $through: 'contributor'
     }],
 
     email: {

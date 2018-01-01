@@ -16,7 +16,7 @@
       <mat-icon>menu</mat-icon>
     </button>
     <div td-sidenav-content>
-      <app-sidebar></app-sidebar>
+      <app-sidebar *ngIf=user.status></app-sidebar>
     </div>
 
     <div td-toolbar-content layout="row" layout-align="center center" flex>

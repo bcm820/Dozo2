@@ -1,26 +1,11 @@
 
 <mat-nav-list>
 
-  <h5 matSubheader class=bg-accent>Project Leads</h5>
-  <mat-divider></mat-divider>
-
-  <span *ngFor="let lead of leads|async">
-    <a mat-list-item (click)=viewProfile(lead._id)>
+  <span *ngFor="let contributor of contributors|async">
+    <a mat-list-item (click)=viewUser(contributor._id)>
       <mat-icon matListIcon>person</mat-icon>
-      <span matLine>{{lead.name}}</span>
-      <span matLine>{{lead._related.account.email}}</span>
-    </a>
-    <mat-divider></mat-divider>
-  </span>
-
-  <h5 matSubheader class=bg-accent>Project Members</h5>
-  <mat-divider></mat-divider>
-
-  <span *ngFor="let member of members|async">
-    <a mat-list-item (click)=viewProfile(member._id)>
-      <mat-icon matListIcon>person</mat-icon>
-      <span matLine>{{member.name}}</span>
-      <span matLine>{{member._related.account.email}}</span>
+      <span matLine>{{contributor.name}}</span>
+      <span matLine>{{contributor.email}}</span>
     </a>
     <mat-divider></mat-divider>
   </span>

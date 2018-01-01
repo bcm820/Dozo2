@@ -24,7 +24,7 @@ export class NewProjectComponent {
       .subscribe(result => {
         this.snackbar.open(result['msg'], 'x', {duration: 3000});
         if(result['status']) {
-          this.dialog.close();
+          this.dialog.close(true);
         }
       });
   }

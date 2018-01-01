@@ -12,7 +12,6 @@ function sendMsg(type, msg){
 
 module.exports = {
 
-    // primary route to get user object
     getUser(req, res){
         User.findById(req.session.uid, {_pw:0, __v:0})
         .then(user => res.json(user))

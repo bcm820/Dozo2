@@ -6,6 +6,14 @@ export class ProjectService {
 
   constructor(private _http: HttpClient) { }
 
+  getUserProjects(){
+    return this._http.get('/api/projects');
+  }
+
+  updateUserProjects(projects){
+    return this._http.post('/api/projects', projects)
+  }
+  
   lookup(id){
     return this._http.get(`/api/projects/${id}`);
   }

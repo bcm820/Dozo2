@@ -1,5 +1,6 @@
 
 const User = require('mongoose').model('User');
+const Project = require('mongoose').model('Project');
 const bcrypt = require('bcrypt');
 
 function sendMsg(status, msg){
@@ -56,7 +57,7 @@ module.exports = {
                 user.checkPW(req.body._pw, (err, good) => {
                     if(good){
                         req.session.uid = user._id;
-                        res.json(sendMsg(true, `Welcome, ${user.first}! Logging in...`));
+                        res.json(sendMsg(true, `Welcome, ${user.first}! Logging you in...`));
                     }
                     else {
                         res.json(sendMsg(false, 'Error: You entered an invalid password.'));
@@ -100,11 +101,15 @@ module.exports = {
                 bcrypt.hash(user._pw, 10, (err, hashedPass) => {
                     user._pw = hashedPass;
                     user._pwconf = undefined;
-                    // finally, save user
-                    user.save()
+                    // create 'agenda' project for user
+                    let agenda = new Project({title:'Agenda', description:'My To Do List'});
+                    user._related = {};
+                    user._related.projects = [agenda];
+                    // finally, save user and nested agenda project in list
+                    user.cascadeSave()
                     .then(user => {
                         req.session.uid = user._id;
-                        res.json(sendMsg(true, `Welcome, ${user.first}! Logging in...`));
+                        res.json(sendMsg(true, `Welcome, ${user.first}! Logging you in...`));
                     })
                     .catch(err => res.json(sendMsg(false, 'Error: One or more fields invalid.')));
                 });

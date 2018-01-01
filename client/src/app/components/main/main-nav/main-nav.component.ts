@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
-import { ProfileService } from '../../../services/profile.service';
+import { UserService } from '../../../services/user.service';
 import { MatDialog } from '@angular/material';
-import { ProfileComponent } from '../profile/profile.component';
+import { ProfileComponent } from './profile/profile.component';
 
 @Component({
   selector: 'app-main-nav',
@@ -12,23 +12,19 @@ import { ProfileComponent } from '../profile/profile.component';
 export class MainNavComponent implements OnInit {
 
   @Input() user;
-  leads;
-  members;
-  // clicking profile will show project and task info
-  // managers will be able to assign to projects
+  contributors;
 
   constructor(
-    private _ps: ProfileService,
+    private _us: UserService,
     private _router: Router,
     private dialog: MatDialog
   ) { }
 
   ngOnInit() {
-    this.leads = this._ps.listLeads();
-    this.members = this._ps.listMembers();
+    this.contributors = this._us.list();
   }
 
-  viewProfile(id){
+  viewUser(id){
     this.dialog.open(ProfileComponent, {
       width:'500px',
       data: { id: id, user: this.user },

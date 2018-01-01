@@ -24,11 +24,11 @@ export class MainComponent implements OnInit {
   ){}
 
   ngOnInit(){
-    this._as.updateStatus();
     this.getStatus();
   }
 
   getStatus(){
+    this._as.updateStatus();
     this._as.status$
       .subscribe(result => {
         if(!result['status']) this._router.navigate(['']);

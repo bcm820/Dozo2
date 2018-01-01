@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { MatSnackBar } from '@angular/material';
-import { ProfileService } from '../../../services/profile.service';
+import { UserService } from '../../../../services/user.service';
 
 @Component({
   selector: 'app-profile',
@@ -17,11 +17,11 @@ export class ProfileComponent implements OnInit {
     private dialogRef: MatDialogRef<ProfileComponent>,
     @Inject(MAT_DIALOG_DATA) public data,
     private snackbar: MatSnackBar,
-    private _ps: ProfileService
+    private _us: UserService
   ) { }
 
   ngOnInit() {
-    this.profile = this._ps.lookupProfile(this.data.id);
+    this.profile = this._us.lookup(this.data.id);
     this.user = this.data.user;
   }
 

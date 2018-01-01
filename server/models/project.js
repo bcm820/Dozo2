@@ -12,33 +12,32 @@ const ProjectSchema = new Schema({
     title: { type: String, required: [true] },
     description: { type: String },
     details: { type: String },
-    start_date: { type: Date },
-    target_date: { type: Date },
-
-    owner: { type: Object, ref: 'User' },
-    controller: { type: Object, ref: 'User' },
+    startDate: { type: Date },
+    targetDate: { type: Date },
 
     /*
         Managers create projects
-        Controllers approve projects
         Leads can assign tasks in projects
     */
 
     // Assign
-    lead: { type: Object, ref: 'User' },
-    members: [{
+
+    manager: {
         type: Object, ref: 'User',
-        $through: 'projects',
-        $cascadeDelete: true
+        $through: 'projects'
+    },
+
+    lead: {
+        type: Object, ref: 'User',
+        $through: 'projects'
+    },
+    
+    contributors: [{
+        type: Object, ref: 'User',
+        $through: 'projects'
     }],
 
-    // Update
-    status: {
-        type: String,
-        enum: ['pending', 'rejected', 'approved', 'in progress', 'completed']
-    },
-    end_date: { type: Date },
-    time: { type: Number },
+    endDate: { type: Date },
 
     // contains all lanes for a project
     grid: [{
@@ -46,9 +45,12 @@ const ProjectSchema = new Schema({
         $through: 'project',
         $cascadeDelete: true
     }],
-    // navigate via:
-    // 'let lane = index'
-    // 'let task = index'
+
+    tasks: [{
+        type: Object, ref: 'Task',
+        $through: 'project',
+        $cascadeDelete: true
+    }]
     
 }, {timestamps:true, usePushEach:true});
 

@@ -2,6 +2,7 @@
 const mongoose = require('mongoose');
 const Project = mongoose.model('Project');
 const User = mongoose.model('User');
+const Lane = mongoose.model('Lane');
 const Task = mongoose.model('Task');
 
 function sendMsg(status, msg){
@@ -13,48 +14,50 @@ function sendMsg(status, msg){
 
 module.exports = {
 
+    // create lane for project
+    createLane(req, res){
+        Project.findById(req.params.id)
+        .then(project => {
+            // using cascading-relations mod, assigning project to lane
+            // will save lane in project's related field
+            let lane = new Lane(req.body);
+            lane._related = {};
+            lane._related.project = project;
+            lane.cascadeSave()
+            .then(lane => {
+                res.json(sendMsg(true, `Lane "${lane.title}" created.`));
+            })
+            .catch(err => res.json(sendMsg(false, `Error: Input invalid.`)));
+        });
+    },
+
     // create task for lane
     createTask(req, res){
         Lane.findById(req.params.id)
         .then(lane => {
             let task = new Task(req.body);
             task._related = {};
-            task.lane = lane._id;
-            task._related.lane = lane;
+            task._related.lane = lane; // default is for first lane
             task.cascadeSave()
             .then(task => {
                 res.json(sendMsg(true, `Task "${task.title}" created.`));
             })
             .catch(err => res.json(sendMsg(false, `Error: Input invalid.`)));
         });
-    }, 
-
-    // create lane for project
-    createLane(req, res){
-        Project.findById(req.params.id)
-        .then(project => {
-            let task = new Task(req.body);
-            task._related = {};
-            task.project = project._id;
-            task._related.project = project;
-            task.cascadeSave()
-            .then(task => {
-                console.log(`Task "${task.title}" created.`)
-                res.json(true);
-            })
-            .catch(err => res.json(listErrors(err)));
-        });
     },
 
+    
+
     // lookup detailed task info
-    lookup(req, res){
+    lookupTask(req, res){
         Task.findById(req.params.id)
-        .populate('member', {name:1})
         .then(task => res.json(task));
     },
     
     // update task info
-    update(req, res){
+    // update its lane
+    // update its user
+    updateTask(req, res){
         Task.findByIdAndUpdate(req.params.id, req.body,
             {runValidators:true, new:true, context: 'query'})
         .then(task => {
@@ -64,19 +67,47 @@ module.exports = {
     },
 
     // remove task
-    remove(req, res){
+    removeTask(req, res){
         Task.findByIdAndRemove(req.params.id)
         .then(task => {
             console.log(`Task "${task.title}" deleted.`);
             res.json(true);
         })
     },
+
+    // lookup lane
+    lookupLane(req, res){
+        Lane.findById(req.params.id)
+        .then(lane => res.json(lane));
+    },
+
+    // update task info
+    updateLane(req, res){
+        Lane.findByIdAndUpdate(req.params.id, req.body,
+            {runValidators:true, new:true, context: 'query'})
+        .then(task => {
+            console.log(`Lane "${lane.title}" updated.`);
+            res.json(true);
+        })
+    },
+
+    // remove task
+    removeLane(req, res){
+        Lane.findByIdAndRemove(req.params.id)
+        .then(task => {
+            console.log(`Lane "${lane.title}" deleted.`);
+            res.json(true);
+        })
+    },
+
+
+    // REFACTOR ASSIGNMENT????
     
-    // assign lead/member profile to project
+    // assign lead/member profile to task
     assign(req, res){
         Task.findById(req.params.task)
         .then(task => {
-            Profile.findById(req.params.profile)
+            User.findById(req.params.profile)
             .then(profile => {
                 profile.tasks.push(task);
                 profile.save()
@@ -94,15 +125,15 @@ module.exports = {
         });
     },
     
-    // unassign lead/member profile from project
+    // unassign lead/member profile from task
     unassign(req, res){
         Task.findById(req.params.task)
         .then(task => {
             task.member = undefined;
             task.save()
-            .then(task => console.log(`Profile removed from "${task.title}."`))
+            .then(task => console.log(`User removed from "${task.title}."`))
         });
-        Profile.findById(req.params.profile)
+        User.findById(req.params.profile)
         .then(profile => {
             profile.tasks.pull(req.params.task);
             profile.save()

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ProfileService } from '../../../services/profile.service';
+import { UserService } from '../../../services/user.service';
 import { MatDialog } from '@angular/material';
-import { UserComponent } from '../user/user.component';
+import { UserComponent } from './user/user.component';
 
 @Component({
   selector: 'app-main-nav2',
@@ -13,16 +13,16 @@ export class MainNav2Component implements OnInit {
   @Input() user;
   users;
   // clicking user will open up dialog with info
-  // managers will be able to assign profile
-  // shows which profiles and for what, but that's all
+  // managers will be able to assign user
+  // shows which users and for what, but that's all
   
   constructor(
-    private _ps: ProfileService,
+    private _us: UserService,
     private dialog: MatDialog
   ) { }
 
   ngOnInit() {
-    this.users = this._ps.list();
+    this.users = this._us.list();
   }
 
   viewUser(id){

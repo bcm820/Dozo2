@@ -1,11 +1,12 @@
 
 .card-button {
-    height: 90px;
+    height: 70px;
     width: 100%;
 }
 
-.sidebar-button {
+.mat-card-button {
     width: 260px;
+    margin-bottom: 2px;
 }
 
 .card-title {
@@ -14,7 +15,7 @@
     color: white;
     font-size: 24px;
     font-weight: 400;
-    margin-top: 12px;
+    margin-top: 8px;
 }
 
 .card-subtitle {
@@ -23,19 +24,20 @@
     color: rgb(109, 40, 19);
     font-size: 14px;
     font-weight: 400;
-    line-height: 34px;
+    line-height: 14px;
 }
 
 .card-blank-button {
     text-align: center;
     margin: auto;
-    height: 89px;
-    line-height: 89px;
+    height: 70px;
+    line-height: 70px;
     width: 100%;
     font-size: 18px;
 }
 
 .card-blank {
+    margin-top: 10px;
     background-color: rgba(235, 235, 235, 0.5);
     border: 0.5px dashed;
 }

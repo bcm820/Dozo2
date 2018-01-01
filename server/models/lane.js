@@ -10,6 +10,11 @@ const LaneSchema = new Schema({
     
     title: { type: String, required: [true] },
 
+    project: {
+        type: Object, ref: 'Project',
+        $through: 'grid',
+    },
+
     tasks: [{ 
         type: Object, ref: 'Task',
         $through: 'lane',
