@@ -33,20 +33,18 @@ module.exports = {
 
     // create task for lane
     createTask(req, res){
-        Lane.findById(req.params.id)
-        .then(lane => {
+        Project.findById(req.params.id)
+        .then(project => {
             let task = new Task(req.body);
-            task._related = {};
-            task._related.lane = lane; // default is for first lane
-            task.cascadeSave()
-            .then(task => {
+            task.project = project._id;
+            project.toDo.push(task);
+            project.cascadeSave()
+            .then(project => {
                 res.json(sendMsg(true, `Task "${task.title}" created.`));
             })
             .catch(err => res.json(sendMsg(false, `Error: Input invalid.`)));
         });
     },
-
-    
 
     // lookup detailed task info
     lookupTask(req, res){

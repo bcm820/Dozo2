@@ -21,6 +21,8 @@ module.exports = (router) => {
     .get(projects.getUserProjects)
     .post(projects.updateUserProjects)
 
+    router.get('/projects/agenda', projects.getAgenda);
+
     router.route('/projects/:id')
     .get(projects.lookup)
     // .post(projects.updateGrid)

@@ -2,6 +2,7 @@
 const mongoose = require('mongoose');
 const Project = mongoose.model('Project');
 const User = mongoose.model('User');
+const Lane = mongoose.model('Lane');
 
 function sendMsg(status, msg){
     return {
@@ -21,14 +22,19 @@ module.exports = {
     updateUserProjects(req, res){
         User.findById(req.session.uid)
         .then(user => {
-            user._related = {};
-            user._related.projects = req.body;
-            user.cascadeSave()
+            user.projects = req.body;
+            user.save()
             .then(user => {
                 res.json(sendMsg(true, `Saving changes...`));
             })
             .catch(err => res.json(sendMsg(false, 'Unable to save changes...')));
         })
+    },
+
+    getAgenda(req, res){
+        Project.findOne({contributors:req.session.uid, title:'Agenda'})
+        .populate({path:'grid', populate:{path:'tasks'}})
+        .then(agenda => res.json(agenda))
     },
     
     // project lookup
@@ -77,11 +83,14 @@ module.exports = {
     // create project
     create(req, res){
         User.findById(req.session.uid)
-        .then(manager => {
+        .then(user => {
             let project = new Project(req.body);
-            project.manager = manager._id;
+            user.projects.push(project);
             project._related = {};
-            project._related.manager = manager;
+            project._related.manager = user;
+            project.contributors = [user._id];
+            let lane = new Lane({title: "To Do"});
+            project._related.grid = [lane];
             project.cascadeSave()
             .then(project => {
                 res.json(sendMsg(true, `"${project.title}" created.`));

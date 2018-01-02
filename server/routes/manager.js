@@ -8,7 +8,6 @@ module.exports = (router) => {
     router.use(auth.authenticateManager);
 
     router.route('/m/users/:id')
-    .post(users.addNotes) // manager details
     .put(users.promote) // promote user to manager
 
     router.route('/m/projects')

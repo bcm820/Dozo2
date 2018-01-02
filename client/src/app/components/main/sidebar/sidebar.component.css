@@ -41,3 +41,16 @@
     background-color: rgba(235, 235, 235, 0.5);
     border: 0.5px dashed;
 }
+
+mat-card > mat-icon {
+    position: absolute;
+    left: 230px;
+    top: 9px;
+    z-index: 1;
+    font-size: 18px;
+    cursor: grab;
+}
+
+mat-card > mat-icon:active {
+    cursor: grabbing;
+}

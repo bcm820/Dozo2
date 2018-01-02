@@ -10,30 +10,9 @@ const UserSchema = new Schema({
     id: { type: String, default: shortid.generate },
     status: { type: Boolean, default: true }, // for auth
     isManager: { type: Boolean },
-    details: { type: String },
-
-    projects: [{
-        type: Object, ref: 'Project',
-        $through: 'manager',
-        $cascadeDelete: true
-    }],
-
-    projects: [{
-        type: Object, ref: 'Project',
-        $through: 'lead',
-        $cascadeDelete: true
-    }],
     
-    projects: [{
-        type: Object, ref: 'Project',
-        $through: 'contributors',
-        $cascadeDelete: true
-    }],
-
-    tasks: [{
-        type: Object, ref: 'Task',
-        $through: 'contributor'
-    }],
+    projects: [{ type: Object, ref: 'Project' }],
+    tasks: [{ type: Object, ref: 'Task' }],
 
     email: {
         type: String, trim: true,

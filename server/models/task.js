@@ -11,26 +11,14 @@ const TaskSchema = new Schema({
     // Create
     title: { type: String, required: [true] },
     description: { type: String },
-    details: { type: String },
-    startDate: { type: Date },
-    targetDate: { type: Date },
 
     // Update
-    endDate: { type: Date },
-
-    contributor: {
-        type: Object, ref: 'User',
-        $through: 'tasks',
-    },
-
-    project: {
-        type: Object, ref: 'Project',
-        $through: 'tasks',
-    },
+    contributor: { type: Object, ref: 'User' },
+    project: { type: Object, ref: 'Project' },
 
     lane: {
         type: Object, ref: 'Lane',
-        $through: 'tasks',
+        $through: 'tasks'
     },
     
 }, {timestamps:true, usePushEach:true});

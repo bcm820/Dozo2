@@ -14,43 +14,22 @@ const ProjectSchema = new Schema({
     details: { type: String },
     startDate: { type: Date },
     targetDate: { type: Date },
+    endDate: { type: Date },
 
-    /*
-        Managers create projects
-        Leads can assign tasks in projects
-    */
+    manager: { type: Object, ref: 'User' },
+    lead: { type: Object, ref: 'User' },
 
-    // Assign
-
-    manager: {
-        type: Object, ref: 'User',
-        $through: 'projects'
-    },
-
-    lead: {
-        type: Object, ref: 'User',
-        $through: 'projects'
-    },
-    
     contributors: [{
         type: Object, ref: 'User',
         $through: 'projects'
     }],
 
-    endDate: { type: Date },
-
-    // contains all lanes for a project
+    // contains all lanes except to-do
     grid: [{
         type: Object, ref: 'Lane',
         $through: 'project',
         $cascadeDelete: true
     }],
-
-    tasks: [{
-        type: Object, ref: 'Task',
-        $through: 'project',
-        $cascadeDelete: true
-    }]
     
 }, {timestamps:true, usePushEach:true});
 

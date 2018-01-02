@@ -1,0 +1,30 @@
+<form #form=ngForm (submit)=sendTask()>
+
+<div mat-dialog-content>
+
+    <mat-form-field>
+      <input matInput placeholder="Title"
+        name=title [(ngModel)]='task.title' #title='ngModel'
+        required minlength=5>
+        <mat-error align=right *ngIf=title.errors [hidden]=!title.errors.minlength>
+          Must be 5 characters minimum.
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Details"
+        name=description [(ngModel)]='task.description' #description='ngModel'
+        required minlength=5>
+        <mat-error align=right *ngIf=description.errors [hidden]=!description.errors.minlength>
+          Must be 5 characters minimum.
+        </mat-error>
+    </mat-form-field>
+
+</div>
+
+<div mat-dialog-actions align=center>
+<button mat-raised-button *ngIf=!form.valid disabled>{{action}}</button>
+<button type=submit mat-raised-button color=accent *ngIf=form.valid>{{action}}</button>
+</div>
+
+</form>

@@ -11,11 +11,11 @@ export class ProjectService {
   }
 
   updateUserProjects(projects){
-    return this._http.post('/api/projects', projects)
+    return this._http.post('/api/projects', projects);
   }
-  
-  lookup(id){
-    return this._http.get(`/api/projects/${id}`);
+
+  getAgenda(){
+    return this._http.get('/api/projects/agenda');
   }
 
   list(){ // all projects in DB
@@ -26,20 +26,16 @@ export class ProjectService {
     return this._http.post('/api/m/projects', project);
   }
 
+  lookup(id){
+    return this._http.get(`/api/projects/${id}`);
+  }
+
+  // later
   update(id, project){
     return this._http.post(`/api/m/projects/${id}`, project);
   }
-
   remove(id){
     return this._http.delete(`/api/m/projects/${id}`);
-  }
-
-  assign(project, profile){
-    return this._http.post(`/api/m/projects/${project}/${profile}`, null)
-  }
-
-  unassign(project, profile){
-    return this._http.delete(`/api/m/projects/${project}/${profile}`)
   }
 
 }

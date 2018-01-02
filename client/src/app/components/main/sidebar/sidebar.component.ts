@@ -2,9 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ProjectService } from '../../../services/project.service';
 import { MatDialog } from '@angular/material';
 import { NewProjectComponent } from '../../project/new-project/new-project.component';
-import { MatSnackBar } from '@angular/material';
 import { DragulaService } from 'ng2-dragula';
-import { TimerObservable } from 'rxjs/observable/TimerObservable';
 
 @Component({
   selector: 'app-sidebar',
@@ -15,28 +13,55 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   projects;
   drops;
+  removes;
   
   constructor(
     private _ps: ProjectService,
     private _ds: DragulaService,
     private dialog: MatDialog,
-    private snackbar: MatSnackBar,
-  ) {
-    this.drops = this._ds.drop.subscribe(result => {
-      this._ps.updateUserProjects(this.projects)
-      .subscribe(result => {
-        this.snackbar.open(result['msg'], 'x', {duration: 3000});
-      });
-    });
-  }
+  ) {}
 
   ngOnInit() {
     this.listProjects();
+    this.setListOptions();
+    this.drops = this._ds.dropModel.subscribe((value) => {
+      this.onDropModel(value.slice(1));
+    });
+    this.removes = this._ds.removeModel.subscribe((value) => {
+      this.onRemoveModel(value.slice(1));
+    });
+  }
+
+  setListOptions(){
+    let bag = this._ds.find('projectList');
+    if (bag !== undefined) this._ds.destroy('projectList');
+    this._ds.setOptions('projectList', {
+      moves: function (el, container, handle) {
+        return handle.classList.contains('handle');
+      }
+    });
+  }
+
+  private onDropModel(args) {
+    let [el, target, source] = args;
+    let list = Array.from(this.projects, project => project['_id']);
+    this.updateProjects(list);
+  }
+
+  private onRemoveModel(args) {
+    let [el, source] = args;
   }
 
   listProjects(){
     this._ps.getUserProjects()
       .subscribe(user => this.projects = user['_related'].projects);
+  }
+
+  updateProjects(list){
+    this._ps.updateUserProjects(list)
+      .subscribe(result => {
+        console.log(result['msg']);
+    });
   }
 
   openNewProject(){
@@ -49,6 +74,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(){
     this.drops.unsubscribe();
+    this.removes.unsubscribe();
   }
 
 }

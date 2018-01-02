@@ -1,18 +1,19 @@
 
 .lane {
-    width: 260px;
+    width: 250px;
+    height: 100%;
 }
 
 .card-heading {
-    width: 212px;
+    width: 184px;
     font-size: 20px;
     padding-bottom: 12px;
     color: white;
 }
 
 .mat-card-button {
-    width: 244px;
-    height: 100%;
+    width: 214px;
+    height: 76px;
 }
 
 .card-title {
@@ -59,4 +60,17 @@
     width: 100%;
     font-size: 18px;
     padding: 35% 0;
+}
+
+mat-card > mat-icon {
+    position: absolute;
+    left: 190px;
+    top: 6px;
+    z-index: 1;
+    font-size: 18px;
+    cursor: grab;
+}
+
+mat-card > mat-icon:active {
+    cursor: grabbing;
 }

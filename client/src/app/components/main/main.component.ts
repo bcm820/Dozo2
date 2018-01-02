@@ -47,7 +47,6 @@ export class MainComponent implements OnInit {
   openAccount(){
     this.dialog.open(AccountComponent, {
       width:'70%',
-      data: this.user,
       autoFocus: false
     })
   }

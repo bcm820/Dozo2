@@ -97,17 +97,6 @@ module.exports = {
         .then(user => res.json(user))
     },
 
-    // manager add notes
-    addNotes(req, res){
-        User.findById(req.params.id)
-        .then(user => {
-            user.details = req.body.details;
-            user.save()
-            .then(user => res.json(user))
-            .catch(err => res.json(sendMsg(false, `Error: Invalid input.`)));
-        })
-    },
-
     // promote user to manager account
     promote(req, res){
         User.findById(req.params.id)

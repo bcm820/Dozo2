@@ -41,6 +41,10 @@ import { DashboardComponent } from './components/main/dashboard/dashboard.compon
 import { ProjectFormComponent } from './components/project/project-form/project-form.component';
 import { NewProjectComponent } from './components/project/new-project/new-project.component';
 
+// Task Components
+import { TaskFormComponent } from './components/task/task-form/task-form.component';
+import { NewTaskComponent } from './components/task/new-task/new-task.component';
+
 
 @NgModule({
   declarations: [
@@ -59,6 +63,8 @@ import { NewProjectComponent } from './components/project/new-project/new-projec
     MainNav2Component,
     SidebarComponent,
     NewProjectComponent,
+    NewTaskComponent,
+    TaskFormComponent,
   ],
   imports: [
     MaterialModule,
@@ -77,7 +83,8 @@ import { NewProjectComponent } from './components/project/new-project/new-projec
     AccountComponent,
     UserComponent,
     ProfileComponent,
-    NewProjectComponent
+    NewProjectComponent,
+    NewTaskComponent
   ],
   providers: [
     AuthService,
