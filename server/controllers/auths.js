@@ -100,29 +100,28 @@ module.exports = {
 
                     // create 'agenda' project
                     const agenda = new Project({
-                        title:'Agenda',
-                        description:'My To Do List',
-                        contributors: [user]
+                        title: 'Agenda',
+                        description:'My To Do List'
                     });
-                    user._related = {};
-                    user._related.projects = [agenda];
+                    user.projects = [agenda._id];
 
-                    // save user and nested agenda project
-                    user.cascadeSave()
+                    // save user object
+                    user.save()
                     .then(user => {
                         req.session.uid = user._id;
+                        agenda.contributors = [user._id];
 
-                        // add user's 'to do' lane to their agenda
-                        Project.findById(agenda._id)
+                        // create 'to do' lane for project and save both
+                        const lane = new Lane({title: 'To Do'});
+                        lane.project = agenda._id;
+                        agenda.grid = [lane._id];
+                        agenda.save()
                         .then(agenda => {
-                            const lane = new Lane({title: 'To Do'});
-                            agenda._related = {};
-                            agenda._related.grid = [lane];
-                            agenda.cascadeSave()
-                            .then(agenda => {
+                            lane.save()
+                            .then(lane => {
                                 res.json(sendMsg(true, `Welcome, ${user.first}! Logging you in...`));
-                            });
-                        });
+                            })
+                        })
                     })
                     .catch(err => res.json(sendMsg(false, 'Error: One or more fields invalid.')));
                 });

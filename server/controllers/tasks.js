@@ -18,31 +18,72 @@ module.exports = {
     createLane(req, res){
         Project.findById(req.params.id)
         .then(project => {
-            // using cascading-relations mod, assigning project to lane
-            // will save lane in project's related field
-            let lane = new Lane(req.body);
-            lane._related = {};
-            lane._related.project = project;
-            lane.cascadeSave()
+            const lane = new Lane(req.body);
+            lane.project = project._id;
+            lane.save()
             .then(lane => {
-                res.json(sendMsg(true, `Lane "${lane.title}" created.`));
+                project.grid.push(lane._id);
+                project.save()
+                .then(project => {
+                    res.json(sendMsg(true, `Lane "${lane.title}" created.`));
+                })
+                .catch(err => res.json(sendMsg(false, `Error: Input invalid.`)));
             })
             .catch(err => res.json(sendMsg(false, `Error: Input invalid.`)));
         });
     },
 
+    // lookup lane
+    lookupLane(req, res){
+        Lane.findById(req.params.id)
+        .then(lane => res.json(lane));
+    },
+
+    // update lane info
+    updateLane(req, res){
+        Lane.findByIdAndUpdate(req.params.id, req.body,
+        {runValidators:true, new:true, context: 'query'})
+        .then(lane => {
+            res.json(sendMsg(true, `Lane "${lane.title}" updated.`));
+        })
+    },
+
+    // update lane orders
+    updateLaneOrder(req, res){
+        Lane.findById(req.params.id)
+        .then(lane => {
+            lane.tasks = req.body;
+            lane.save()
+            .then(lane => res.json(sendMsg(true, `"${lane.title}" order updated.`)));
+        })
+    },
+
+    // remove lane
+    removeLane(req, res){
+        Lane.findByIdAndRemove(req.params.id)
+        .then(lane => {
+            console.log(`Lane "${lane.title}" deleted.`);
+            res.json(true);
+        })
+    },
+
     // create task for lane
     createTask(req, res){
-        Project.findById(req.params.id)
-        .then(project => {
-            let task = new Task(req.body);
-            task.project = project._id;
-            project.toDo.push(task);
-            project.cascadeSave()
-            .then(project => {
-                res.json(sendMsg(true, `Task "${task.title}" created.`));
+        Lane.findById(req.params.id)
+        .populate('tasks')
+        .then(lane => {
+            const task = new Task(req.body);
+            task.project = lane.project;
+            lane.tasks.push(task);
+            lane.save()
+            .then(lane => {
+                task.save()
+                .then(task => {
+                    res.json(sendMsg(true, `Task "${task.title}" created.`));
+                })
+                .catch(err => res.json(sendMsg(false, `Error: Unable to save task.`)));
             })
-            .catch(err => res.json(sendMsg(false, `Error: Input invalid.`)));
+            .catch(err => res.json(sendMsg(false, `Error: Unable to save lane.`)));
         });
     },
 
@@ -53,7 +94,6 @@ module.exports = {
     },
     
     // update task info
-    // update its lane
     // update its user
     updateTask(req, res){
         Task.findByIdAndUpdate(req.params.id, req.body,
@@ -69,31 +109,6 @@ module.exports = {
         Task.findByIdAndRemove(req.params.id)
         .then(task => {
             console.log(`Task "${task.title}" deleted.`);
-            res.json(true);
-        })
-    },
-
-    // lookup lane
-    lookupLane(req, res){
-        Lane.findById(req.params.id)
-        .then(lane => res.json(lane));
-    },
-
-    // update task info
-    updateLane(req, res){
-        Lane.findByIdAndUpdate(req.params.id, req.body,
-            {runValidators:true, new:true, context: 'query'})
-        .then(task => {
-            console.log(`Lane "${lane.title}" updated.`);
-            res.json(true);
-        })
-    },
-
-    // remove task
-    removeLane(req, res){
-        Lane.findByIdAndRemove(req.params.id)
-        .then(task => {
-            console.log(`Lane "${lane.title}" deleted.`);
             res.json(true);
         })
     },

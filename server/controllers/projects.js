@@ -59,20 +59,6 @@ module.exports = {
         .populate('tasks')
         .then(tasks => res.json(tasks));
     },
-
-    // assign users to project
-    updateContributors(req, res){
-        Project.findById(req.params.project)
-        .then(project => {
-            project._related = {};
-            project._related.contributors = req.body; // pass in array of users
-            project.cascadeSave()
-            .then(project => {
-                res.json(sendMsg(true, `"${project.title}" contributor list updated.`))
-            })
-            .catch(err => res.json(sendMsg(false, `Error: Input invalid.`)));
-        });
-    },
     
     // list all projects in database
     list(req, res){
@@ -84,16 +70,23 @@ module.exports = {
     create(req, res){
         User.findById(req.session.uid)
         .then(user => {
-            let project = new Project(req.body);
-            user.projects.push(project);
-            project._related = {};
-            project._related.manager = user;
+            const project = new Project(req.body);
+            user.projects.push(project._id);
+            project.manager = user._id;
             project.contributors = [user._id];
-            let lane = new Lane({title: "To Do"});
-            project._related.grid = [lane];
-            project.cascadeSave()
-            .then(project => {
-                res.json(sendMsg(true, `"${project.title}" created.`));
+            const lane = new Lane({title: "To Do"});
+            project.grid = [lane._id];
+            user.save()
+            .then(user => {
+                project.save()
+                .then(project => {
+                    lane.save()
+                    .then(lane => {
+                        res.json(sendMsg(true, `"${project.title}" created.`));
+                    })
+                    .catch(err => console.log(err));
+                })
+                .catch(err => console.log(err));
             })
             .catch(err => console.log(err));
         })
@@ -108,7 +101,18 @@ module.exports = {
         })
     },
 
-    // update grid
+    // assign users to project
+    updateContributors(req, res){
+        Project.findById(req.params.project) // prob also have to add to users...
+        .then(project => {
+            project.contributors = req.body; // pass in array of users
+            project.save()
+            .then(project => {
+                res.json(sendMsg(true, `"${project.title}" contributor list updated.`))
+            })
+            .catch(err => res.json(sendMsg(false, `Error: Input invalid.`)));
+        });
+    },
 
     // delete project
     remove(req, res){

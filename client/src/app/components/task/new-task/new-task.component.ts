@@ -9,8 +9,8 @@ import { TaskService } from '../../../services/task.service';
 })
 export class NewTaskComponent implements OnInit {
 
-  task = { title:'', description:'' }
-  projectId;
+  task = { title:'', description:'', details:'' }
+  laneId;
   action = 'Add'
 
   constructor(
@@ -21,11 +21,11 @@ export class NewTaskComponent implements OnInit {
   ) { }
 
   ngOnInit(){
-    this.projectId = this.data._id;
+    this.laneId = this.data.grid[0]._id;
   }
 
   createTask(task){
-    this._ts.create(task, this.projectId)
+    this._ts.createTask(task, this.laneId)
       .subscribe(result => {
         this.snackbar.open(result['msg'], 'x', {duration: 3000});
         if(result['status']) {

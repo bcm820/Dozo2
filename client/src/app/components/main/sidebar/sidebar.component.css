@@ -6,7 +6,7 @@
 
 .mat-card-button {
     width: 260px;
-    margin-bottom: 2px;
+    margin-bottom: 9px;
 }
 
 .card-title {
@@ -30,7 +30,7 @@
 .card-blank-button {
     text-align: center;
     margin: auto;
-    height: 70px;
+    height: 69px;
     line-height: 70px;
     width: 100%;
     font-size: 18px;
@@ -42,15 +42,15 @@
     border: 0.5px dashed;
 }
 
-mat-card > mat-icon {
-    position: absolute;
-    left: 230px;
-    top: 9px;
-    z-index: 1;
-    font-size: 18px;
+.handle {
+    /* position: absolute; */
+    /* left: 230px; */
+    /* top: 9px; */
+    /* z-index: 1; */
+    font-size: 16px;
     cursor: grab;
 }
 
-mat-card > mat-icon:active {
+.handle:active {
     cursor: grabbing;
 }

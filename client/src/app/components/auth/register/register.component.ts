@@ -11,7 +11,13 @@ import { Router } from '@angular/router';
 })
 export class RegisterComponent {
 
-  user = { first:'', last:'', email:'', _pw:'', _pwconf:'' }
+  user = {
+    first:'brian',
+    last:'mendoza',
+    email:'bcmendoza@gmail.com',
+    _pw:'codingdojo',
+    _pwconf:'codingdojo'
+  }
   action = 'Sign Up';
 
   constructor(

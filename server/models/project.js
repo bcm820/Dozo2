@@ -2,15 +2,11 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const Object = Schema.ObjectId;
-const shortid = require('shortid');
 
 const ProjectSchema = new Schema({
     
-    id: { type: String, default: shortid.generate },
-    
-    // Create
     title: { type: String, required: [true] },
-    description: { type: String },
+    description: { type: String, required: [true] },
     details: { type: String },
     startDate: { type: Date },
     targetDate: { type: Date },
@@ -18,23 +14,13 @@ const ProjectSchema = new Schema({
 
     manager: { type: Object, ref: 'User' },
     lead: { type: Object, ref: 'User' },
+    contributors: [{ type: Object, ref: 'User' }],
+    grid: [{ type: Object, ref: 'Lane' }],
 
-    contributors: [{
-        type: Object, ref: 'User',
-        $through: 'projects'
-    }],
-
-    // contains all lanes except to-do
-    grid: [{
-        type: Object, ref: 'Lane',
-        $through: 'project',
-        $cascadeDelete: true
-    }],
+    // manager assigns lead and contributors
+    // this can happen at creation or at update
+    // assigning lead and contributors will add project to user's list
     
 }, {timestamps:true, usePushEach:true});
-
-// import for cascading relations
-const cascade = require('cascading-relations');
-ProjectSchema.plugin(cascade);
 
 mongoose.model('Project', ProjectSchema);

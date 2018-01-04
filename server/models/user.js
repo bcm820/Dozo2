@@ -2,17 +2,13 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const Object = Schema.ObjectId;
-const shortid = require('shortid');
 const bcrypt = require('bcrypt');
 
 const UserSchema = new Schema({
 
-    id: { type: String, default: shortid.generate },
-    status: { type: Boolean, default: true }, // for auth
+    status: { type: Boolean, default: true },
     isManager: { type: Boolean },
-    
     projects: [{ type: Object, ref: 'Project' }],
-    tasks: [{ type: Object, ref: 'Task' }],
 
     email: {
         type: String, trim: true,
@@ -48,10 +44,6 @@ const UserSchema = new Schema({
     },
     
 }, {timestamps:true, usePushEach:true});
-
-// import for cascading relations
-const cascade = require('cascading-relations');
-UserSchema.plugin(cascade);
 
 // virtual fullName attr
 UserSchema.virtual('name').get(function(){

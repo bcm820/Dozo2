@@ -13,7 +13,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   projects;
   drops;
-  removes;
   
   constructor(
     private _ps: ProjectService,
@@ -27,11 +26,13 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.drops = this._ds.dropModel.subscribe((value) => {
       this.onDropModel(value.slice(1));
     });
-    this.removes = this._ds.removeModel.subscribe((value) => {
-      this.onRemoveModel(value.slice(1));
-    });
   }
 
+  listProjects(){
+    this._ps.getUserProjects()
+      .subscribe(user => this.projects = user['projects']);
+  }
+  
   setListOptions(){
     let bag = this._ds.find('projectList');
     if (bag !== undefined) this._ds.destroy('projectList');
@@ -43,18 +44,11 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   private onDropModel(args) {
-    let [el, target, source] = args;
-    let list = Array.from(this.projects, project => project['_id']);
-    this.updateProjects(list);
-  }
-
-  private onRemoveModel(args) {
-    let [el, source] = args;
-  }
-
-  listProjects(){
-    this._ps.getUserProjects()
-      .subscribe(user => this.projects = user['_related'].projects);
+    if(args[0].id === 'project'){
+      let [el, target, source] = args;
+      let list = Array.from(this.projects, project => project['_id']);
+      this.updateProjects(list);
+    }
   }
 
   updateProjects(list){
@@ -74,7 +68,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(){
     this.drops.unsubscribe();
-    this.removes.unsubscribe();
   }
 
 }

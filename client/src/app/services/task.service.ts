@@ -6,40 +6,48 @@ export class TaskService {
 
   constructor(private _http: HttpClient) { }
 
-  list(id){ // list all tasks for a project
+  list(id){ // maybe not
     return this._http.get(`/api/projects/${id}/tasks`);
   }
 
-  create(task, id){
-    return this._http.post(`/api/projects/${id}/tasks`, task);
+  createTask(task, id){ // done
+    return this._http.post(`/api/projects/${id}/build`, task);
   }
 
-  lookup(id){
+  createLane(lane, id){ // done
+    return this._http.put(`/api/projects/${id}/build`, lane)
+  }
+
+  lookup(id){ // maybe not
     return this._http.get(`/api/tasks/${id}`);
   }
 
-  update(task, id){
-    return this._http.post(`/api/tasks/${id}`, task);
+  updateTask(task){ 
+    return this._http.post(`/api/tasks/${task._id}`, task);
   }
 
-  remove(id){
+  updateLane(lane){ 
+    return this._http.post(`/api/lanes/${lane._id}`, lane);
+  }
+
+  updateLaneOrder(lane, id){
+    return this._http.put(`/api/lanes/${id}`, lane);
+  }
+
+  removeTask(id){
     return this._http.delete(`/api/tasks/${id}`);
   }
 
-  assign(task, profile){
+  removeLane(id){
+    return this._http.delete(`/api/lanes/${id}`);
+  }
+
+  assign(task, profile){ // maybe not
     return this._http.post(`/api/tasks/${task}/${profile}`, null)
   }
 
-  unassign(task, profile){
+  unassign(task, profile){ // maybe not
     return this._http.delete(`/api/tasks/${task}/${profile}`)
-  }
-
-  listByStatus(project, status){
-    return this._http.get(`/api/tasks/${project}/all/${status}`);
-  }
-
-  listFilter(project, profile, status){
-    return this._http.get(`/api/tasks/${project}/${profile}/${status}`);
   }
 
 }

@@ -1,23 +1,25 @@
 
 <div layout=column layout-padding layout-margin layout-align="center center">
 
-    <div layout=column [dragula]='"projectList"' [dragulaModel]='projects'>
-
-        <mat-card class="bg-accent mat-card-button"
-            *ngFor="let project of projects">
-            <a mat-button class=card-button>
-            <span class="card-title text-truncate">{{project.title}}</span>
-            <span class="card-subtitle text-truncate">{{project.description}}</span>
-            </a>
-            <mat-icon class=handle>dehaze</mat-icon>
-        </mat-card>
-
-    </div>
-
     <div class="card-blank mat-card-button">
         <a mat-button (click)=openNewProject() class=card-blank-button>
             New Project <mat-icon>playlist_add</mat-icon>
         </a>
+    </div>
+
+    <div layout=column [dragula]='"projectList"' [dragulaModel]='projects'>
+
+        <mat-card class="bg-accent mat-card-button"
+            *ngFor="let project of projects" id="project">
+            <a mat-button class=card-button>
+            <span class="card-title text-truncate">
+                <mat-icon class=handle>dehaze</mat-icon> {{project.title}}
+            </span>
+            <span class="card-subtitle text-truncate">{{project.description}}</span>
+            </a>
+            <!-- <mat-icon class=handle>dehaze</mat-icon> -->
+        </mat-card>
+
     </div>
 
     <!-- <td-json-formatter [data]="projects" [levelsOpen]="1"></td-json-formatter> -->

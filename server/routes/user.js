@@ -25,62 +25,19 @@ module.exports = (router) => {
 
     router.route('/projects/:id')
     .get(projects.lookup)
-    // .post(projects.updateGrid)
     
-    router.route('/projects/:id/tasks')
-    .get(projects.getGrid)
+    router.route('/projects/:id/build')
     .post(tasks.createTask)
     .put(tasks.createLane)
+
+    router.route('/lanes/:id')
+    .post(tasks.updateLane)
+    .put(tasks.updateLaneOrder)
+    .delete(tasks.removeLane)
 
     router.route('/tasks/:id')
     .get(tasks.lookupTask)
     .post(tasks.updateTask)
     .delete(tasks.removeTask)
 
-    router.route('/lanes/:id')
-    .get(tasks.lookupLane)
-    .post(tasks.updateLane)
-    .delete(tasks.removeLane)
-
 };
-
-
-/*
-
-USER:
-status
-isManager
-details
-[projects] (via manager, lead, contributors)
-email, first, last, _pw, _pwconf, name
-
-PROJECT:
-title
-description
-details
-startDate
-targetDate
-manager (User, thru 'projects')
-lead (User, thru 'projects')
-[contributors] (User, thru 'projects')
-end_date
-[grid] (Lane, thru 'project')
-[tasks] (Task, thru 'project')
-
-LANE:
-title
-project (Project, thru 'grid')
-[tasks] (Task, thru 'lane')
-
-TASK:
-title
-description
-details
-startDate
-targetDate
-endDate
-contributor (User, thru 'tasks')
-project (Project, thru 'tasks')
-lane (Lane, thru 'tasks')
-
-*/

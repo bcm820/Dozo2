@@ -40,10 +40,14 @@ import { DashboardComponent } from './components/main/dashboard/dashboard.compon
 // Project Components
 import { ProjectFormComponent } from './components/project/project-form/project-form.component';
 import { NewProjectComponent } from './components/project/new-project/new-project.component';
+import { EditProjectComponent } from './components/project/edit-project/edit-project.component';
 
 // Task Components
 import { TaskFormComponent } from './components/task/task-form/task-form.component';
 import { NewTaskComponent } from './components/task/new-task/new-task.component';
+import { EditTaskComponent } from './components/task/edit-task/edit-task.component';
+import { TaskComponent } from './components/task/task/task.component';
+import { LaneComponent } from './components/task/lane/lane.component';
 
 
 @NgModule({
@@ -65,6 +69,10 @@ import { NewTaskComponent } from './components/task/new-task/new-task.component'
     NewProjectComponent,
     NewTaskComponent,
     TaskFormComponent,
+    EditProjectComponent,
+    EditTaskComponent,
+    TaskComponent,
+    LaneComponent,
   ],
   imports: [
     MaterialModule,
@@ -84,13 +92,15 @@ import { NewTaskComponent } from './components/task/new-task/new-task.component'
     UserComponent,
     ProfileComponent,
     NewProjectComponent,
-    NewTaskComponent
+    NewTaskComponent,
+    EditProjectComponent,
+    EditTaskComponent,
   ],
   providers: [
     AuthService,
     UserService,
     ProjectService,
-    TaskService
+    TaskService,
   ],
   bootstrap: [AppComponent]
 })

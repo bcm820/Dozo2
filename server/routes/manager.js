@@ -8,58 +8,15 @@ module.exports = (router) => {
     router.use(auth.authenticateManager);
 
     router.route('/m/users/:id')
-    .put(users.promote) // promote user to manager
+    .put(users.promote)
 
     router.route('/m/projects')
-    .get(projects.list) // list all projects
-    .post(projects.create) // create new project
+    // .get(projects.list) // list all projects
+    .post(projects.create)
 
     router.route('/m/projects/:id')
-    .get(projects.getTasks) // list all tasks
-    .post(projects.updateContributors) // add members
-    .put(projects.update) // update project
+    // .get(projects.getTasks) // list all tasks
+    .post(projects.update) // update info
     .delete(projects.remove) // delete project
 
 };
-
-
-
-/*
-
-USER:
-status
-isManager
-details
-[projects] (via manager, lead, contributors)
-email, first, last, _pw, _pwconf, name
-
-PROJECT:
-title
-description
-details
-startDate
-targetDate
-manager (User, thru 'projects')
-lead (User, thru 'projects')
-[contributors] (User, thru 'projects')
-end_date
-[grid] (Lane, thru 'project')
-[tasks] (Task, thru 'project')
-
-LANE:
-title
-project (Project, thru 'grid')
-[tasks] (Task, thru 'lane')
-
-TASK:
-title
-description
-details
-startDate
-targetDate
-endDate
-contributor (User, thru 'tasks')
-project (Project, thru 'tasks')
-lane (Lane, thru 'tasks')
-
-*/

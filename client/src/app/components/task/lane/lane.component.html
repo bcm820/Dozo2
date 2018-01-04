@@ -1,0 +1,32 @@
+
+<div class=lane layout=column layout-align="center center">
+    <mat-menu #headerMenu="matMenu">
+        <button mat-menu-item (click)=openEdit()> Edit </button>
+        <button *ngIf="!lane._id === lane0._id" mat-menu-item (click)=openDelete()> Delete </button>
+    </mat-menu>
+    <mat-card class="bg-accent card-header">
+        <mat-icon class=header-menu [matMenuTriggerFor]="headerMenu">arrow_drop_down</mat-icon>
+        <mat-card-title class="card-heading text-truncate" align=center>
+            {{lane.title}}
+        </mat-card-title>
+    </mat-card>
+    <div class=drag [dragula]='"lane"' [dragulaModel]='lane.tasks' id={{label}}>
+        <mat-card class=mat-card-button *ngFor="let task of lane.tasks">
+            <a mat-button class=mat-card-button>
+            <span class="card-title">
+                <mat-icon class=handle>dehaze</mat-icon> {{task.title}}
+            </span>
+            <span class="card-subtitle">{{task.description}}</span>
+            </a>
+        </mat-card>
+    </div>
+</div>
+
+
+<!-- inputs -->
+<!-- lane -->
+<!-- label (e.g. lane1) -->
+<!-- lane0 (to compare for deletes) -->
+<!-- if lane = lane0, hide delete -->
+<!-- or maybe that logic will happen up top? -->
+<!-- the dragulaModel thing might mess me up. -->

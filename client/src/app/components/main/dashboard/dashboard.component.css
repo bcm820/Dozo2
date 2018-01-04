@@ -4,16 +4,22 @@
     height: 100%;
 }
 
+.card-header {
+    height: 70px;
+}
+
 .card-heading {
-    width: 184px;
-    font-size: 20px;
-    padding-bottom: 12px;
+    width: 200px;
+    font-size: 24px;
+    padding-top: 25px;
     color: white;
 }
 
 .mat-card-button {
-    width: 214px;
-    height: 76px;
+    margin-top: 10px;
+    width: 230px;
+    height: 100%;
+    white-space: normal;
 }
 
 .card-title {
@@ -21,56 +27,93 @@
     display: block;
     font-size: 20px;
     font-weight: 400;
-    margin-top: 8px;
+    line-height: 22px;
+    margin-top: 20px;
 }
 
 .card-subtitle {
     text-align: left;
     display: block;
     color: gray;
-    font-size: 14px;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 18px;
+    margin-bottom: 20px;
+}
+
+.card-tag {
+    text-align: right;
+    display: block;
+    color: gray;
+    font-size: 12px;
     font-weight: 400;
     line-height: 14px;
-    margin-bottom: 10px;
+    margin-top: 6px;
 }
 
 .card-blank-button {
     text-align: center;
-    height: 76px;
+    height: 77px;
     line-height: 75px;
     width: 100%;
     font-size: 18px;
 }
 
 .card-blank {
-    margin-top: 8px;
     background-color: rgba(255, 255, 255, 0.5);
     border: 0.5px dashed;
 }
 
 .lane-blank {
-    height: 100%;
     background-color: rgba(255, 255, 255, 0.5);
     border: 0.5px dashed;
+    height: 71px;
 }
 
 .lane-blank-button {
     text-align: center;
-    height: 100%;
     width: 100%;
-    font-size: 18px;
-    padding: 35% 0;
+    height: 100%;
+    font-size: 20px;
+    padding-top: 17px;
+    position: relative;
 }
 
-mat-card > mat-icon {
-    position: absolute;
-    left: 190px;
-    top: 6px;
-    z-index: 1;
+.input-blank {
+    background-color: rgba(255, 255, 255, 0);
+    border: 0px;
     font-size: 18px;
+    text-align: center;
+}
+
+.input-blank:focus {
+    outline-width: 0;
+}
+
+.handle {
+    /* position: absolute; */
+    /* left: 190px; */
+    /* top: 6px; */
+    /* z-index: 1; */
+    font-size: 14px;
     cursor: grab;
 }
 
-mat-card > mat-icon:active {
+.handle:active {
     cursor: grabbing;
+}
+
+.header-menu {
+    position: absolute;
+    left: 210px;
+    top: 50px;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.drag {
+    padding-bottom: 30px;
+    height: 100%;
+    width: 100%;
 }

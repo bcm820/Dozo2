@@ -2,29 +2,20 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const Object = Schema.ObjectId;
-const shortid = require('shortid');
 
 const TaskSchema = new Schema({
     
-    id: { type: String, default: shortid.generate },
-
-    // Create
     title: { type: String, required: [true] },
     description: { type: String },
-
-    // Update
-    contributor: { type: Object, ref: 'User' },
+    details: { type: String },
+    lane: { type: Object, ref: 'Lane' },
     project: { type: Object, ref: 'Project' },
+    contributor: { type: Object, ref: 'User' },
 
-    lane: {
-        type: Object, ref: 'Lane',
-        $through: 'tasks'
-    },
+    // managers can create, but not assign
+    // leads can create and assign contributors
+    // users can create and it will assign themselves
     
 }, {timestamps:true, usePushEach:true});
-
-// import for cascading relations
-const cascade = require('cascading-relations');
-TaskSchema.plugin(cascade);
 
 mongoose.model('Task', TaskSchema);
