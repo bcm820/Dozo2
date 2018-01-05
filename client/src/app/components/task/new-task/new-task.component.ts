@@ -17,11 +17,11 @@ export class NewTaskComponent implements OnInit {
     private dialog: MatDialogRef<NewTaskComponent>,
     private snackbar: MatSnackBar,
     private _ts: TaskService,
-    @Inject(MAT_DIALOG_DATA) private data
+    @Inject(MAT_DIALOG_DATA) private lane
   ) { }
 
   ngOnInit(){
-    this.laneId = this.data.grid[0]._id;
+    this.laneId = this.lane._id;
   }
 
   createTask(task){

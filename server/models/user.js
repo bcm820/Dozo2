@@ -5,10 +5,14 @@ const Object = Schema.ObjectId;
 const bcrypt = require('bcrypt');
 
 const UserSchema = new Schema({
-
     status: { type: Boolean, default: true },
     isManager: { type: Boolean },
-    projects: [{ type: Object, ref: 'Project' }],
+    // only managers can assign contributors and tasks
+    // normal users can still make their own projects
+    agenda: { type: Object },
+    project_ids: [{ type: Object }],
+    // for contributors only
+    // used to determine sort order on sidebar
 
     email: {
         type: String, trim: true,
@@ -43,11 +47,11 @@ const UserSchema = new Schema({
         }
     },
     
-}, {timestamps:true, usePushEach:true});
-
-// virtual fullName attr
-UserSchema.virtual('name').get(function(){
-    return `${this.first} ${this.last}`;
+}, {
+    timestamps:true,
+    usePushEach:true,
+    toObject: {virtuals:true},
+    toJSON: {virtuals:true}
 });
 
 // check password prior to login
@@ -57,5 +61,37 @@ UserSchema.methods.checkPW = function(password, cb){
         else { cb(null, good); }
     });
 }
+
+UserSchema.virtual('name').get(function(){
+    return `${this.first} ${this.last}`;
+});
+
+// many to many requires definition on both sides
+// to create and update lists, add IDs to both child arrays
+UserSchema.virtual('projects', {
+  ref: 'Project',
+  localField: 'project_ids',
+  foreignField: '_id'
+});
+
+// one to many defined on parent
+// references foreignField in related doc
+UserSchema.virtual('projects_created', {
+  ref: 'Project',
+  localField: '_id',
+  foreignField: 'creator'
+});
+
+UserSchema.virtual('tasks_created', {
+  ref: 'Task',
+  localField: '_id',
+  foreignField: 'creator'
+});
+
+UserSchema.virtual('tasks_contributed', {
+  ref: 'Task',
+  localField: '_id',
+  foreignField: 'contributor'
+});
 
 mongoose.model('User', UserSchema);

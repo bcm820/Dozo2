@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material';
-import { AuthService } from '../../services/auth.service';
+import { MatDialog, MatSnackBar } from '@angular/material';
+import { UserService } from '../../services/user.service';
 import { RegisterComponent } from '.././auth/register/register.component';
 import { LoginComponent } from '.././auth/login/login.component';
 import { AccountComponent } from '.././auth/account/account.component';
-import { MatDialog } from '@angular/material';
 
 @Component({
   selector: 'app-main',
@@ -19,7 +18,7 @@ export class MainComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private snackbar: MatSnackBar,
-    private _as: AuthService,
+    private _us: UserService,
     private _router: Router
   ){}
 
@@ -28,8 +27,8 @@ export class MainComponent implements OnInit {
   }
 
   getStatus(){
-    this._as.updateStatus();
-    this._as.status$
+    this._us.updateStatus();
+    this._us.status$
       .subscribe(result => {
         if(!result['status']) this._router.navigate(['']);
         this.user = result;
@@ -47,12 +46,13 @@ export class MainComponent implements OnInit {
   openAccount(){
     this.dialog.open(AccountComponent, {
       width:'70%',
+      data: this.user,
       autoFocus: false
     })
   }
 
   logout(){
-    this._as.logout()
+    this._us.logout()
       .subscribe(result => {
         this.snackbar.open(result['msg'], 'x', {duration: 3000});
         this._router.navigate(['']);

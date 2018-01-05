@@ -1,3 +1,10 @@
-<p>
-  edit-task works!
-</p>
+
+<div *ngIf="userID === task.creator" layout=column layout-margin layout-padding>
+
+    <h2 mat-dialog-title align=center>Update Item</h2>
+
+    <task-form [task]=task [action]=action (send)=updateTask($event)></task-form>
+
+</div>
+
+<td-json-formatter *ngIf="userID !== task.creator" [data]="task" [levelsOpen]="1"></td-json-formatter>

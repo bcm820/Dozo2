@@ -5,9 +5,12 @@ import { LandingComponent } from './components/main/landing/landing.component';
 import { DashboardComponent } from './components/main/dashboard/dashboard.component';
 
 const routes: Routes = [
-  {path:'', component: MainComponent, children:[
-    {path:'', component: LandingComponent},
-    {path:'dashboard', component: DashboardComponent}
+  { path:'', component: MainComponent, children: [
+
+    { path: '', component: LandingComponent },
+    { path: 'dashboard', component: DashboardComponent },
+    { path: 'projects/:id', component: DashboardComponent }
+    
   ]},
 ];
 

@@ -14,68 +14,20 @@ function sendMsg(status, msg){
 module.exports = {
     
     getUserProjects(req, res){
-        User.findById(req.session.uid, {projects:1})
+        User.findById(req.session.uid, {project_ids:1})
         .populate('projects')
-        .then(user => res.json(user))
+        .then(projects => res.json(projects))
     },
 
-    updateUserProjects(req, res){
-        User.findById(req.session.uid)
-        .then(user => {
-            user.projects = req.body;
-            user.save()
-            .then(user => {
-                res.json(sendMsg(true, `Saving changes...`));
-            })
-            .catch(err => res.json(sendMsg(false, 'Unable to save changes...')));
-        })
-    },
-
-    getAgenda(req, res){
-        Project.findOne({contributors:req.session.uid, title:'Agenda'})
-        .populate({path:'grid', populate:{path:'tasks'}})
-        .then(agenda => res.json(agenda))
-    },
-    
-    // project lookup
-    lookup(req, res){
-        Project.findById(req.params.id, {__v:0, grid:0})
-        .populate('manager')
-        .populate('lead')
-        .populate('contributors')
-        .then(user => res.json(user));
-    },
-
-    // get full project grid
-    getGrid(req, res){
-        Project.findById(req.params.id, {grid:1})
-        .populate({path:'grid', populate:{path:'tasks'}})
-        .then(grid => res.json(grid));
-    },
-
-    // get all tasks in one list
-    getTasks(req, res){
-        Project.findById(req.params.id)
-        .populate('tasks')
-        .then(tasks => res.json(tasks));
-    },
-    
-    // list all projects in database
-    list(req, res){
-        Project.find({}, {grid:0}).sort({target_date:-1})
-        .then(list => res.json(list));
-    },
-
-    // create project
     create(req, res){
         User.findById(req.session.uid)
         .then(user => {
             const project = new Project(req.body);
-            user.projects.push(project._id);
-            project.manager = user._id;
-            project.contributors = [user._id];
+            user.project_ids.push(project._id);
+            project.creator = user._id;
+            project.contributor_ids = [user._id];
             const lane = new Lane({title: "To Do"});
-            project.grid = [lane._id];
+            project.grid_ids = [lane._id];
             user.save()
             .then(user => {
                 project.save()
@@ -86,13 +38,37 @@ module.exports = {
                     })
                     .catch(err => console.log(err));
                 })
-                .catch(err => console.log(err));
             })
-            .catch(err => console.log(err));
         })
     },
 
-    // update project info
+    updateUserProjects(req, res){
+        User.findById(req.session.uid)
+        .then(user => {
+            user.project_ids = req.body;
+            user.save()
+            .then(user => {
+                res.json(sendMsg(true, `Saving changes...`));
+            })
+        })
+    },
+
+    lookup(req, res){
+        Project.findById(req.params.id)
+        .populate('creator')
+        .populate('contributors')
+        .populate({ path: 'grid',
+            populate: { path: 'tasks',
+                populate: [
+                    { path: 'creator', select: ['first', 'last', 'name'] },
+                    { path: 'contributor', select: ['first', 'last', 'name'] }
+                ]
+            }
+        })
+        .then(project => res.json(project));
+    },
+
+    // update project info, but not contributors
     update(req, res){
         Project.findByIdAndUpdate(req.params.id, req.body,
             {runValidators:true, new:true, context: 'query'})
@@ -101,17 +77,23 @@ module.exports = {
         })
     },
 
-    // assign users to project
-    updateContributors(req, res){
-        Project.findById(req.params.project) // prob also have to add to users...
+    // update contributors
+    assign(req, res){
+        Project.findById(req.params.id)
         .then(project => {
-            project.contributors = req.body; // pass in array of users
+            project.contributor_ids = req.body;
             project.save()
-            .then(project => {
-                res.json(sendMsg(true, `"${project.title}" contributor list updated.`))
-            })
-            .catch(err => res.json(sendMsg(false, `Error: Input invalid.`)));
-        });
+            .then(lane => res.json(true));
+        })
+    },
+
+    updateGrid(req, res){
+        Project.findById(req.params.id)
+        .then(project => {
+            project.grid_ids = req.body;
+            project.save()
+            .then(lane => res.json(true));
+        })
     },
 
     // delete project

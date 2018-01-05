@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { AuthService } from '../../../services/auth.service';
+import { UserService } from '../../../services/user.service';
 import { Subject } from 'Rxjs';
 
 @Component({
@@ -26,11 +26,11 @@ export class UserFormComponent implements OnInit {
   address$ = new Subject(); // email address input
   unique: any = true;
   
-  constructor(private _as: AuthService) { }
+  constructor(private _us: UserService) { }
 
   checkEmail(){
     if(this.action === 'Sign up'){
-      this._as.checkEmail(this.address$)
+      this._us.checkEmail(this.address$)
       .subscribe(result => {
         this.unique = result;
       });

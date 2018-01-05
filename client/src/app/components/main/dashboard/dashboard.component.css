@@ -112,6 +112,21 @@
     cursor: pointer;
 }
 
+.card-delete {
+    position: absolute;
+    left: 215px;
+    top: -13px;
+    font-size: 28px;
+    cursor: pointer;
+    z-index: 1;
+    opacity: 0;
+    transition: all ease 0.4s;
+}
+
+.card-delete:hover {
+    opacity: 100;
+}
+
 .drag {
     padding-bottom: 30px;
     height: 100%;

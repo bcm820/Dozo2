@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material';
-import { MatSnackBar } from '@angular/material';
-import { AuthService } from '../../../services/auth.service';
+import { Component } from '@angular/core';
+import { MatDialogRef, MatSnackBar } from '@angular/material';
+import { UserService } from '../../../services/user.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -9,7 +8,7 @@ import { Router } from '@angular/router';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
 
   guest = {email:'', _pw:''}
   hidePW = true;
@@ -17,25 +16,22 @@ export class LoginComponent implements OnInit {
   pwError;
   
   constructor(
-    private _as: AuthService,
+    private _us: UserService,
     private snackbar: MatSnackBar,
     private dialog: MatDialogRef<LoginComponent>,
     private _router: Router
   ) { }
 
-  ngOnInit() {
-  }
-
   login(){
-    this._as.login(this.guest)
-      .subscribe(result => {
-        this.snackbar.open(result['msg'], 'x', {duration: 3000})
-        this._as.updateStatus();
-        if(result['status']){
-          this.dialog.close();
-          this._router.navigate(['dashboard']);
-        }
-      });
+    this._us.login(this.guest)
+    .subscribe(result => {
+      this.snackbar.open(result['msg'], 'x', {duration: 3000})
+      this._us.updateStatus();
+      if(result['status']){
+        this.dialog.close();
+        this._router.navigate(['dashboard']);
+      }
+    });
   }
 
 }

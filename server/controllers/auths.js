@@ -2,6 +2,7 @@
 const User = require('mongoose').model('User');
 const Project = require('mongoose').model('Project');
 const Lane = require('mongoose').model('Lane');
+const Task = require('mongoose').model('Task');
 const bcrypt = require('bcrypt');
 
 function sendMsg(status, msg){
@@ -17,6 +18,36 @@ module.exports = {
     logRoute(req, res, next){
         console.log(req.method, req.url);
         next();
+    },
+    
+    testLane(){
+        Lane.findOne({})
+        .populate('tasks')
+        .populate('project') // rev
+    },
+
+    testProject(){
+        Project.findOne({})
+        .populate('contributors')
+        .populate('grid')
+        .populate('creator') // rev
+        .then(projects => res.json(projects));
+    },
+
+    testTask(){
+        Task.findOne({}) // all rev
+        .populate('lane')
+        .populate('creator')
+        .populate('contributor')
+    },
+
+    testUser(){
+        User.findOne({})
+        .populate('projects')
+        .populate('projectsCreated')
+        .populate('tasksCreated')
+        .populate('tasksContributed')
+        .then(users => res.json(users));
     },
     
     // checks session prior to accessing info
@@ -35,11 +66,11 @@ module.exports = {
             .then(user => {
                 if(user !== null){
                     if(user.isManager) next();
-                    else res.json(sendMsg(false, 'Error: Manager credentials required.'));
+                    else res.json(sendMsg(false, 'Access denied. Credentials required.'));
                 }
             })
         }
-        else res.json(sendMsg(false, 'Error: Manager credentials required.'));
+        else res.json(sendMsg(false, 'Error: Credentials required. Please log in.'));
     },
 
     login(req, res){
@@ -52,6 +83,9 @@ module.exports = {
                 user.checkPW(req.body._pw, (err, good) => {
                     if(good){
                         req.session.uid = user._id;
+                        // user._pw = undefined;
+                        // user.__v = undefined;
+                        // req.session.user = user;
                         res.json(sendMsg(true, `Welcome, ${user.first}! Logging you in...`));
                     }
                     else {
@@ -103,18 +137,23 @@ module.exports = {
                         title: 'Agenda',
                         description:'My To Do List'
                     });
-                    user.projects = [agenda._id];
+                    user.agenda = agenda._id;
+                    user.project_ids = [agenda._id];
 
                     // save user object
                     user.save()
                     .then(user => {
                         req.session.uid = user._id;
-                        agenda.contributors = [user._id];
+                        // user._pw = undefined;
+                        // user.__v = undefined;
+                        // req.session.user = user;
+                        agenda.creator = user._id;
+                        agenda.contributor_ids = [user._id];
 
                         // create 'to do' lane for project and save both
                         const lane = new Lane({title: 'To Do'});
-                        lane.project = agenda._id;
-                        agenda.grid = [lane._id];
+                        // lane.project = agenda._id;
+                        agenda.grid_ids = [lane._id];
                         agenda.save()
                         .then(agenda => {
                             lane.save()

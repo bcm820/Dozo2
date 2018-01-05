@@ -10,32 +10,28 @@ export class ProjectService {
     return this._http.get('/api/projects');
   }
 
-  updateUserProjects(projects){
-    return this._http.post('/api/projects', projects);
-  }
-
-  getAgenda(){
-    return this._http.get('/api/projects/agenda');
-  }
-
-  list(){ // all projects in DB
-    return this._http.get('/api/m/projects');
-  }
-
   create(project){
-    return this._http.post('/api/m/projects', project);
+    return this._http.post('/api/projects', project);
+  }
+
+  updateUserProjects(project_ids){
+    return this._http.put('/api/projects', project_ids);
   }
 
   lookup(id){
     return this._http.get(`/api/projects/${id}`);
   }
 
-  // later
   update(id, project){
     return this._http.post(`/api/m/projects/${id}`, project);
   }
+
+  updateGrid(id, grid_ids){
+    return this._http.put(`/api/m/projects/${id}`, grid_ids);
+  }
+
   remove(id){
-    return this._http.delete(`/api/m/projects/${id}`);
+    return this._http.delete(`/api/projects/${id}`);
   }
 
 }

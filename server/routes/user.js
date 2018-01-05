@@ -19,12 +19,14 @@ module.exports = (router) => {
 
     router.route('/projects')
     .get(projects.getUserProjects)
-    .post(projects.updateUserProjects)
-
-    router.get('/projects/agenda', projects.getAgenda);
+    .post(projects.create)
+    .put(projects.updateUserProjects)
 
     router.route('/projects/:id')
     .get(projects.lookup)
+    .post(projects.update)
+    .put(projects.updateGrid)
+    .delete(projects.remove)
     
     router.route('/projects/:id/build')
     .post(tasks.createTask)
@@ -32,11 +34,10 @@ module.exports = (router) => {
 
     router.route('/lanes/:id')
     .post(tasks.updateLane)
-    .put(tasks.updateLaneOrder)
+    .put(tasks.updateLaneTasks)
     .delete(tasks.removeLane)
 
     router.route('/tasks/:id')
-    .get(tasks.lookupTask)
     .post(tasks.updateTask)
     .delete(tasks.removeTask)
 

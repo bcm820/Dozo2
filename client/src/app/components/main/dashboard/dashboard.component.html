@@ -2,9 +2,9 @@
 <div layout=row layout-padding layout-margin>
     
     <!-- TO DO -->
-    <div class=lane layout=column layout-align="center center">
+    <div *ngIf=lane0 class=lane layout=column layout-align="center center">
         <mat-card class="bg-accent card-header">
-            <mat-icon class=header-menu (click)=openEdit(lane0)>arrow_drop_down</mat-icon>
+            <mat-icon class=header-menu (click)=openEditLane(lane0)>arrow_drop_down</mat-icon>
             <mat-card-title class="card-heading text-truncate" align=center>
                 {{lane0.title}}
             </mat-card-title>
@@ -16,9 +16,15 @@
         </div>
         <div class=drag [dragula]='"lane"' [dragulaModel]='lane0.tasks' id=lane0>
             <mat-card class=mat-card-button *ngFor="let task of lane0.tasks">
-                <a mat-button class=mat-card-button matTooltip="{{task.contributor}}">
+                <a mat-button class=mat-card-button (click)=openEditTask(task)>
+                <mat-icon *ngIf="user._id === task.creator || user.isManager"
+                    class=card-delete (click)="openDeleteTask(task._id)">cancel</mat-icon>
                 <span class="card-title">
-                    <mat-icon class=handle>dehaze</mat-icon> {{task.title}}
+                    <span>
+                        <mat-icon *ngIf="user._id === task.contributor || user.isManager"
+                        class=handle>dehaze</mat-icon> 
+                    </span>
+                    {{task.title}}
                 </span>
                 <span class="card-subtitle">{{task.description}}</span>
                 </a>
@@ -29,8 +35,8 @@
     <!-- If Lane 1 -->
     <div *ngIf=lane1 class=lane layout=column layout-align="center center">
         <mat-menu #headerMenu="matMenu">
-            <button mat-menu-item (click)=openEdit(lane1)> Edit </button>
-            <button mat-menu-item (click)=openDelete(lane1)> Delete </button>
+            <button mat-menu-item (click)=openEditLane(lane1)> Edit </button>
+            <button mat-menu-item (click)=openDeleteLane(lane1)> Delete </button>
         </mat-menu>
         <mat-card class="bg-accent card-header">
             <mat-icon class=header-menu [matMenuTriggerFor]="headerMenu">arrow_drop_down</mat-icon>
@@ -40,9 +46,14 @@
         </mat-card>
         <div class=drag [dragula]='"lane"' [dragulaModel]='lane1.tasks' id=lane1>
             <mat-card class=mat-card-button *ngFor="let task of lane1.tasks">
-                <a mat-button class=mat-card-button>
+                <a mat-button class=mat-card-button (click)=openEditTask(task)>
+                <mat-icon *ngIf="user._id === task.creator || user.isManager"
+                    class=card-delete (click)="openDeleteTask(task._id)">cancel</mat-icon>
                 <span class="card-title">
-                    <mat-icon class=handle>dehaze</mat-icon> {{task.title}}
+                    <span>
+                        <mat-icon class=handle>dehaze</mat-icon> 
+                    </span>
+                    {{task.title}}
                 </span>
                 <span class="card-subtitle">{{task.description}}</span>
                 </a>
@@ -53,8 +64,8 @@
     <!-- If Lane 2 -->
     <div *ngIf=lane2 class=lane layout=column layout-align="center center">
         <mat-menu #headerMenu="matMenu">
-            <button mat-menu-item (click)=openEdit(lane2)> Edit </button>
-            <button mat-menu-item (click)=openDelete(lane2)> Delete </button>
+            <button mat-menu-item (click)=openEditLane(lane2)> Edit </button>
+            <button mat-menu-item (click)=openDeleteLane(lane2)> Delete </button>
         </mat-menu>
         <mat-card class="bg-accent card-header">
             <mat-icon class=header-menu [matMenuTriggerFor]="headerMenu">arrow_drop_down</mat-icon>
@@ -64,9 +75,14 @@
         </mat-card>
         <div class=drag [dragula]='"lane"' [dragulaModel]='lane2.tasks' id=lane2>
             <mat-card class=mat-card-button *ngFor="let task of lane2.tasks">
-                <a mat-button class=mat-card-button>
+                <a mat-button class=mat-card-button (click)=openEditTask(task)>
+                <mat-icon *ngIf="user._id === task.creator || user.isManager"
+                    class=card-delete (click)="openDeleteTask(task._id)">cancel</mat-icon>
                 <span class="card-title">
-                    <mat-icon class=handle>dehaze</mat-icon> {{task.title}}
+                    <span>
+                        <mat-icon class=handle>dehaze</mat-icon> 
+                    </span>
+                    {{task.title}}
                 </span>
                 <span class="card-subtitle">{{task.description}}</span>
                 </a>
@@ -77,8 +93,8 @@
     <!-- If Lane 3 -->
     <div *ngIf=lane3 class=lane layout=column layout-align="center center">
         <mat-menu #headerMenu="matMenu">
-            <button mat-menu-item (click)=openEdit(lane3)> Edit </button>
-            <button mat-menu-item (click)=openDelete(lane3)> Delete </button>
+            <button mat-menu-item (click)=openEditLane(lane3)> Edit </button>
+            <button mat-menu-item (click)=openDeleteLane(lane3)> Delete </button>
         </mat-menu>
         <mat-card class="bg-accent card-header">
             <mat-icon class=header-menu [matMenuTriggerFor]="headerMenu">arrow_drop_down</mat-icon>
@@ -88,9 +104,14 @@
         </mat-card>
         <div class=drag [dragula]='"lane"' [dragulaModel]='lane3.tasks' id=lane3>
             <mat-card class=mat-card-button *ngFor="let task of lane3.tasks">
-                <a mat-button class=mat-card-button>
+                <a mat-button class=mat-card-button (click)=openEditTask(task)>
+                <mat-icon *ngIf="user._id === task.creator || user.isManager"
+                    class=card-delete (click)="openDeleteTask(task._id)">cancel</mat-icon>
                 <span class="card-title">
-                    <mat-icon class=handle>dehaze</mat-icon> {{task.title}}
+                    <span>
+                        <mat-icon class=handle>dehaze</mat-icon> 
+                    </span>
+                    {{task.title}}
                 </span>
                 <span class="card-subtitle">{{task.description}}</span>
                 </a>
@@ -101,8 +122,8 @@
     <!-- If Lane 4 -->
     <div *ngIf=lane4 class=lane layout=column layout-align="center center">
         <mat-menu #headerMenu="matMenu">
-            <button mat-menu-item (click)=openEdit(lane4)> Edit </button>
-            <button mat-menu-item (click)=openDelete(lane4)> Delete </button>
+            <button mat-menu-item (click)=openEditLane(lane4)> Edit </button>
+            <button mat-menu-item (click)=openDeleteLane(lane4)> Delete </button>
         </mat-menu>
         <mat-card class="bg-accent card-header">
             <mat-icon class=header-menu [matMenuTriggerFor]="headerMenu">arrow_drop_down</mat-icon>
@@ -112,9 +133,14 @@
         </mat-card>
         <div class=drag [dragula]='"lane"' [dragulaModel]='lane4.tasks' id=lane4>
             <mat-card class=mat-card-button *ngFor="let task of lane4.tasks">
-                <a mat-button class=mat-card-button>
+                <a mat-button class=mat-card-button (click)=openEditTask(task)>
+                <mat-icon *ngIf="user._id === task.creator || user.isManager"
+                    class=card-delete (click)="openDeleteTask(task._id)">cancel</mat-icon>
                 <span class="card-title">
-                    <mat-icon class=handle>dehaze</mat-icon> {{task.title}}
+                    <span>
+                        <mat-icon class=handle>dehaze</mat-icon> 
+                    </span>
+                    {{task.title}}
                 </span>
                 <span class="card-subtitle">{{task.description}}</span>
                 </a>

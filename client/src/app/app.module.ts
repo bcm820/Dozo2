@@ -13,7 +13,6 @@ import { CovalentModule } from './ui/covalent.module';
 import { DragulaModule } from 'ng2-dragula';
 
 // Services
-import { AuthService } from './services/auth.service';
 import { UserService } from './services/user.service';
 import { ProjectService } from './services/project.service';
 import { TaskService } from './services/task.service';
@@ -46,8 +45,6 @@ import { EditProjectComponent } from './components/project/edit-project/edit-pro
 import { TaskFormComponent } from './components/task/task-form/task-form.component';
 import { NewTaskComponent } from './components/task/new-task/new-task.component';
 import { EditTaskComponent } from './components/task/edit-task/edit-task.component';
-import { TaskComponent } from './components/task/task/task.component';
-import { LaneComponent } from './components/task/lane/lane.component';
 
 
 @NgModule({
@@ -71,8 +68,6 @@ import { LaneComponent } from './components/task/lane/lane.component';
     TaskFormComponent,
     EditProjectComponent,
     EditTaskComponent,
-    TaskComponent,
-    LaneComponent,
   ],
   imports: [
     MaterialModule,
@@ -97,7 +92,6 @@ import { LaneComponent } from './components/task/lane/lane.component';
     EditTaskComponent,
   ],
   providers: [
-    AuthService,
     UserService,
     ProjectService,
     TaskService,

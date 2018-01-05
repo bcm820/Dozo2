@@ -90,10 +90,11 @@ module.exports = {
         .then(list => res.json(list));
     },
     
-    // user lookup
+    // user lookup, for looking at their info
     lookup(req, res){
         User.findById(req.params.id, {_pw:0, __v:0})
-        .populate('projects', {title:1})
+        .populate('projects')
+        .populate('tasks_contributed')
         .then(user => res.json(user))
     },
 

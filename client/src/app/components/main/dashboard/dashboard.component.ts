@@ -1,13 +1,15 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { NewTaskComponent } from '../../task/new-task/new-task.component';
+import { EditTaskComponent } from '../../task/edit-task/edit-task.component';
 import { ProjectService } from '../../../services/project.service';
 import { TaskService } from '../../../services/task.service';
 import { DragulaService } from 'ng2-dragula';
+import { UserService } from '../../../services/user.service';
 import { FormControl } from '@angular/forms';
 import { ViewContainerRef } from '@angular/core';
 import { TdDialogService } from '@covalent/core';
-import { setInterval } from 'timers';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -16,42 +18,65 @@ import { setInterval } from 'timers';
 })
 export class DashboardComponent implements OnInit, OnDestroy {
 
+  user$;
+  project$;
+  drops$;
+
+  user: any = {_id:0};
+  project_id;
   project;
-  lane0 = {tasks:[{title:'',description:''}]}
-  lane1 = {tasks:[{title:'',description:''}]}
-  lane2 = {tasks:[{title:'',description:''}]}
-  lane3 = {tasks:[{title:'',description:''}]}
-  lane4 = {tasks:[{title:'',description:''}]}
-  drops;
+  lane0;
+  lane1;
+  lane2;
+  lane3;
+  lane4;
 
   newLane = {status: false, title: ''};
   
   constructor(
     private _ps: ProjectService,
+    private _us: UserService,
     private _ts: TaskService,
     private _ds: DragulaService,
-    private dialog: MatDialog,
+    private _route: ActivatedRoute,
+    private _dialog: MatDialog,
     private _tdDialog: TdDialogService,
     private _tdDialogRef: ViewContainerRef
-  ){}
+  ){
+    this._route.paramMap.subscribe( params => {
+      this.project_id = params.get('id');
+    })
+  }
 
   ngOnInit() {
-    this.getAgenda();
-    this.setLaneOptions();
-    this.drops = this._ds.dropModel.subscribe((value) => {
-      this.onDropModel(value.slice(1));
-    });
+    this.getProject();
+    this.setDragulaOptions();
+    this.drops$ = this._ds.dropModel
+      .subscribe((value) => this.onDropModel(value.slice(1)));
   }
 
-  getAgenda(){
-    this._ps.getAgenda()
+  getProject(){
+    this._us.updateStatus();
+    this.user$ = this._us.status$
+    .subscribe(user => {
+      this.user = user;
+      if(this.project_id === null){
+        this.project_id = this.user['agenda'];
+      }
+      this.project$ = this._ps.lookup(this.project_id)
       .subscribe(agenda => {
         this.project = agenda;
-        [this.lane0, this.lane1, this.lane2, this.lane3, this.lane4] = agenda['grid'];
+        [ this.lane0,
+          this.lane1,
+          this.lane2,
+          this.lane3,
+          this.lane4
+        ] = agenda['grid'];
       });
+    });
   }
   
-  setLaneOptions(){
+  setDragulaOptions(){
     let bag = this._ds.find('lane');
     if (bag !== undefined) this._ds.destroy('lane');
     this._ds.setOptions('lane', {
@@ -61,12 +86,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     });
   }
 
-  addLane(){
-    setTimeout(() => { this.newLane.status = true; }, 400);
-  }
-
   onDropModel(args) {
-
+    
     if(args[0].id !== 'project'){
       let [el, target, source] = args;
       let lane: any = this.checkLane(args[2].id);
@@ -77,27 +98,22 @@ export class DashboardComponent implements OnInit, OnDestroy {
         let newLane: any = this.checkLane(args[1].id);
         let id2 = newLane['_id'];
         newLane = this.getLaneTaskIDs(newLane);
-        this._ts.updateLaneOrder(newLane, id2).subscribe(result => {
-          this._ts.updateLaneOrder(lane, id).subscribe(result => this.getAgenda());
+        this._ts.updateLaneTasks(newLane, id2).subscribe(result => {
+          this._ts.updateLaneTasks(lane, id).subscribe(result => this.getProject());
         });
       } else {
-        this._ts.updateLaneOrder(lane, id).subscribe(result => this.getAgenda());
+        this._ts.updateLaneTasks(lane, id).subscribe(result => this.getProject());
       }
     }
   }
 
   checkLane(laneId){
     switch(laneId) {
-      case 'lane0':
-        return this.lane0;
-      case 'lane1':
-        return this.lane1;
-      case 'lane2':
-        return this.lane2;
-      case 'lane3':
-        return this.lane3;
-      case 'lane4':
-        return this.lane4;
+      case 'lane0': return this.lane0;
+      case 'lane1': return this.lane1;
+      case 'lane2': return this.lane2;
+      case 'lane3': return this.lane3;
+      case 'lane4': return this.lane4;
     }
   }
 
@@ -105,14 +121,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     return Array.from(lane.tasks, item => item['_id']);
   }
 
-  openNewTask(){
-    let dialogRef = this.dialog.open(NewTaskComponent, {
-      width: '500px',
-      data: this.project
-    });
-    dialogRef.beforeClose().subscribe(result => {
-      if(result) this.getAgenda();
-    });
+  addLane(){
+    setTimeout(() => { this.newLane.status = true; }, 400);
   }
 
   createNewLane(){
@@ -121,20 +131,19 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this._ts.createLane(lane, this.project._id)
       .subscribe(result => {
         if(result['status']){
-          if(result) this.getAgenda();
+          if(result) this.getProject();
           this.newLane = {status: false, title: ''};
         }
       });
   }
 
-  openEdit(lane) {
+  openEditLane(lane) {
     this._tdDialog.openPrompt({
       message: '',
       title: `Edit "${lane.title}" Lane`,
       value: `${lane.title}`,
       acceptButton: 'Edit',
     }).afterClosed().subscribe(title => {
-      // if lane title is too long, show message and cancel!!!
       if(title) {
         lane.title = title;
         this._ts.updateLane(lane)
@@ -143,7 +152,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     });
   }
 
-  openDelete(lane) {
+  openDeleteLane(lane) {
     let message;
     let notEmpty = false;
     if(lane.tasks.length > 0){
@@ -163,20 +172,58 @@ export class DashboardComponent implements OnInit, OnDestroy {
           let tasksIDs = this.getLaneTaskIDs(lane);
           let lane0IDs = this.getLaneTaskIDs(this.lane0);
           tasksIDs = [...lane0IDs, ...tasksIDs];
-          this._ts.updateLaneOrder(tasksIDs, this.lane0['_id'])
+          this._ts.updateLaneTasks(tasksIDs, this.lane0['_id'])
             .subscribe(result => {
-              this._ts.removeLane(lane._id).subscribe(lane => this.getAgenda());
-              this.getAgenda()
+              this._ts.removeLane(lane._id).subscribe(lane => this.getProject());
+              this.getProject()
             });
         } else {
-          this._ts.removeLane(lane._id).subscribe(lane => this.getAgenda());
+          this._ts.removeLane(lane._id).subscribe(lane => this.getProject());
         }
       }
     });
   }
 
+  openNewTask(){
+    let dialogRef = this._dialog.open(NewTaskComponent, {
+      width: '500px',
+      data: this.lane0
+    });
+    dialogRef.beforeClose().subscribe(result => {
+      if(result) this.getProject();
+    });
+  }
+
+  openEditTask(task){
+    let dialogRef = this._dialog.open(EditTaskComponent, {
+      width: '500px',
+      data: {
+        task: task,
+        userID: this.user._id
+      }
+    });
+    dialogRef.beforeClose().subscribe(result => {
+      if(result) this.getProject();
+    });
+  }
+
+  openDeleteTask(taskID){
+    this._tdDialog.openConfirm({
+      message: `Are you sure you want to delete this task?`,
+      title: `Delete Task`,
+      acceptButton: 'Delete',
+    }).afterClosed().subscribe((accept) => {
+      if(accept) {
+        this._ts.removeTask(taskID)
+          .subscribe(lane => this.getProject());
+      }
+    });
+  }
+
   ngOnDestroy(){
-    this.drops.unsubscribe();
+    this.drops$.unsubscribe();
+    this.user$.unsubscribe();
+    this.project$.unsubscribe();
   }
 
 }

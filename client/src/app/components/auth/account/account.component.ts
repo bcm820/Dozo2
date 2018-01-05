@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { MatSnackBar } from '@angular/material';
-import { AuthService } from '../../../services/auth.service';
+import { MatSnackBar, MAT_DIALOG_DATA } from '@angular/material';
+import { UserService } from '../../../services/user.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -21,35 +21,35 @@ export class AccountComponent implements OnInit {
   
   constructor(
     private snackbar: MatSnackBar,
-    private _as: AuthService,
-    private _router: Router
+    private _us: UserService,
+    private _router: Router,
   ) { }
 
   ngOnInit(){
-    this._as.updateStatus();
-    this.user = this._as.status$
+    this._us.updateStatus();
+    this.user = this._us.status$
   }
 
   changePW(){
-    this._as.updatePW(this.pwField)
+    this._us.updatePW(this.pwField)
       .subscribe(result => {
         this.snackbar.open(result['msg'], 'x', {duration: 3000});
       });
   }
   
   update(user){
-    this._as.update(user)
+    this._us.updateUser(user)
       .subscribe(result => {
         this.snackbar.open(result['msg'], 'x', {duration: 3000});
-        this._as.updateStatus();
+        this._us.updateStatus();
       });
   }
 
   unregister(){
-    this._as.unregister(this.pwDel)
+    this._us.unregister(this.pwDel)
       .subscribe(result => {
         this.snackbar.open(result['msg'], 'x', {duration: 3000})
-        this._as.updateStatus();
+        this._us.updateStatus();
         this._router.navigate(['']);
       });
   }

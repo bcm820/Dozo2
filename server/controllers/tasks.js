@@ -19,24 +19,16 @@ module.exports = {
         Project.findById(req.params.id)
         .then(project => {
             const lane = new Lane(req.body);
-            lane.project = project._id;
             lane.save()
             .then(lane => {
-                project.grid.push(lane._id);
+                project.grid_ids.push(lane._id);
                 project.save()
                 .then(project => {
-                    res.json(sendMsg(true, `Lane "${lane.title}" created.`));
+                    res.json(sendMsg(true, `"${lane.title}" created.`));
                 })
-                .catch(err => res.json(sendMsg(false, `Error: Input invalid.`)));
             })
-            .catch(err => res.json(sendMsg(false, `Error: Input invalid.`)));
+            .catch(err => res.json(sendMsg(false, `Error: Lane heading must be at least 2 characters.`)));
         });
-    },
-
-    // lookup lane
-    lookupLane(req, res){
-        Lane.findById(req.params.id)
-        .then(lane => res.json(lane));
     },
 
     // update lane info
@@ -44,134 +36,56 @@ module.exports = {
         Lane.findByIdAndUpdate(req.params.id, req.body,
         {runValidators:true, new:true, context: 'query'})
         .then(lane => {
-            res.json(sendMsg(true, `Lane "${lane.title}" updated.`));
+            res.json(sendMsg(true, `"${lane.title}" updated.`));
         })
     },
 
-    // update lane orders
-    updateLaneOrder(req, res){
+    // update task order in lane
+    updateLaneTasks(req, res){
         Lane.findById(req.params.id)
         .then(lane => {
-            lane.tasks = req.body;
+            lane.task_ids = req.body;
             lane.save()
-            .then(lane => res.json(sendMsg(true, `"${lane.title}" order updated.`)));
+            .then(lane => res.json(true));
         })
     },
 
     // remove lane
     removeLane(req, res){
         Lane.findByIdAndRemove(req.params.id)
-        .then(lane => {
-            console.log(`Lane "${lane.title}" deleted.`);
-            res.json(true);
-        })
+        .then(lane => res.json(true));
     },
 
     // create task for lane
     createTask(req, res){
         Lane.findById(req.params.id)
-        .populate('tasks')
         .then(lane => {
             const task = new Task(req.body);
-            task.project = lane.project;
-            lane.tasks.push(task);
-            lane.save()
-            .then(lane => {
-                task.save()
-                .then(task => {
-                    res.json(sendMsg(true, `Task "${task.title}" created.`));
-                })
-                .catch(err => res.json(sendMsg(false, `Error: Unable to save task.`)));
+            task.creator = req.session.uid;
+            task.save()
+            .then(task => {
+                lane.task_ids.push(task._id);
+                lane.save()
+                .then(lane => res.json(sendMsg(true, `Task "${task.title}" created.`)));
             })
-            .catch(err => res.json(sendMsg(false, `Error: Unable to save lane.`)));
+            .catch(err => res.json(sendMsg(false, `Error: One or more fields invalid.`)));
         });
-    },
-
-    // lookup detailed task info
-    lookupTask(req, res){
-        Task.findById(req.params.id)
-        .then(task => res.json(task));
     },
     
     // update task info
-    // update its user
+    // include contributor ID
     updateTask(req, res){
         Task.findByIdAndUpdate(req.params.id, req.body,
-            {runValidators:true, new:true, context: 'query'})
+            {runValidators: true, new:true, context: 'query'})
         .then(task => {
-            console.log(`Task "${task.title}" updated.`);
-            res.json(true);
+            res.json(sendMsg(true, `Task "${task.title}" updated.`));
         })
     },
 
     // remove task
     removeTask(req, res){
         Task.findByIdAndRemove(req.params.id)
-        .then(task => {
-            console.log(`Task "${task.title}" deleted.`);
-            res.json(true);
-        })
-    },
-
-
-    // REFACTOR ASSIGNMENT????
-    
-    // assign lead/member profile to task
-    assign(req, res){
-        Task.findById(req.params.task)
-        .then(task => {
-            User.findById(req.params.profile)
-            .then(profile => {
-                profile.tasks.push(task);
-                profile.save()
-                .then(profile => {
-                    task.member = profile;
-                    task.save()
-                    .then(task => {
-                        console.log(`Task "${task.title}" assigned to ${profile.name}.`);
-                        res.json(true)
-                    })
-                    .catch(err => res.json(listErrors(err)));
-                })
-                .catch(err => res.json(listErrors(err)));
-            });
-        });
-    },
-    
-    // unassign lead/member profile from task
-    unassign(req, res){
-        Task.findById(req.params.task)
-        .then(task => {
-            task.member = undefined;
-            task.save()
-            .then(task => console.log(`User removed from "${task.title}."`))
-        });
-        User.findById(req.params.profile)
-        .then(profile => {
-            profile.tasks.pull(req.params.task);
-            profile.save()
-            .then(profile => console.log(`Task removed from ${profile.name}'s list.`))
-        })
-        res.json(true);
-    },
-
-    // filter by status
-    listByStatus(req, res){
-        Task.find({
-            project: req.params.project,
-            status: req.params.status
-        }).sort({priority:-1})
-        .then(list => res.json(list));
-    },
-
-    // filter by profile and status
-    listFilter(req, res){
-        Task.find({
-            project: req.params.project,
-            member: req.params.profile,
-            status: req.params.status
-        }).sort({priority:-1})
-        .then(list => res.json(list));
+        .then(task => res.json(true));
     }
     
 }

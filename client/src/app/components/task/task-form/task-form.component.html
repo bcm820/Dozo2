@@ -12,9 +12,9 @@
     </mat-form-field>
 
     <mat-form-field>
-      <input matInput placeholder="Description"
+      <textarea matInput placeholder="Description"
         name=description [(ngModel)]='task.description' #description='ngModel'
-        required>
+        required rows=3></textarea>
         <mat-error align=right *ngIf=description.errors [hidden]=!description.errors.required>
           A brief description is required.
         </mat-error>
@@ -22,7 +22,7 @@
 
     <mat-form-field>
       <textarea matInput placeholder="Details" name=details
-        [(ngModel)]='task.details' #details='ngModel'></textarea>
+        [(ngModel)]='task.details' #details='ngModel' rows=3></textarea>
     </mat-form-field>
 
 </div>

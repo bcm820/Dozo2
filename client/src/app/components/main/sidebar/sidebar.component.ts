@@ -1,7 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { ProjectService } from '../../../services/project.service';
 import { MatDialog } from '@angular/material';
 import { NewProjectComponent } from '../../project/new-project/new-project.component';
+import { Router } from '@angular/router';
 import { DragulaService } from 'ng2-dragula';
 
 @Component({
@@ -11,19 +12,21 @@ import { DragulaService } from 'ng2-dragula';
 })
 export class SidebarComponent implements OnInit, OnDestroy {
 
+  @Input() agenda;
   projects;
-  drops;
+  drops$;
   
   constructor(
     private _ps: ProjectService,
     private _ds: DragulaService,
-    private dialog: MatDialog,
+    private _dialog: MatDialog,
+    private _router: Router
   ) {}
 
   ngOnInit() {
     this.listProjects();
     this.setListOptions();
-    this.drops = this._ds.dropModel.subscribe((value) => {
+    this.drops$ = this._ds.dropModel.subscribe((value) => {
       this.onDropModel(value.slice(1));
     });
   }
@@ -53,21 +56,24 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   updateProjects(list){
     this._ps.updateUserProjects(list)
-      .subscribe(result => {
-        console.log(result['msg']);
-    });
+      .subscribe(result => {return});
   }
 
   openNewProject(){
-    let dialogRef = this.dialog.open(NewProjectComponent,
+    let dialogRef = this._dialog.open(NewProjectComponent,
       {width: '500px'});
     dialogRef.beforeClose().subscribe(result => {
       if(result) this.listProjects();
     });
   }
 
+  goToProject(id){
+    if(id === this.agenda) this._router.navigate(['dashboard']);
+    else this._router.navigate(['projects', id]);
+  }
+
   ngOnDestroy(){
-    this.drops.unsubscribe();
+    this.drops$.unsubscribe();
   }
 
 }

@@ -1,5 +1,5 @@
 
-<div layout=column layout-padding layout-margin layout-align="center center">
+<div layout=column layout-padding layout-margin>
 
     <div class="card-blank mat-card-button">
         <a mat-button (click)=openNewProject() class=card-blank-button>
@@ -11,13 +11,12 @@
 
         <mat-card class="bg-accent mat-card-button"
             *ngFor="let project of projects" id="project">
-            <a mat-button class=card-button>
+            <a mat-button class=card-button (click)=goToProject(project._id)>
             <span class="card-title text-truncate">
                 <mat-icon class=handle>dehaze</mat-icon> {{project.title}}
             </span>
             <span class="card-subtitle text-truncate">{{project.description}}</span>
             </a>
-            <!-- <mat-icon class=handle>dehaze</mat-icon> -->
         </mat-card>
 
     </div>
