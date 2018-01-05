@@ -6,7 +6,7 @@
 
 .mat-card-button {
     width: 200px;
-    margin: 9px 0px;
+    margin: 7px 0px;
 }
 
 .card-title {
@@ -52,4 +52,8 @@
 
 .handle:active {
     cursor: grabbing;
+}
+
+.left {
+    margin-left: 15px;
 }

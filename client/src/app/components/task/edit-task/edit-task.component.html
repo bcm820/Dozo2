@@ -1,5 +1,5 @@
 
-<div *ngIf="userID === task.creator" layout=column layout-margin layout-padding>
+<div *ngIf="userID === task.creator._id" layout=column layout-margin layout-padding>
 
     <h2 mat-dialog-title align=center>Update Item</h2>
 
@@ -7,4 +7,4 @@
 
 </div>
 
-<td-json-formatter *ngIf="userID !== task.creator" [data]="task" [levelsOpen]="1"></td-json-formatter>
+<td-json-formatter *ngIf="userID !== task.creator._id" [data]="task" [levelsOpen]="1"></td-json-formatter>

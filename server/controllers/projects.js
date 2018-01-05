@@ -60,8 +60,8 @@ module.exports = {
         .populate({ path: 'grid',
             populate: { path: 'tasks',
                 populate: [
-                    { path: 'creator', select: ['first', 'last', 'name'] },
-                    { path: 'contributor', select: ['first', 'last', 'name'] }
+                    { path: 'creator', select: ['first', 'last', 'name', '_id'] },
+                    { path: 'contributor', select: ['first', 'last', 'name', '_id'] }
                 ]
             }
         })
