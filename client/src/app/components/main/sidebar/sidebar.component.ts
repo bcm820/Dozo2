@@ -25,7 +25,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.listProjects();
-    this.setListOptions();
+    // this.setListOptions();
     this.drops$ = this._ds.dropModel.subscribe((value) => {
       this.onDropModel(value.slice(1));
     });

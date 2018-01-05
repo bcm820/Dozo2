@@ -23,13 +23,7 @@
     </mat-form-field>
 
     <mat-form-field>
-      <textarea matInput placeholder="Notes for Project Lead(s)" rows=3
-        name=notes [(ngModel)]='project.notes' #notes='ngModel'></textarea>
-        <mat-hint align=end>(Optional)</mat-hint>
-    </mat-form-field>
-
-    <mat-form-field>
-      <input matInput [matDatepicker]="start_date" placeholder="Start Date"
+      <input matInput [matDatepicker]="startDate" placeholder="Start Date"
         name=start_date [(ngModel)]='project.start_date'
         #start_date='ngModel' required [min]="minDate">
       <mat-datepicker-toggle matSuffix [for]="start_date"></mat-datepicker-toggle>
@@ -37,7 +31,7 @@
     </mat-form-field>
 
     <mat-form-field>
-      <input matInput [matDatepicker]="target_date" placeholder="Target Date"
+      <input matInput [matDatepicker]="targetDate" placeholder="Target Date"
         name=target_date [(ngModel)]='project.target_date'
         #target_date='ngModel' required [min]="minDate">
       <mat-datepicker-toggle matSuffix [for]="target_date"></mat-datepicker-toggle>

@@ -7,7 +7,6 @@ const LaneSchema = new Schema({
     
     title: { type: String, required: [true], minlength: [2] },
     task_ids: [{ type: Object }],
-    // project: { type: Object, ref: 'Project' }
     
 }, {
     timestamps:true,

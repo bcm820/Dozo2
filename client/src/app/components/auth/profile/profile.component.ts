@@ -1,20 +1,20 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { MatSnackBar } from '@angular/material';
-import { UserService } from '../../../../services/user.service';
+import { UserService } from '../../../services/user.service';
 
 @Component({
-  selector: 'app-user',
-  templateUrl: './user.component.html',
-  styleUrls: ['./user.component.css']
+  selector: 'app-profile',
+  templateUrl: './profile.component.html',
+  styleUrls: ['./profile.component.css']
 })
-export class UserComponent implements OnInit {
+export class ProfileComponent implements OnInit {
 
   employee;
   user;
   
   constructor(
-    private dialogRef: MatDialogRef<UserComponent>,
+    private dialogRef: MatDialogRef<ProfileComponent>,
     @Inject(MAT_DIALOG_DATA) public data,
     private snackbar: MatSnackBar,
     private _us: UserService

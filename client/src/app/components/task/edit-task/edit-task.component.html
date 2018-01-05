@@ -3,7 +3,12 @@
 
     <h2 mat-dialog-title align=center>Update Item</h2>
 
-    <task-form [task]=task [action]=action (send)=updateTask($event)></task-form>
+    <task-form
+    [task]=task
+    [action]=action
+    [contributors]=contributors
+    (send)=updateTask($event)
+    ></task-form>
 
 </div>
 

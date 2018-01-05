@@ -19,13 +19,13 @@ $typography: mat-typography-config(
   $accent:  map-get($theme, accent);
   $warn:    map-get($theme, warn);
 
-  .bg-primary { background-color: mat-color($primary); }
-  .bg-accent { background-color: mat-color($accent); }
-  .bg-warn { background-color: mat-color($warn); }
-  .txt-primary { color: mat-color($primary); }
-  .txt-accent { color: mat-color($accent); }
-  .txt-warn { color: mat-color($warn); }
-  
+  .bgPrimary { background-color: mat-color($primary); }
+  .bgAccent { background-color: mat-color($accent); }
+  .bgWarn { background-color: mat-color($warn); }
+  .txtPrimary { color: mat-color($primary); }
+  .txtAccent { color: mat-color($accent); }
+  .txtWarn { color: mat-color($warn); }
+
 }
 
 // includes

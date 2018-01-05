@@ -2,7 +2,7 @@
 <td-layout>
 
   <!-- other attrs: logo="assets:logo" -->
-  <td-navigation-drawer *ngIf=user.status flex sidenavTitle="Your Company" name="{{user.name}}" email="{{user.email}}" color=primary>
+  <td-navigation-drawer *ngIf=user.status flex sidenavTitle="{{dashboard}}" name="{{user.name}}" email="{{user.email}}" color=primary>
     <app-main-nav [user]=user></app-main-nav>
     <div *ngIf=user.isManager td-navigation-drawer-menu>
       <app-main-nav2 [user]=user></app-main-nav2>
@@ -11,16 +11,18 @@
 
   <!-- For individual project pages, have a stationary list on the side? -->
   <!-- other attrs:  navigationRoute="/", logo="assets:logo",  toolbarTitle="Title" -->
-  <td-layout-nav-list toolbarTitle="Dozo" opened={{user.status}} mode=side sidenavWidth=230px>
-    <button mat-icon-button td-menu-button tdLayoutToggle matTooltip="Menu">
-      <mat-icon>menu</mat-icon>
+  <td-layout-nav-list opened={{user.status}} mode=side sidenavWidth=230px>
+    <button mat-icon-button td-menu-button tdLayoutToggle matTooltip="Projects">
+      <mat-icon>view_list</mat-icon>
     </button>
     <div td-sidenav-content>
       <app-sidebar *ngIf=user.status [agenda]=user.agenda></app-sidebar>
     </div>
 
     <div td-toolbar-content layout="row" layout-align="center center" flex>
-      <a *ngIf=user.status mat-icon-button tdLayoutNavListToggle matTooltip="Toggle"><mat-icon>view_list</mat-icon></a>
+      <a *ngIf=user.status mat-icon-button tdLayoutNavListToggle>
+        <mat-icon matTooltip="Show / Hide">menu</mat-icon>
+      </a>
       <h1 *ngIf=!user.status>Dozo</h1>
       <span flex></span>
       <span *ngIf=!user.status>
@@ -35,8 +37,8 @@
     <router-outlet></router-outlet>
     <td-layout-footer color="primary">
       <div layout=row layout-margin>
-        <div flex><strong>Copyright © 2017. All rights reserved.</strong></div>
-        <div flex align=right><strong>Powered by Dozo</strong></div>
+        <div flex class=footer>Copyright © 2017. All rights reserved.</div>
+        <div flex align=right class=footer>Powered by Dozo</div>
       </div>
     </td-layout-footer>
   </td-layout-nav-list>

@@ -56,7 +56,7 @@ module.exports = {
     lookup(req, res){
         Project.findById(req.params.id)
         .populate('creator')
-        .populate('contributors')
+        .populate({path: 'contributors', select: ['first', 'last', 'name', '_id'] })
         .populate({ path: 'grid',
             populate: { path: 'tasks',
                 populate: [

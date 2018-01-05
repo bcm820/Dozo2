@@ -25,13 +25,12 @@ import { UserFormComponent } from './components/auth/user-form/user-form.compone
 import { RegisterComponent } from './components/auth/register/register.component';
 import { AccountComponent } from './components/auth/account/account.component';
 import { LoginComponent } from './components/auth/login/login.component';
+import { ProfileComponent } from './components/auth/profile/profile.component';
 
 // Layout Components
 import { MainComponent } from './components/main/main.component';
 import { MainNavComponent } from './components/main/main-nav/main-nav.component';
-import { ProfileComponent } from './components/main/main-nav/profile/profile.component';
 import { MainNav2Component } from './components/main/main-nav2/main-nav2.component';
-import { UserComponent } from './components/main/main-nav2/user/user.component';
 import { SidebarComponent } from './components/main/sidebar/sidebar.component';
 import { LandingComponent } from './components/main/landing/landing.component';
 import { DashboardComponent } from './components/main/dashboard/dashboard.component';
@@ -58,7 +57,6 @@ import { EditTaskComponent } from './components/task/edit-task/edit-task.compone
     UserFormComponent,
     MainNavComponent,
     MainComponent,
-    UserComponent,
     ProjectFormComponent,
     ProfileComponent,
     MainNav2Component,
@@ -84,7 +82,6 @@ import { EditTaskComponent } from './components/task/edit-task/edit-task.compone
     RegisterComponent,
     LoginComponent,
     AccountComponent,
-    UserComponent,
     ProfileComponent,
     NewProjectComponent,
     NewTaskComponent,

@@ -8,11 +8,9 @@ const UserSchema = new Schema({
     status: { type: Boolean, default: true },
     isManager: { type: Boolean },
     // only managers can assign contributors and tasks
-    // normal users can still make their own projects
-    agenda: { type: Object },
+    // normal users can still make their own projects/tasks
+    agenda: { type: Object, ref: 'Project' },
     project_ids: [{ type: Object }],
-    // for contributors only
-    // used to determine sort order on sidebar
 
     email: {
         type: String, trim: true,

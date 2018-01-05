@@ -1,13 +1,29 @@
 
-<mat-nav-list>
+<mat-list
+  [dragula]='"projectList"'
+  [dragulaModel]='projects'>
 
-  <span *ngFor="let contributor of contributors|async">
-    <a mat-list-item (click)=viewUser(contributor._id)>
-      <mat-icon matListIcon>person</mat-icon>
-      <span matLine>{{contributor.name}}</span>
-      <span matLine>{{contributor.email}}</span>
-    </a>
-    <mat-divider></mat-divider>
-  </span>
+  <mat-list-item id="project" *ngFor="let project of projects">
+    <mat-icon [ngClass]="{txtAccent: project._id === current}"
+    matListIcon class=handle>dehaze</mat-icon>
+      <span
+      [ngClass]="{txtAccent: project._id === current}"
+      (click)=goToProject(project) matLine>{{project.title}}</span>
+      <span
+      [ngClass]="{txtAccent: project._id === current}"
+      (click)=goToProject(project) matLine>{{project.startDate}}</span>
+    <mat-icon class=edit>edit</mat-icon>
+  </mat-list-item>
 
-</mat-nav-list>
+</mat-list>
+
+<div layout=column layout-align="center center">
+
+  <div class="card-blank">
+      <a mat-button class=card-blank-button
+        (click)=openNewProject()>
+          New Project <mat-icon>playlist_add</mat-icon>
+      </a>
+  </div>
+
+</div>

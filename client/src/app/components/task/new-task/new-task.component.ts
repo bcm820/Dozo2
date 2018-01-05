@@ -9,19 +9,21 @@ import { TaskService } from '../../../services/task.service';
 })
 export class NewTaskComponent implements OnInit {
 
-  task = { title:'', description:'', details:'' }
+  task = { title:'', description:'', details:'', contributor:'' }
   laneId;
+  contributors;
   action = 'Add'
 
   constructor(
     private dialog: MatDialogRef<NewTaskComponent>,
     private snackbar: MatSnackBar,
     private _ts: TaskService,
-    @Inject(MAT_DIALOG_DATA) private lane
+    @Inject(MAT_DIALOG_DATA) private data
   ) { }
 
   ngOnInit(){
-    this.laneId = this.lane._id;
+    this.laneId = this.data.lane._id;
+    this.contributors = this.data.contributors;
   }
 
   createTask(task){

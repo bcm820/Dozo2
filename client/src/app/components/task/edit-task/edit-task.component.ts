@@ -9,8 +9,9 @@ import { TaskService } from '../../../services/task.service';
 })
 export class EditTaskComponent implements OnInit {
 
-  action = 'Update';
+  action = 'Save Changes';
   task;
+  contributors;
   userID; // compare against task creator to see if they can update
   
   constructor(
@@ -23,6 +24,7 @@ export class EditTaskComponent implements OnInit {
   ngOnInit() {
     this.task = this.data.task;
     this.userID = this.data.userID;
+    this.contributors = this.data.contributors;
   }
 
   updateTask(task){

@@ -60,6 +60,7 @@ module.exports = {
     createTask(req, res){
         Lane.findById(req.params.id)
         .then(lane => {
+            if(req.body.contributor === '') req.body.contributor = undefined;
             const task = new Task(req.body);
             task.creator = req.session.uid;
             task.save()

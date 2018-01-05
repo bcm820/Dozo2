@@ -1,0 +1,41 @@
+
+.handle {
+    cursor: grab;
+}
+
+.handle:active {
+    cursor: grabbing;
+}
+
+span {
+    cursor: pointer;
+}
+
+.card-blank {
+    width: 200px;
+    margin: 15px 0px;
+}
+
+.card-blank-button {
+    text-align: center;
+    margin: auto;
+    height: 69px;
+    line-height: 70px;
+    width: 100%;
+    font-size: 18px;
+}
+
+.edit {
+    position: absolute;
+    right: -10px;
+    top: 20px;
+    font-size: 30px;
+    z-index: 1;
+    opacity: 0;
+    transition: all ease 0.4s;
+    cursor: pointer;
+}
+
+.edit:hover {
+    opacity: 100;
+}

@@ -14,6 +14,8 @@ import { AccountComponent } from '.././auth/account/account.component';
 export class MainComponent implements OnInit {
 
   user: any = {status: false}
+  title;
+  dashboard = "Project Dashboard";
 
   constructor(
     private dialog: MatDialog,
@@ -26,12 +28,18 @@ export class MainComponent implements OnInit {
     this.getStatus();
   }
 
+  updateTitle(title){
+    this.title = title;
+  }
+
   getStatus(){
     this._us.updateStatus();
     this._us.status$
       .subscribe(result => {
         if(!result['status']) this._router.navigate(['']);
         this.user = result;
+        if(this.user.isManager)
+          this.dashboard = "Manager Dashboard";
       });
   }
   

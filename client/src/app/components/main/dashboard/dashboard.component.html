@@ -3,12 +3,12 @@
     
     <!-- TO DO -->
     <div *ngIf=lane0 class=lane>
-        <mat-card class="bg-accent card-header">
+        <mat-card class="bgAccent card-header">
+            <mat-icon class=header-menu (click)=openEditLane(lane0)>
+                arrow_drop_down
+            </mat-icon>
             <mat-card-title class="card-heading text-truncate" align=center>
-                <mat-icon class=header-menu (click)=openEditLane(lane0)>
-                    arrow_drop_down
-                </mat-icon> 
-                {{lane0.title}} &nbsp;
+                {{lane0.title}}
             </mat-card-title>
         </mat-card>
         <div class="card-blank">
@@ -39,12 +39,12 @@
             <button mat-menu-item (click)=openEditLane(lane1)> Edit </button>
             <button mat-menu-item (click)=openDeleteLane(lane1)> Delete </button>
         </mat-menu>
-        <mat-card class="bg-accent card-header">
+        <mat-card class="bgAccent card-header">
+            <mat-icon class=header-menu [matMenuTriggerFor]="headerMenu">
+                arrow_drop_down
+            </mat-icon> 
             <mat-card-title class="card-heading text-truncate" align=center>
-                <mat-icon class=header-menu [matMenuTriggerFor]="headerMenu">
-                    arrow_drop_down
-                </mat-icon> 
-                {{lane1.title}} &nbsp;
+                {{lane1.title}}
             </mat-card-title>
         </mat-card>
         <div class=drag [dragula]='"lane"' [dragulaModel]='lane1.tasks' id=lane1>
@@ -70,12 +70,12 @@
             <button mat-menu-item (click)=openEditLane(lane2)> Edit </button>
             <button mat-menu-item (click)=openDeleteLane(lane2)> Delete </button>
         </mat-menu>
-        <mat-card class="bg-accent card-header">
+        <mat-card class="bgAccent card-header">
+            <mat-icon class=header-menu [matMenuTriggerFor]="headerMenu">
+                arrow_drop_down
+            </mat-icon> 
             <mat-card-title class="card-heading text-truncate" align=center>
-                <mat-icon class=header-menu [matMenuTriggerFor]="headerMenu">
-                    arrow_drop_down
-                </mat-icon> 
-                {{lane2.title}} &nbsp;
+                {{lane2.title}}
             </mat-card-title>
         </mat-card>
         <div class=drag [dragula]='"lane"' [dragulaModel]='lane2.tasks' id=lane2>
@@ -101,12 +101,12 @@
             <button mat-menu-item (click)=openEditLane(lane3)> Edit </button>
             <button mat-menu-item (click)=openDeleteLane(lane3)> Delete </button>
         </mat-menu>
-        <mat-card class="bg-accent card-header">
+        <mat-card class="bgAccent card-header">
+            <mat-icon class=header-menu [matMenuTriggerFor]="headerMenu">
+                arrow_drop_down
+            </mat-icon> 
             <mat-card-title class="card-heading text-truncate" align=center>
-                <mat-icon class=header-menu [matMenuTriggerFor]="headerMenu">
-                    arrow_drop_down
-                </mat-icon> 
-                {{lane3.title}} &nbsp;
+                {{lane3.title}}
             </mat-card-title>
         </mat-card>
         <div class=drag [dragula]='"lane"' [dragulaModel]='lane3.tasks' id=lane3>
@@ -132,12 +132,12 @@
             <button mat-menu-item (click)=openEditLane(lane4)> Edit </button>
             <button mat-menu-item (click)=openDeleteLane(lane4)> Delete </button>
         </mat-menu>
-        <mat-card class="bg-accent card-header">
+        <mat-card class="bgAccent card-header">
+            <mat-icon class=header-menu [matMenuTriggerFor]="headerMenu">
+                arrow_drop_down
+            </mat-icon> 
             <mat-card-title class="card-heading text-truncate" align=center>
-                <mat-icon class=header-menu [matMenuTriggerFor]="headerMenu">
-                    arrow_drop_down
-                </mat-icon> 
-                {{lane4.title}} &nbsp;
+                {{lane4.title}}
             </mat-card-title>
         </mat-card>
         <div class=drag [dragula]='"lane"' [dragulaModel]='lane4.tasks' id=lane4>

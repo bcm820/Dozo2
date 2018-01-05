@@ -5,8 +5,8 @@
     <mat-form-field>
       <input matInput placeholder="Title"
         name=title [(ngModel)]='task.title' #title='ngModel'
-        required>
-        <mat-error align=right *ngIf=title.errors [hidden]=!title.errors.required>
+        required maxlength=40>
+        <mat-error *ngIf=title.errors [hidden]=!title.errors.required align=right>
           A title is required.
         </mat-error>
     </mat-form-field>
@@ -14,10 +14,21 @@
     <mat-form-field>
       <textarea matInput placeholder="Description"
         name=description [(ngModel)]='task.description' #description='ngModel'
-        required rows=3></textarea>
-        <mat-error align=right *ngIf=description.errors [hidden]=!description.errors.required>
-          A brief description is required.
+        required rows=3 maxlength=200></textarea>
+        <mat-error *ngIf=title.errors [hidden]=!title.errors.required align=right>
+          A description is required.
         </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-select *ngIf=task.contributor name=contributor
+        [(ngModel)]='task.contributor' #contributor='ngModel' placeholder="Assigned to {{task.contributor.name}}">
+        <mat-option *ngFor="let contributor of contributors" value="{{contributor._id}}">{{contributor.name}}</mat-option>
+      </mat-select>
+      <mat-select *ngIf=!task.contributor name=contributor
+        [(ngModel)]='task.contributor' #contributor='ngModel' placeholder="Assign to">
+        <mat-option *ngFor="let contributor of contributors" value="{{contributor._id}}">{{contributor.name}}</mat-option>
+      </mat-select>
     </mat-form-field>
 
     <mat-form-field>

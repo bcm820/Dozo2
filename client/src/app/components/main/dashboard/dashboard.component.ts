@@ -19,12 +19,13 @@ import { ActivatedRoute } from '@angular/router';
 export class DashboardComponent implements OnInit, OnDestroy {
 
   user$;
-  project$;
   drops$;
+  rtSub$;
 
-  user: any = {_id:0};
+  user;
   project_id;
   project;
+
   lane0;
   lane1;
   lane2;
@@ -43,7 +44,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private _tdDialog: TdDialogService,
     private _tdDialogRef: ViewContainerRef
   ){
-    this._route.paramMap.subscribe( params => {
+    this.rtSub$ = this._route.paramMap.subscribe( params => {
       this.project_id = params.get('id');
     })
   }
@@ -63,7 +64,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       if(this.project_id === null){
         this.project_id = this.user['agenda'];
       }
-      this.project$ = this._ps.lookup(this.project_id)
+      this._ps.lookup(this.project_id)
       .subscribe(agenda => {
         this.project = agenda;
         [ this.lane0,
@@ -187,7 +188,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
   openNewTask(){
     let dialogRef = this._dialog.open(NewTaskComponent, {
       width: '500px',
-      data: this.lane0
+      data: {
+        lane: this.lane0,
+        contributors: this.project['contributors']
+      }
     });
     dialogRef.beforeClose().subscribe(result => {
       if(result) this.getProject();
@@ -199,7 +203,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
       width: '500px',
       data: {
         task: task,
-        userID: this.user._id
+        userID: this.user._id,
+        contributors: this.project['contributors']
       }
     });
     dialogRef.beforeClose().subscribe(result => {
@@ -223,7 +228,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ngOnDestroy(){
     this.drops$.unsubscribe();
     this.user$.unsubscribe();
-    this.project$.unsubscribe();
+    this.rtSub$.unsubscribe();
   }
 
 }
