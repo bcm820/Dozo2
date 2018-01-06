@@ -10,7 +10,7 @@ import { ProjectService } from '../../../services/project.service';
 })
 export class NewProjectComponent {
   
-  project = { title:'', description:'', notes:'', start_date:'', target_date:'' };
+  project = { title:'', description:'', notes:'', startDate:'', targetDate:'' };
   action = 'Create Project';
   
   constructor(

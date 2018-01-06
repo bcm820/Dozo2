@@ -1,5 +1,5 @@
 
-<div layout=row layout-margin>
+<div *ngIf=project layout=row layout-margin>
     
     <!-- TO DO -->
     <div *ngIf=lane0 class=lane>
@@ -23,7 +23,7 @@
                 <mat-card-content class=mat-card-button (click)=openEditTask(task)>
                 <span class="card-title">
                     <span>
-                        <mat-icon *ngIf="user._id === task.creator._id" class=handle>dehaze</mat-icon> 
+                        <mat-icon *ngIf="user._id === task.creator._id && !filter" class=handle>dehaze</mat-icon> 
                     </span>
                     {{task.title}}
                 </span>
@@ -54,7 +54,7 @@
                 <mat-card-content class=mat-card-button (click)=openEditTask(task)>
                 <span class="card-title">
                     <span>
-                        <mat-icon *ngIf="user._id === task.creator._id" class=handle>dehaze</mat-icon> 
+                        <mat-icon *ngIf="user._id === task.creator._id && !filter" class=handle>dehaze</mat-icon>  
                     </span>
                     {{task.title}}
                 </span>
@@ -85,7 +85,7 @@
                 <mat-card-content class=mat-card-button (click)=openEditTask(task)>
                 <span class="card-title">
                     <span>
-                        <mat-icon *ngIf="user._id === task.creator._id" class=handle>dehaze</mat-icon> 
+                        <mat-icon *ngIf="user._id === task.creator._id && !filter" class=handle>dehaze</mat-icon>  
                     </span>
                     {{task.title}}
                 </span>
@@ -116,7 +116,7 @@
                 <mat-card-content class=mat-card-button (click)=openEditTask(task)>
                 <span class="card-title">
                     <span>
-                        <mat-icon *ngIf="user._id === task.creator._id" class=handle>dehaze</mat-icon> 
+                        <mat-icon *ngIf="user._id === task.creator._id && !filter" class=handle>dehaze</mat-icon>  
                     </span>
                     {{task.title}}
                 </span>
@@ -147,7 +147,7 @@
                 <mat-card-content class=mat-card-button (click)=openEditTask(task)>
                 <span class="card-title">
                     <span>
-                        <mat-icon *ngIf="user._id === task.creator._id" class=handle>dehaze</mat-icon> 
+                        <mat-icon *ngIf="user._id === task.creator._id && !filter" class=handle>dehaze</mat-icon>  
                     </span>
                     {{task.title}}
                 </span>
@@ -169,7 +169,12 @@
                 (blur)="newLane = {status: false, title: ''}" placeholder="(Add Title)">
         </div>
 
+        <mat-slide-toggle (click)=filterTasks()>Slide me!</mat-slide-toggle>
+
     </div>
+
+    <div *ngIf="!lane1" class=lane>&nbsp;</div>
+    <div *ngIf="!lane2" class=lane>&nbsp;</div>
 
 </div>
 

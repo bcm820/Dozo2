@@ -22,11 +22,15 @@ module.exports = (router) => {
     .post(projects.create)
     .put(projects.updateUserProjects)
 
+    router.get('/projects/agenda', projects.getAgenda)
+
     router.route('/projects/:id')
     .get(projects.lookup)
     .post(projects.update)
     .put(projects.updateGrid)
     .delete(projects.remove)
+
+    router.get('/projects/:id/filter', projects.filter)
     
     router.route('/projects/:id/build')
     .post(tasks.createTask)

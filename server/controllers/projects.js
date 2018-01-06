@@ -52,11 +52,11 @@ module.exports = {
             })
         })
     },
-
+    
     lookup(req, res){
         Project.findById(req.params.id)
         .populate('creator')
-        .populate({path: 'contributors', select: ['first', 'last', 'name', '_id'] })
+        .populate({ path: 'contributors', select: ['first', 'last', 'name', '_id'] })
         .populate({ path: 'grid',
             populate: { path: 'tasks',
                 populate: [
@@ -65,7 +65,64 @@ module.exports = {
                 ]
             }
         })
-        .then(project => res.json(project));
+        .then(project => {
+            req.session.pid = project._id;
+            res.json(project);
+        });
+    },
+
+    filter(req, res){
+        Project.findById(req.params.id)
+        .populate('creator')
+        .populate({ path: 'contributors', select: ['first', 'last', 'name', '_id'], })
+        .populate({ path: 'grid',
+            populate: { path: 'tasks', match: { contributor: req.session.uid },
+                populate: [
+                    { path: 'creator', select: ['first', 'last', 'name', '_id'] },
+                    { path: 'contributor', select: ['first', 'last', 'name', '_id'] }
+                ]
+            }
+        })
+        .then(project => {
+            req.session.pid = project._id;
+            res.json(project);
+        });
+    },
+
+    getAgenda(req, res){
+        User.findById(req.session.uid)
+        .then(user => {
+            Project.findById(user.agenda)
+            .populate('creator')
+            .populate({ path: 'contributors', select: ['first', 'last', 'name', '_id'] })
+            .populate({ path: 'grid',
+                populate: { path: 'tasks',
+                    populate: [
+                        { path: 'creator', select: ['first', 'last', 'name', '_id'] },
+                        { path: 'contributor', select: ['first', 'last', 'name', '_id'] }
+                    ]
+                }
+            })
+            .then(agenda => {
+                req.session.pid = agenda._id;
+                res.json(agenda);
+            });
+        });
+    },
+
+    handleSub(){
+        Project.findById(req.session.pid)
+        .populate('creator')
+        .populate({ path: 'contributors', select: ['first', 'last', 'name', '_id'] })
+        .populate({ path: 'grid',
+            populate: { path: 'tasks',
+                populate: [
+                    { path: 'creator', select: ['first', 'last', 'name', '_id'] },
+                    { path: 'contributor', select: ['first', 'last', 'name', '_id'] }
+                ]
+            }
+        })
+        .then(agenda => res.json(agenda));
     },
 
     // update project info, but not contributors

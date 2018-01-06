@@ -20,11 +20,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   user$;
   drops$;
-  rtSub$;
+  rtParam$;
+  project$;
 
   user;
-  project_id;
   project;
+  filter = false; // only show assigned items
 
   lane0;
   lane1;
@@ -44,36 +45,36 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private _tdDialog: TdDialogService,
     private _tdDialogRef: ViewContainerRef
   ){
-    this.rtSub$ = this._route.paramMap.subscribe( params => {
-      this.project_id = params.get('id');
+    this.rtParam$ = this._route.paramMap.subscribe(params => {
+      if(!params.get('id')) this._ps.getAgenda();
+      this._ps.updateProject(params.get('id'));
     })
   }
 
   ngOnInit() {
+    this.getUser();
     this.getProject();
     this.setDragulaOptions();
     this.drops$ = this._ds.dropModel
       .subscribe((value) => this.onDropModel(value.slice(1)));
   }
 
-  getProject(){
+  getUser(){
     this._us.updateStatus();
     this.user$ = this._us.status$
-    .subscribe(user => {
-      this.user = user;
-      if(this.project_id === null){
-        this.project_id = this.user['agenda'];
-      }
-      this._ps.lookup(this.project_id)
-      .subscribe(agenda => {
-        this.project = agenda;
-        [ this.lane0,
-          this.lane1,
-          this.lane2,
-          this.lane3,
-          this.lane4
-        ] = agenda['grid'];
-      });
+    .subscribe(user => this.user = user);
+  }
+
+  getProject(){
+    this.project$ = this._ps.project$
+    .subscribe(project => {
+      this.project = project;
+      [ this.lane0,
+        this.lane1,
+        this.lane2,
+        this.lane3,
+        this.lane4
+      ] = project['grid'];
     });
   }
   
@@ -88,7 +89,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   onDropModel(args) {
-    
+
     if(args[0].id !== 'project'){
       let [el, target, source] = args;
       let lane: any = this.checkLane(args[2].id);
@@ -100,10 +101,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
         let id2 = newLane['_id'];
         newLane = this.getLaneTaskIDs(newLane);
         this._ts.updateLaneTasks(newLane, id2).subscribe(result => {
-          this._ts.updateLaneTasks(lane, id).subscribe(result => this.getProject());
+          this._ts.updateLaneTasks(lane, id).subscribe(result => {
+            this._ps.updateProject(this.project._id);
+            this.getProject();
+          });
         });
       } else {
-        this._ts.updateLaneTasks(lane, id).subscribe(result => this.getProject());
+        this._ts.updateLaneTasks(lane, id).subscribe(result => {
+          this._ps.updateProject(this.project._id);
+          this.getProject();
+        });
       }
     }
   }
@@ -132,7 +139,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this._ts.createLane(lane, this.project._id)
       .subscribe(result => {
         if(result['status']){
-          if(result) this.getProject();
+          if(result){
+            this._ps.updateProject(this.project._id);
+            this.getProject();
+          }
           this.newLane = {status: false, title: ''};
         }
       });
@@ -156,7 +166,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   openDeleteLane(lane) {
     let message;
     let notEmpty = false;
-    if(lane.tasks.length > 0){
+    if(lane.tasks && lane.tasks > 0){
       message = `Are you sure you want to delete this "${lane.title}" lane?
         All its items will be moved to your "${this.lane0['title']}" lane.`;
       notEmpty = true;
@@ -175,14 +185,32 @@ export class DashboardComponent implements OnInit, OnDestroy {
           tasksIDs = [...lane0IDs, ...tasksIDs];
           this._ts.updateLaneTasks(tasksIDs, this.lane0['_id'])
             .subscribe(result => {
-              this._ts.removeLane(lane._id).subscribe(lane => this.getProject());
-              this.getProject()
+              this._ts.removeLane(lane._id).subscribe(lane => {
+                this._ps.updateProject(this.project._id);
+                this.getProject();
+              });
             });
         } else {
-          this._ts.removeLane(lane._id).subscribe(lane => this.getProject());
+          this._ts.removeLane(lane._id).subscribe(lane => {
+            this._ps.updateProject(this.project._id);
+            this.getProject();
+          });
         }
       }
     });
+  }
+
+  // later, move this to sidebar!
+  filterTasks(){
+    if(!this.filter){
+      this.filter = true;
+      this._ps.filterProject(this.project._id);
+    }
+    else {
+      this.filter = false;
+      this._ps.updateProject(this.project._id);
+    }
+    this.getProject();
   }
 
   openNewTask(){
@@ -194,7 +222,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
       }
     });
     dialogRef.beforeClose().subscribe(result => {
-      if(result) this.getProject();
+      if(result){
+        this._ps.updateProject(this.project._id);
+        this.getProject();
+      }
     });
   }
 
@@ -208,7 +239,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
       }
     });
     dialogRef.beforeClose().subscribe(result => {
-      if(result) this.getProject();
+      if(result){
+        this._ps.updateProject(this.project._id);
+        this.getProject();
+      }
     });
   }
 
@@ -220,15 +254,19 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }).afterClosed().subscribe((accept) => {
       if(accept) {
         this._ts.removeTask(taskID)
-          .subscribe(lane => this.getProject());
+        .subscribe(lane => {
+          this._ps.updateProject(this.project._id);
+          this.getProject();
+        });
       }
     });
   }
 
   ngOnDestroy(){
-    this.drops$.unsubscribe();
     this.user$.unsubscribe();
-    this.rtSub$.unsubscribe();
+    this.project$.unsubscribe();
+    this.drops$.unsubscribe();
+    this.rtParam$.unsubscribe();
   }
 
 }

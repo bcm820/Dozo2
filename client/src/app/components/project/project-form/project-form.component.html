@@ -24,18 +24,18 @@
 
     <mat-form-field>
       <input matInput [matDatepicker]="startDate" placeholder="Start Date"
-        name=start_date [(ngModel)]='project.start_date'
-        #start_date='ngModel' required [min]="minDate">
-      <mat-datepicker-toggle matSuffix [for]="start_date"></mat-datepicker-toggle>
-      <mat-datepicker #start_date touchUi=true></mat-datepicker>
+        name=startDate [(ngModel)]='project.startDate'
+        #startDate='ngModel' required [min]="minDate">
+      <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+      <mat-datepicker #startDate touchUi=true></mat-datepicker>
     </mat-form-field>
 
     <mat-form-field>
       <input matInput [matDatepicker]="targetDate" placeholder="Target Date"
-        name=target_date [(ngModel)]='project.target_date'
-        #target_date='ngModel' required [min]="minDate">
-      <mat-datepicker-toggle matSuffix [for]="target_date"></mat-datepicker-toggle>
-      <mat-datepicker #target_date touchUi=true [startAt]=project.start_date></mat-datepicker>
+        name=targetDate [(ngModel)]='project.targetDate'
+        #targetDate='ngModel' required [min]="minDate">
+      <mat-datepicker-toggle matSuffix [for]="targetDate"></mat-datepicker-toggle>
+      <mat-datepicker #targetDate touchUi=true [startAt]=project.start_date></mat-datepicker>
     </mat-form-field>
 
 </div>

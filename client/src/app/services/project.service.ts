@@ -1,10 +1,36 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Subject } from 'Rxjs';
 
 @Injectable()
 export class ProjectService {
 
   constructor(private _http: HttpClient) { }
+
+  // store current project
+  // if none, log out!
+  project$ = new Subject();
+
+  updateProject(id){
+    this._http.get(`/api/projects/${id}`)
+    .subscribe(project => {
+      this.project$.next(project);
+    });
+  }
+
+  filterProject(id){
+    this._http.get(`/api/projects/${id}/filter`)
+    .subscribe(project => {
+      this.project$.next(project);
+    });
+  }
+
+  getAgenda(){
+    this._http.get('/api/projects/agenda')
+    .subscribe(agenda => {
+      this.project$.next(agenda);
+    })
+  }
 
   getUserProjects(){
     return this._http.get('/api/projects');
@@ -16,10 +42,6 @@ export class ProjectService {
 
   updateUserProjects(project_ids){
     return this._http.put('/api/projects', project_ids);
-  }
-
-  lookup(id){
-    return this._http.get(`/api/projects/${id}`);
   }
 
   update(id, project){

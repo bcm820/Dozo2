@@ -1,4 +1,5 @@
 
+
 <td-layout>
 
   <!-- other attrs: logo="assets:logo" -->
@@ -11,8 +12,8 @@
 
   <!-- For individual project pages, have a stationary list on the side? -->
   <!-- other attrs:  navigationRoute="/", logo="assets:logo",  toolbarTitle="Title" -->
-  <td-layout-nav-list opened={{user.status}} mode=side sidenavWidth=230px>
-    <button mat-icon-button td-menu-button tdLayoutToggle matTooltip="Projects">
+  <td-layout-nav-list opened={{user.status}} mode=side sidenavWidth=275px>
+    <button mat-icon-button td-menu-button tdLayoutToggle matTooltip="Project Dashboard">
       <mat-icon>view_list</mat-icon>
     </button>
     <div td-sidenav-content>
@@ -37,7 +38,7 @@
     <router-outlet></router-outlet>
     <td-layout-footer color="primary">
       <div layout=row layout-margin>
-        <div flex class=footer>Copyright © 2017. All rights reserved.</div>
+        <div flex class=footer>Copyright © 2017</div>
         <div flex align=right class=footer>Powered by Dozo</div>
       </div>
     </td-layout-footer>

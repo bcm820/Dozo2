@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialogRef, MatSnackBar } from '@angular/material';
 import { UserService } from '../../../services/user.service';
+import { ProjectService } from '../../../services/project.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -17,6 +18,7 @@ export class LoginComponent {
   
   constructor(
     private _us: UserService,
+    private _ps: ProjectService,
     private snackbar: MatSnackBar,
     private dialog: MatDialogRef<LoginComponent>,
     private _router: Router
@@ -28,6 +30,7 @@ export class LoginComponent {
       this.snackbar.open(result['msg'], 'x', {duration: 3000})
       this._us.updateStatus();
       if(result['status']){
+        this._ps.getAgenda();
         this.dialog.close();
         this._router.navigate(['dashboard']);
       }

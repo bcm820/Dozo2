@@ -1,29 +1,30 @@
 
-<mat-list
+<mat-nav-list>
+  <h5 matSubheader class=bgAccent>My Projects</h5>
+</mat-nav-list>
+
+<mat-nav-list
   [dragula]='"projectList"'
   [dragulaModel]='projects'>
 
-  <mat-list-item id="project" *ngFor="let project of projects">
+  <span *ngFor="let project of projects">
+  <mat-list-item id="project" (click)=goToProject(project)>
     <mat-icon [ngClass]="{txtAccent: project._id === current}"
     matListIcon class=handle>dehaze</mat-icon>
       <span
-      [ngClass]="{txtAccent: project._id === current}"
-      (click)=goToProject(project) matLine>{{project.title}}</span>
-      <span
-      [ngClass]="{txtAccent: project._id === current}"
-      (click)=goToProject(project) matLine>{{project.startDate}}</span>
+      [ngClass]="{txtAccent: project._id === current}" matLine>{{project.title}}</span>
+      <span *ngIf=project.targetDate
+      [ngClass]="{txtAccent: project._id === current}" matLine>Due on {{project.targetDate|date:'mediumDate'}}</span>
     <mat-icon class=edit>edit</mat-icon>
   </mat-list-item>
+  <mat-divider></mat-divider>
+  </span>
 
-</mat-list>
+</mat-nav-list>
 
-<div layout=column layout-align="center center">
-
-  <div class="card-blank">
-      <a mat-button class=card-blank-button
-        (click)=openNewProject()>
-          New Project <mat-icon>playlist_add</mat-icon>
-      </a>
-  </div>
-
-</div>
+<mat-nav-list>
+  <mat-list-item (click)=openNewProject()>
+    <mat-icon matListIcon>playlist_add</mat-icon>
+    <span matLine>New Project</span>
+  </mat-list-item>
+</mat-nav-list>

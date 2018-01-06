@@ -69,10 +69,11 @@ export class MainNavComponent implements OnInit {
   }
 
   goToProject(project){
-    console.log(project);
     this.current = project._id;
-    if(project._id === this.user['agenda'])
+    if(project._id === this.user['agenda']){
+      this._ps.getAgenda();
       this._router.navigate(['dashboard']);
+    }
     else this._router.navigate(['projects', project._id]);
   }
 
