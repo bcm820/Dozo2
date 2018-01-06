@@ -23,7 +23,7 @@ module.exports = (router) => {
     .put(projects.updateUserProjects)
 
     router.get('/projects/agenda', projects.getAgenda)
-
+    
     router.route('/projects/:id')
     .get(projects.lookup)
     .post(projects.update)

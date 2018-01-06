@@ -1,9 +1,10 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { ProjectService } from '../../../services/project.service';
 import { MatDialog } from '@angular/material';
 import { NewProjectComponent } from '../../project/new-project/new-project.component';
 import { Router } from '@angular/router';
 import { DragulaService } from 'ng2-dragula';
+import { NewTaskComponent } from '../../task/new-task/new-task.component';
 
 @Component({
   selector: 'app-sidebar',
@@ -11,69 +12,53 @@ import { DragulaService } from 'ng2-dragula';
   styleUrls: ['./sidebar.component.css']
 })
 export class SidebarComponent implements OnInit, OnDestroy {
-
-  @Input() agenda;
-  projects;
-  drops$;
+  
+  project$;
+  @Output() send = new EventEmitter;
+  
+  project;
+  filter = false; // only show assigned items
   
   constructor(
     private _ps: ProjectService,
-    private _ds: DragulaService,
-    private _dialog: MatDialog,
-    private _router: Router
+    private _dialog: MatDialog
   ) {}
 
   ngOnInit() {
-    this.listProjects();
-    // this.setListOptions();
-    this.drops$ = this._ds.dropModel.subscribe((value) => {
-      this.onDropModel(value.slice(1));
-    });
+    this.project$ = this._ps.project$
+    .subscribe(project => this.project = project);
   }
 
-  listProjects(){
-    this._ps.getUserProjects()
-      .subscribe(user => this.projects = user['projects']);
+  filterTasks(){
+    if(!this.filter){
+      this.filter = true;
+      this._ps.filterProject(this.project._id);
+    }
+    else {
+      this.filter = false;
+      this._ps.updateProject(this.project._id);
+    }
+    this.send.emit();
   }
-  
-  setListOptions(){
-    let bag = this._ds.find('projectList');
-    if (bag !== undefined) this._ds.destroy('projectList');
-    this._ds.setOptions('projectList', {
-      moves: function (el, container, handle) {
-        return handle.classList.contains('handle');
+
+  openNewTask(){
+    let dialogRef = this._dialog.open(NewTaskComponent, {
+      width: '500px',
+      data: {
+        lane_id: this.project.grid[0]._id,
+        contributors: this.project['contributors']
+      }
+    });
+    dialogRef.beforeClose().subscribe(result => {
+      if(result){
+        this._ps.updateProject(this.project._id);
+        this.send.emit();
       }
     });
   }
 
-  private onDropModel(args) {
-    if(args[0].id === 'project'){
-      let [el, target, source] = args;
-      let list = Array.from(this.projects, project => project['_id']);
-      this.updateProjects(list);
-    }
-  }
-
-  updateProjects(list){
-    this._ps.updateUserProjects(list)
-      .subscribe(result => {return});
-  }
-
-  openNewProject(){
-    let dialogRef = this._dialog.open(NewProjectComponent,
-      {width: '500px'});
-    dialogRef.beforeClose().subscribe(result => {
-      if(result) this.listProjects();
-    });
-  }
-
-  goToProject(id){
-    if(id === this.agenda) this._router.navigate(['dashboard']);
-    else this._router.navigate(['projects', id]);
-  }
-
   ngOnDestroy(){
-    this.drops$.unsubscribe();
+    this.project$.unsubscribe();
   }
 
 }

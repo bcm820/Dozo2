@@ -25,13 +25,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   user;
   project;
-  filter = false; // only show assigned items
-
-  lane0;
-  lane1;
-  lane2;
-  lane3;
-  lane4;
+  grid_ids;
 
   newLane = {status: false, title: ''};
   
@@ -47,7 +41,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ){
     this.rtParam$ = this._route.paramMap.subscribe(params => {
       if(!params.get('id')) this._ps.getAgenda();
-      this._ps.updateProject(params.get('id'));
+      else this._ps.updateProject(params.get('id'));
     })
   }
 
@@ -55,8 +49,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.getUser();
     this.getProject();
     this.setDragulaOptions();
-    this.drops$ = this._ds.dropModel
-      .subscribe((value) => this.onDropModel(value.slice(1)));
+    this.drops$ = this._ds.drop
+      .subscribe((value) => this.onDrop(value.slice(1)));
   }
 
   getUser(){
@@ -68,13 +62,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
   getProject(){
     this.project$ = this._ps.project$
     .subscribe(project => {
-      this.project = project;
-      [ this.lane0,
-        this.lane1,
-        this.lane2,
-        this.lane3,
-        this.lane4
-      ] = project['grid'];
+
+      if(project['_id']){
+        this.project = project;
+        let grid_ids = [];
+        project['grid'].forEach(lane => {
+          grid_ids.push(Array.from(lane.tasks, item => item['_id']));
+        })
+        this.grid_ids = grid_ids;
+      }
+
     });
   }
   
@@ -88,40 +85,45 @@ export class DashboardComponent implements OnInit, OnDestroy {
     });
   }
 
-  onDropModel(args) {
+  onDrop(args) {
 
     if(args[0].id !== 'project'){
-      let [el, target, source] = args;
-      let lane: any = this.checkLane(args[2].id);
-      let id = lane['_id'];
-      lane = this.getLaneTaskIDs(lane);
+      // let [task, newLane, oldLane, next] = args;
 
-      if(args[2].id !== args[1].id){
-        let newLane: any = this.checkLane(args[1].id);
-        let id2 = newLane['_id'];
-        newLane = this.getLaneTaskIDs(newLane);
-        this._ts.updateLaneTasks(newLane, id2).subscribe(result => {
-          this._ts.updateLaneTasks(lane, id).subscribe(result => {
+      let same = false;
+      let j2;
+
+      const lane = args[2].id;
+      const newLane = args[1].id;
+      if(lane === newLane) same = true;
+
+      const task = args[0].id;
+      
+      const i1 = args[2].title; // lane idx
+      const i2 = args[1].title; // newLane idx
+      const j1 = args[0].title; // task idx
+      if(args[3]) j2 = args[3].title; // next idx
+  
+      this.grid_ids[i1].splice(j1, 1);
+      if(j2) this.grid_ids[i2].splice(j2, 0, task);
+      else this.grid_ids[i2].push(task);
+
+      if(!same){
+        this._ts.updateLaneTasks(this.grid_ids[i1], lane)
+        .subscribe(result => {
+          this._ts.updateLaneTasks(this.grid_ids[i2], newLane)
+          .subscribe(result => {
             this._ps.updateProject(this.project._id);
-            this.getProject();
+            // this.getProject();
           });
         });
       } else {
-        this._ts.updateLaneTasks(lane, id).subscribe(result => {
+        this._ts.updateLaneTasks(this.grid_ids[i1], lane)
+        .subscribe(result => {
           this._ps.updateProject(this.project._id);
-          this.getProject();
-        });
+          // this.getProject();
+        })
       }
-    }
-  }
-
-  checkLane(laneId){
-    switch(laneId) {
-      case 'lane0': return this.lane0;
-      case 'lane1': return this.lane1;
-      case 'lane2': return this.lane2;
-      case 'lane3': return this.lane3;
-      case 'lane4': return this.lane4;
     }
   }
 
@@ -130,7 +132,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   addLane(){
-    setTimeout(() => { this.newLane.status = true; }, 400);
+    setTimeout(() => { this.newLane.status = true; }, 300);
   }
 
   createNewLane(){
@@ -141,7 +143,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         if(result['status']){
           if(result){
             this._ps.updateProject(this.project._id);
-            this.getProject();
+            // this.getProject();
           }
           this.newLane = {status: false, title: ''};
         }
@@ -168,7 +170,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     let notEmpty = false;
     if(lane.tasks && lane.tasks > 0){
       message = `Are you sure you want to delete this "${lane.title}" lane?
-        All its items will be moved to your "${this.lane0['title']}" lane.`;
+        All its items will be moved to your "${this.project.grid[0].title}" lane.`;
       notEmpty = true;
     } else {
       message = `Are you sure you want to delete this "${lane.title}" lane?`
@@ -181,50 +183,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
       if(accept) {
         if(notEmpty){
           let tasksIDs = this.getLaneTaskIDs(lane);
-          let lane0IDs = this.getLaneTaskIDs(this.lane0);
-          tasksIDs = [...lane0IDs, ...tasksIDs];
-          this._ts.updateLaneTasks(tasksIDs, this.lane0['_id'])
-            .subscribe(result => {
-              this._ts.removeLane(lane._id).subscribe(lane => {
-                this._ps.updateProject(this.project._id);
-                this.getProject();
-              });
+          tasksIDs = [...this.grid_ids[0], ...tasksIDs];
+          this._ts.updateLaneTasks(tasksIDs, this.project.grid[0]._id)
+          .subscribe(result => {
+            this._ts.removeLane(lane._id).subscribe(lane => {
+              this._ps.updateProject(this.project._id);
+              // this.getProject();
             });
+          });
         } else {
           this._ts.removeLane(lane._id).subscribe(lane => {
             this._ps.updateProject(this.project._id);
-            this.getProject();
+            // this.getProject();
           });
         }
-      }
-    });
-  }
-
-  // later, move this to sidebar!
-  filterTasks(){
-    if(!this.filter){
-      this.filter = true;
-      this._ps.filterProject(this.project._id);
-    }
-    else {
-      this.filter = false;
-      this._ps.updateProject(this.project._id);
-    }
-    this.getProject();
-  }
-
-  openNewTask(){
-    let dialogRef = this._dialog.open(NewTaskComponent, {
-      width: '500px',
-      data: {
-        lane: this.lane0,
-        contributors: this.project['contributors']
-      }
-    });
-    dialogRef.beforeClose().subscribe(result => {
-      if(result){
-        this._ps.updateProject(this.project._id);
-        this.getProject();
       }
     });
   }
@@ -241,22 +213,22 @@ export class DashboardComponent implements OnInit, OnDestroy {
     dialogRef.beforeClose().subscribe(result => {
       if(result){
         this._ps.updateProject(this.project._id);
-        this.getProject();
+        // this.getProject();
       }
     });
   }
 
   openDeleteTask(taskID){
     this._tdDialog.openConfirm({
-      message: `Are you sure you want to delete this task?`,
-      title: `Delete Task`,
+      message: 'Are you sure you want to delete this task?',
+      title: 'Delete Task',
       acceptButton: 'Delete',
     }).afterClosed().subscribe((accept) => {
       if(accept) {
         this._ts.removeTask(taskID)
         .subscribe(lane => {
           this._ps.updateProject(this.project._id);
-          this.getProject();
+          // this.getProject();
         });
       }
     });

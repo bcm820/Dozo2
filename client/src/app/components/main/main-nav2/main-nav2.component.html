@@ -1,9 +1,6 @@
 
 <mat-nav-list>
 
-  <h5 matSubheader class=bgAccent>User Profiles</h5>
-  <mat-divider></mat-divider>
-
   <span *ngFor="let user of users|async">
     <a mat-list-item (click)=viewUser(user._id)>
       <mat-icon matListIcon>person</mat-icon>

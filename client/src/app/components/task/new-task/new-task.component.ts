@@ -10,7 +10,7 @@ import { TaskService } from '../../../services/task.service';
 export class NewTaskComponent implements OnInit {
 
   task = { title:'', description:'', details:'', contributor:'' }
-  laneId;
+  lane_id;
   contributors;
   action = 'Add'
 
@@ -22,12 +22,12 @@ export class NewTaskComponent implements OnInit {
   ) { }
 
   ngOnInit(){
-    this.laneId = this.data.lane._id;
+    this.lane_id = this.data.lane_id;
     this.contributors = this.data.contributors;
   }
 
   createTask(task){
-    this._ts.createTask(task, this.laneId)
+    this._ts.createTask(task, this.lane_id)
       .subscribe(result => {
         this.snackbar.open(result['msg'], 'x', {duration: 3000});
         if(result['status']) {

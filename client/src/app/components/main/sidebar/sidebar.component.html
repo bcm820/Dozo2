@@ -1,0 +1,14 @@
+
+
+<mat-nav-list>
+  <mat-list-item (click)=openNewTask()>
+    <mat-icon matListIcon>playlist_add</mat-icon>
+    <span matLine>Add an Item</span>
+    <!-- <span matLine></span> -->
+  </mat-list-item>
+</mat-nav-list>
+
+
+<!-- <mat-slide-toggle (click)=filterTasks()>Slide me!</mat-slide-toggle> -->
+
+<td-json-formatter [data]="project$ | async" [levelsOpen]="1"></td-json-formatter>

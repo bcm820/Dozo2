@@ -1,8 +1,4 @@
 
-<mat-nav-list>
-  <h5 matSubheader class=bgAccent>My Projects</h5>
-</mat-nav-list>
-
 <mat-nav-list
   [dragula]='"projectList"'
   [dragulaModel]='projects'>
@@ -11,10 +7,15 @@
   <mat-list-item id="project" (click)=goToProject(project)>
     <mat-icon [ngClass]="{txtAccent: project._id === current}"
     matListIcon class=handle>dehaze</mat-icon>
-      <span
-      [ngClass]="{txtAccent: project._id === current}" matLine>{{project.title}}</span>
-      <span *ngIf=project.targetDate
-      [ngClass]="{txtAccent: project._id === current}" matLine>Due on {{project.targetDate|date:'mediumDate'}}</span>
+    <span
+      [ngClass]="{txtAccent: project._id === current}" matLine>{{project.title}}
+    </span>
+    <span
+      [ngClass]="{txtAccent: project._id === current}" matLine>
+      <span *ngIf=project.targetDate>
+        Target: {{project.targetDate|date:'mediumDate'}}
+      </span>
+    </span>
     <mat-icon class=edit>edit</mat-icon>
   </mat-list-item>
   <mat-divider></mat-divider>
@@ -24,7 +25,8 @@
 
 <mat-nav-list>
   <mat-list-item (click)=openNewProject()>
-    <mat-icon matListIcon>playlist_add</mat-icon>
-    <span matLine>New Project</span>
+    <mat-icon>playlist_add</mat-icon>
+    <span matLine>Create a New Project</span>
+    <span matLine></span>
   </mat-list-item>
 </mat-nav-list>

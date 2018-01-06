@@ -9,7 +9,6 @@ const LaneSchema = new Schema({
     task_ids: [{ type: Object }],
     
 }, {
-    timestamps:true,
     usePushEach:true,
     toObject: {virtuals:true},
     toJSON: {virtuals:true}
