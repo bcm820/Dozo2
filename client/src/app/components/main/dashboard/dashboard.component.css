@@ -93,8 +93,12 @@
 }
 
 .handle {
-    font-size: 14px;
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
     cursor: grab;
+    width: 14px;
+    height: 14px;
 }
 
 .handle:active {
@@ -117,12 +121,8 @@
 }
 
 .drag {
-    padding-bottom: 30px;
+    padding-bottom: 150px;
     height: 100%;
     width: 100%;
     margin: auto;
-}
-
-.hide {
-    display: none;
 }

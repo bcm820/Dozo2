@@ -6,8 +6,7 @@ const Object = Schema.ObjectId;
 const ProjectSchema = new Schema({
     
     title: { type: String, required: [true] },
-    description: { type: String, required: [true] },
-    details: { type: String },
+    description: { type: String },
     startDate: { type: Date },
     targetDate: { type: Date },
 
@@ -21,8 +20,8 @@ const ProjectSchema = new Schema({
     grid_ids: [{ type: Object }]
     
 }, {
-    timestamps:true,
-    usePushEach:true,
+    timestamps: true,
+    usePushEach: true,
     toObject: {virtuals:true},
     toJSON: {virtuals:true}
 });

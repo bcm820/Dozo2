@@ -74,7 +74,10 @@ export class MainNavComponent implements OnInit {
       this._ps.getAgenda();
       this._router.navigate(['dashboard']);
     }
-    else this._router.navigate(['projects', project._id]);
+    else {
+      this._ps.updateProject(project._id);
+      this._router.navigate(['projects', project._id]);
+    }
   }
 
   ngOnDestroy(){

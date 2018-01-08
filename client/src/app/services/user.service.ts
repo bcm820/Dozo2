@@ -80,4 +80,8 @@ export class UserService {
     return this._http.post(`/api/m/users/${id}`, null);
   }
 
+  ngOnDestroy(){
+    this.status$.unsubscribe();
+  }
+
 }

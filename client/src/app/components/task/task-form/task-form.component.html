@@ -14,10 +14,7 @@
     <mat-form-field>
       <textarea matInput placeholder="Description"
         name=description [(ngModel)]='task.description' #description='ngModel'
-        required rows=3 maxlength=200></textarea>
-        <mat-error *ngIf=title.errors [hidden]=!title.errors.required align=right>
-          A description is required.
-        </mat-error>
+        rows=3 maxlength=200></textarea>
     </mat-form-field>
 
     <mat-form-field>

@@ -16,6 +16,7 @@ export class MainComponent implements OnInit {
   user: any = {status: false}
   title;
   dashboard = "Project Dashboard";
+  show = true;
 
   constructor(
     private dialog: MatDialog,
@@ -26,6 +27,17 @@ export class MainComponent implements OnInit {
 
   ngOnInit(){
     this.getStatus();
+  }
+
+  showSidebar(){
+    if(this.show){
+      this.show = false;
+      console.log('hide')
+    }
+    else if(!this.show){
+      this.show = true;
+      console.log('show')
+    }
   }
 
   updateTitle(title){
@@ -53,7 +65,7 @@ export class MainComponent implements OnInit {
 
   openAccount(){
     this.dialog.open(AccountComponent, {
-      width:'70%',
+      width:'50%',
       data: this.user,
       autoFocus: false
     })

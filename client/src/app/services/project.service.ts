@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Subject } from 'Rxjs';
 
 @Injectable()
-export class ProjectService {
+export class ProjectService implements OnDestroy {
 
   constructor(private _http: HttpClient) { }
 
@@ -18,18 +18,18 @@ export class ProjectService {
     });
   }
 
-  filterProject(id){
-    this._http.get(`/api/projects/${id}/filter`)
-    .subscribe(project => {
-      this.project$.next(project);
-    });
-  }
-
   getAgenda(){
     this._http.get('/api/projects/agenda')
     .subscribe(agenda => {
       this.project$.next(agenda);
     })
+  }
+
+  filterProject(id){
+    this._http.get(`/api/projects/${id}/filter`)
+    .subscribe(project => {
+      this.project$.next(project);
+    });
   }
 
   getUserProjects(){
@@ -54,6 +54,10 @@ export class ProjectService {
 
   remove(id){
     return this._http.delete(`/api/projects/${id}`);
+  }
+
+  ngOnDestroy(){
+    this.project$.unsubscribe();
   }
 
 }

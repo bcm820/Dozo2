@@ -10,6 +10,7 @@ const UserSchema = new Schema({
     // only managers can assign contributors and tasks
     // normal users can still make their own projects/tasks
     agenda: { type: Object, ref: 'Project' },
+    update: { type: String },
     project_ids: [{ type: Object }],
 
     email: {

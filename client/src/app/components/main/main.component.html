@@ -12,17 +12,17 @@
 
   <!-- For individual project pages, have a stationary list on the side? -->
   <!-- other attrs:  navigationRoute="/", logo="assets:logo",  toolbarTitle="Title" -->
-  <td-layout-nav-list opened={{user.status}} mode=side sidenavWidth=275px>
-    <button mat-icon-button td-menu-button tdLayoutToggle matTooltip="Project Dashboard">
-      <mat-icon>view_list</mat-icon>
+  <td-layout-nav-list opened={{user.status}} mode=side sidenavWidth=225px>
+    <button mat-icon-button td-menu-button tdLayoutToggle matTooltip="Dashboard">
+      <mat-icon>menu</mat-icon>
     </button>
     <div td-sidenav-content>
-      <app-sidebar *ngIf=user.status></app-sidebar>
+      <app-sidebar *ngIf=user.status [user]=user></app-sidebar>
     </div>
 
     <div td-toolbar-content layout="row" layout-align="center center" flex>
       <a *ngIf=user.status mat-icon-button tdLayoutNavListToggle>
-        <mat-icon matTooltip="Show / Hide">menu</mat-icon>
+        <mat-icon matTooltip="Show / Hide">chrome_reader_mode</mat-icon>
       </a>
       <h1 *ngIf=!user.status>Dozo</h1>
       <span flex></span>

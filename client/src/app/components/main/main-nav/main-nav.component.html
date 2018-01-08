@@ -1,25 +1,50 @@
 
-<mat-nav-list
-  [dragula]='"projectList"'
-  [dragulaModel]='projects'>
 
+
+<!-- <div class="example-container mat-elevation-z8">
+  <mat-table #table [dataSource]="dataSource" matSort>
+
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="weight">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Weight </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.weight}} </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+</div> -->
+
+
+
+
+<mat-nav-list>
+
+  <h3 matSubheader>Projects</h3>
   <span *ngFor="let project of projects">
+
   <mat-list-item id="project" (click)=goToProject(project)>
-    <mat-icon [ngClass]="{txtAccent: project._id === current}"
-    matListIcon class=handle>dehaze</mat-icon>
-    <span
-      [ngClass]="{txtAccent: project._id === current}" matLine>{{project.title}}
+    <mat-icon [ngClass]="{txtAccent: project._id === current}" matListIcon>
+      dehaze
+    </mat-icon>
+    <span [ngClass]="{txtAccent: project._id === current}" matLine>
+      {{project.title}}
     </span>
     <span
       [ngClass]="{txtAccent: project._id === current}" matLine>
       <span *ngIf=project.targetDate>
-        Target: {{project.targetDate|date:'mediumDate'}}
+        Goal: {{project.targetDate|date:'mediumDate'}}
       </span>
     </span>
     <mat-icon class=edit>edit</mat-icon>
   </mat-list-item>
-  <mat-divider></mat-divider>
+
   </span>
+  <mat-divider></mat-divider>
 
 </mat-nav-list>
 

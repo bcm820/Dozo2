@@ -69,7 +69,7 @@ module.exports = {
             req.session.pid = project._id;
             res.json(project);
         })
-        .catch(err => res.json(err));
+        .catch(err => res.json(false));
     },
 
     filter(req, res){
@@ -87,7 +87,8 @@ module.exports = {
         .then(project => {
             req.session.pid = project._id;
             res.json(project);
-        });
+        })
+        .catch(err => res.json(false));
     },
 
     getAgenda(req, res){
@@ -107,7 +108,8 @@ module.exports = {
             .then(agenda => {
                 req.session.pid = agenda._id;
                 res.json(agenda);
-            });
+            })
+            .catch(err => res.json(false));
         });
     },
 

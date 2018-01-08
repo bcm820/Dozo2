@@ -6,8 +6,10 @@ const Object = Schema.ObjectId;
 const TaskSchema = new Schema({
     
     title: { type: String, required: [true] },
-    description: { type: String, required: [true] },
+    description: { type: String },
     details: { type: String },
+    priority: { type: Number, enum: [1, 2, 3] },
+    estTime: { type: Number },
 
     creator: { type: Object, ref: 'User' },
     contributor: { type: Object, ref: 'User' },
@@ -17,8 +19,8 @@ const TaskSchema = new Schema({
     // users can create and it will assign themselves
     
 }, {
-    timestamps:true,
-    usePushEach:true,
+    timestamps: true,
+    usePushEach: true,
     toObject: {virtuals:true},
     toJSON: {virtuals:true}
 });

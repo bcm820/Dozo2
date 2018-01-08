@@ -4,11 +4,6 @@
 <div layout=row layout-padding>
 
     <div flex>
-        <h3>{{user.name}}</h3>
-        <td-json-formatter [data]="user" [levelsOpen]="1"></td-json-formatter>
-    </div>
-
-    <div flex>
 
         <h3>Change Password</h3>
         <form #pwForm=ngForm (submit)=changePW()>

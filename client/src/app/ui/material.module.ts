@@ -18,6 +18,8 @@ import {
   MatSlideToggleModule
 } from '@angular/material';
 
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+
 @NgModule({
   imports: [
     MatButtonModule,
@@ -34,7 +36,8 @@ import {
     MatNativeDateModule,
     MatMenuModule,
     MatSelectModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    MatProgressSpinnerModule
   ],
   exports: [
     MatButtonModule,
@@ -51,7 +54,8 @@ import {
     MatNativeDateModule,
     MatMenuModule,
     MatSelectModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    MatProgressSpinnerModule
   ]
 })
 

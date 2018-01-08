@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { ProjectService } from '../../../services/project.service';
 import { MatDialog } from '@angular/material';
 import { NewProjectComponent } from '../../project/new-project/new-project.component';
@@ -14,7 +14,7 @@ import { NewTaskComponent } from '../../task/new-task/new-task.component';
 export class SidebarComponent implements OnInit, OnDestroy {
   
   project$;
-  @Output() send = new EventEmitter;
+  @Input() user;
   
   project;
   filter = false; // only show assigned items
@@ -38,7 +38,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
       this.filter = false;
       this._ps.updateProject(this.project._id);
     }
-    this.send.emit();
   }
 
   openNewTask(){
@@ -50,10 +49,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
       }
     });
     dialogRef.beforeClose().subscribe(result => {
-      if(result){
-        this._ps.updateProject(this.project._id);
-        this.send.emit();
-      }
+      if(result) this._ps.updateProject(this.project._id);
     });
   }
 

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatSnackBar, MAT_DIALOG_DATA } from '@angular/material';
+import { MatSnackBar, MatDialogRef } from '@angular/material';
 import { UserService } from '../../../services/user.service';
 import { Router } from '@angular/router';
 
@@ -23,6 +23,7 @@ export class AccountComponent implements OnInit {
     private snackbar: MatSnackBar,
     private _us: UserService,
     private _router: Router,
+    private dialog: MatDialogRef<AccountComponent>,
   ) { }
 
   ngOnInit(){
@@ -42,14 +43,16 @@ export class AccountComponent implements OnInit {
       .subscribe(result => {
         this.snackbar.open(result['msg'], 'x', {duration: 3000});
         this._us.updateStatus();
+        this.dialog.close();
       });
   }
 
   unregister(){
     this._us.unregister(this.pwDel)
       .subscribe(result => {
-        this.snackbar.open(result['msg'], 'x', {duration: 3000})
+        this.snackbar.open(result['msg'], 'x', {duration: 3000});
         this._us.updateStatus();
+        this.dialog.close();
         this._router.navigate(['']);
       });
   }

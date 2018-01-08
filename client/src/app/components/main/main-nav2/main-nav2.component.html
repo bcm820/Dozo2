@@ -1,13 +1,13 @@
 
 <mat-nav-list>
 
+  <h3 matSubheader>Profiles</h3>
   <span *ngFor="let user of users|async">
     <a mat-list-item (click)=viewUser(user._id)>
       <mat-icon matListIcon>person</mat-icon>
       <span matLine>{{user.name}}</span>
       <span matLine>{{user.email}}</span>
     </a>
-    <mat-divider></mat-divider>
   </span>
   
 </mat-nav-list>
