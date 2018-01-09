@@ -5,10 +5,10 @@
         <mat-menu #headerMenu="matMenu">
             <button mat-menu-item
             (click)=openEditLane(lane)>Rename</button>
-            <button *ngIf="lane !== project.grid[0]" mat-menu-item (click)=openDeleteLane(lane)>Delete</button>
+            <button *ngIf="project.grid && lane !== project.grid[0]" mat-menu-item (click)=openDeleteLane(lane)>Delete</button>
         </mat-menu>
         <mat-card class="bgAccent card-header">
-            <mat-icon class=header-menu [matMenuTriggerFor]="headerMenu" *ngIf=" project.creator && user._id === project.creator._id">
+            <mat-icon class=header-menu [matMenuTriggerFor]="headerMenu" *ngIf="project.creator && user._id === project.creator._id">
                 arrow_drop_down
             </mat-icon> 
             <mat-card-title class="card-heading text-truncate" align=center>

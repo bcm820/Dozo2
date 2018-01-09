@@ -16,6 +16,7 @@ module.exports = (router) => {
 
     router.get('/users', users.list);
     router.get('/users/:id', users.lookup);
+    router.post('/m/users/:id', users.promote)
 
     router.route('/projects')
     .get(projects.getUserProjects)

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProjectService } from '../../../services/project.service';
 import { MatDialog } from '@angular/material';
@@ -15,7 +15,6 @@ export class MainNavComponent implements OnInit {
   @Input() user;
   projects;
   current;
-  drops$;
 
   constructor(
     private _ps: ProjectService,
@@ -25,46 +24,22 @@ export class MainNavComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this._ps.getUserProjects();
     this.listProjects();
-    this.setListOptions();
-    this.drops$ = this._ds.dropModel.subscribe((value) => {
-      this.onDropModel(value.slice(1));
-    });
   }
 
   listProjects(){
-    this._ps.getUserProjects()
-      .subscribe(user => this.projects = user['projects']);
-  }
-  
-  setListOptions(){
-    let bag = this._ds.find('projectList');
-    if (bag !== undefined) this._ds.destroy('projectList');
-    this._ds.setOptions('projectList', {
-      moves: function (el, container, handle) {
-        return handle.classList.contains('handle');
-      }
-    });
-  }
-
-  private onDropModel(args) {
-    if(args[0].id === 'project'){
-      let [el, target, source] = args;
-      let list = Array.from(this.projects, project => project['_id']);
-      this.updateProjects(list);
-    }
-  }
-
-  updateProjects(list){
-    this._ps.updateUserProjects(list)
-      .subscribe(result => console.log(result));
+    this._ps.projects$
+    .subscribe(user => this.projects = user['projects']);
   }
 
   openNewProject(){
-    let dialogRef = this._dialog.open(NewProjectComponent,
-      {width: '500px'});
+    let dialogRef = this._dialog.open(NewProjectComponent, {
+      width: '500px',
+      data: this.user
+    });
     dialogRef.beforeClose().subscribe(result => {
-      if(result) this.listProjects();
+      if(result) this._ps.getUserProjects();
     });
   }
 
@@ -78,10 +53,6 @@ export class MainNavComponent implements OnInit {
       this._ps.updateProject(project._id);
       this._router.navigate(['projects', project._id]);
     }
-  }
-
-  ngOnDestroy(){
-    this.drops$.unsubscribe();
   }
 
 }

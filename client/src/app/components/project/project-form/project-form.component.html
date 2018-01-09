@@ -13,9 +13,9 @@
     </mat-form-field>
 
     <mat-form-field>
-      <input matInput placeholder="Description"
+      <textarea matInput placeholder="Description"
         name=description [(ngModel)]='project.description' #description='ngModel'
-        required minlength=10>
+        required minlength=10></textarea>
         <mat-hint align=end>Minimum 10 characters</mat-hint>
         <mat-error align=right *ngIf=description.errors [hidden]=!description.errors.minlength>
           Must be 10 characters minimum.
@@ -36,6 +36,14 @@
         #targetDate='ngModel' required [min]="minDate">
       <mat-datepicker-toggle matSuffix [for]="targetDate"></mat-datepicker-toggle>
       <mat-datepicker #targetDate touchUi=true [startAt]=project.start_date></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-select multiple name=contributor_ids [(ngModel)]='project.contributor_ids' #contributor_ids='ngModel' placeholder="Select Team Members">
+        <span *ngFor="let user of users|async">
+        <mat-option value="{{user._id}}">{{user.name}}</mat-option>
+        </span>
+      </mat-select>
     </mat-form-field>
 
 </div>

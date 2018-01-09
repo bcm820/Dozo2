@@ -20,36 +20,6 @@ module.exports = {
         next();
     },
     
-    testLane(){
-        Lane.findOne({})
-        .populate('tasks')
-        .populate('project') // rev
-    },
-
-    testProject(){
-        Project.findOne({})
-        .populate('contributors')
-        .populate('grid')
-        .populate('creator') // rev
-        .then(projects => res.json(projects));
-    },
-
-    testTask(){
-        Task.findOne({}) // all rev
-        .populate('lane')
-        .populate('creator')
-        .populate('contributor')
-    },
-
-    testUser(){
-        User.findOne({})
-        .populate('projects')
-        .populate('projectsCreated')
-        .populate('tasksCreated')
-        .populate('tasksContributed')
-        .then(users => res.json(users));
-    },
-    
     // checks session prior to accessing info
     // returns false if user ID not in session
     authenticate(req, res, next){
@@ -57,20 +27,6 @@ module.exports = {
         else {
             res.json(sendMsg(false, 'Error: Credentials required. Please log in.'));
         }
-    },
-
-    // checks if manager before allowing access to manager routes
-    authenticateManager(req, res, next){
-        if(req.session.uid){
-            User.findById(req.session.uid)
-            .then(user => {
-                if(user !== null){
-                    if(user.isManager) next();
-                    else res.json(sendMsg(false, 'Access denied. Credentials required.'));
-                }
-            })
-        }
-        else res.json(sendMsg(false, 'Error: Credentials required. Please log in.'));
     },
 
     login(req, res){
@@ -144,15 +100,11 @@ module.exports = {
                     user.save()
                     .then(user => {
                         req.session.uid = user._id;
-                        // user._pw = undefined;
-                        // user.__v = undefined;
-                        // req.session.user = user;
                         agenda.creator = user._id;
                         agenda.contributor_ids = [user._id];
 
                         // create 'to do' lane for project and save both
                         const lane = new Lane({title: 'To Do'});
-                        // lane.project = agenda._id;
                         agenda.grid_ids = [lane._id];
                         agenda.save()
                         .then(agenda => {

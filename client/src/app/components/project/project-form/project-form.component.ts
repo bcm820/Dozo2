@@ -11,6 +11,7 @@ export class ProjectFormComponent implements OnInit {
 
   @Input() project;
   @Input() action;
+  @Input() users;
   @Output() send = new EventEmitter;
   minDate = new Date();
   

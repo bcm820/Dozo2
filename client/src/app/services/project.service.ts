@@ -10,6 +10,7 @@ export class ProjectService implements OnDestroy {
   // store current project
   // if none, log out!
   project$ = new Subject();
+  projects$ = new Subject();
 
   updateProject(id){
     this._http.get(`/api/projects/${id}`)
@@ -33,7 +34,10 @@ export class ProjectService implements OnDestroy {
   }
 
   getUserProjects(){
-    return this._http.get('/api/projects');
+    return this._http.get('/api/projects')
+    .subscribe(projects => {
+      this.projects$.next(projects);
+    })
   }
 
   create(project){
@@ -44,12 +48,12 @@ export class ProjectService implements OnDestroy {
     return this._http.put('/api/projects', project_ids);
   }
 
-  update(id, project){
-    return this._http.post(`/api/m/projects/${id}`, project);
+  update(project){
+    return this._http.post(`/api/projects/${project._id}`, project);
   }
 
   updateGrid(id, grid_ids){
-    return this._http.put(`/api/m/projects/${id}`, grid_ids);
+    return this._http.put(`/api/projects/${id}`, grid_ids);
   }
 
   remove(id){

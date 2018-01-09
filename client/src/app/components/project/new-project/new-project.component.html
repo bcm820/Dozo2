@@ -3,6 +3,11 @@
 
     <h2 mat-dialog-title align=center>Create a New Project</h2>
 
-    <project-form [project]=project [action]=action (send)=createProject($event)></project-form>
+    <project-form
+    [project]=project
+    [action]=action
+    [users]=users
+    (send)=createProject($event)>
+    </project-form>
 
 </div>

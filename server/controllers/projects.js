@@ -25,7 +25,6 @@ module.exports = {
             const project = new Project(req.body);
             user.project_ids.push(project._id);
             project.creator = user._id;
-            project.contributor_ids = [user._id];
             const lane = new Lane({title: "To Do"});
             project.grid_ids = [lane._id];
             user.save()
@@ -113,7 +112,6 @@ module.exports = {
         });
     },
 
-    // update project info, but not contributors
     update(req, res){
         Project.findByIdAndUpdate(req.params.id, req.body,
             {runValidators:true, new:true, context: 'query'})
@@ -122,16 +120,7 @@ module.exports = {
         })
     },
 
-    // update contributors
-    assign(req, res){
-        Project.findById(req.params.id)
-        .then(project => {
-            project.contributor_ids = req.body;
-            project.save()
-            .then(lane => res.json(true));
-        })
-    },
-
+    // for updating lane order
     updateGrid(req, res){
         Project.findById(req.params.id)
         .then(project => {

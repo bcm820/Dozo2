@@ -22,9 +22,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
   project$;
   drops$;
   rtParam$;
+  tdDialog$;
 
-  user;
-  project;
+  user: any = false;
+  project: any = false;
 
   newLane = {status: false, title: ''};
   newLaneTip = "Press RETURN to save";
@@ -145,7 +146,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   openEditLane(lane) {
-    this._tdDialog.openPrompt({
+    this.tdDialog$ = this._tdDialog.openPrompt({
       message: '',
       title: `Rename "${lane.title}" Lane`,
       value: `${lane.title}`,
@@ -169,7 +170,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     } else {
       message = `Are you sure you want to delete this "${lane.title}" lane?`
     }
-    this._tdDialog.openConfirm({
+    this.tdDialog$ = this._tdDialog.openConfirm({
       message: message,
       title: `Delete "${lane.title}" Lane`,
       acceptButton: 'Delete',
@@ -229,6 +230,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.project$.unsubscribe();
     this.drops$.unsubscribe();
     this.rtParam$.unsubscribe();
+    this.tdDialog$.unsubscribe();
   }
 
 }

@@ -23,13 +23,11 @@
 
 
 <mat-nav-list>
-
   <h3 matSubheader>Projects</h3>
   <span *ngFor="let project of projects">
-
   <mat-list-item id="project" (click)=goToProject(project)>
     <mat-icon [ngClass]="{txtAccent: project._id === current}" matListIcon>
-      dehaze
+      assignment
     </mat-icon>
     <span [ngClass]="{txtAccent: project._id === current}" matLine>
       {{project.title}}
@@ -40,14 +38,12 @@
         Goal: {{project.targetDate|date:'mediumDate'}}
       </span>
     </span>
-    <mat-icon class=edit>edit</mat-icon>
   </mat-list-item>
-
   </span>
-  <mat-divider></mat-divider>
-
 </mat-nav-list>
 
+<span *ngIf=user.isManager>
+<!-- <mat-divider></mat-divider> -->
 <mat-nav-list>
   <mat-list-item (click)=openNewProject()>
     <mat-icon>playlist_add</mat-icon>
@@ -55,3 +51,4 @@
     <span matLine></span>
   </mat-list-item>
 </mat-nav-list>
+</span>

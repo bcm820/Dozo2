@@ -13,7 +13,6 @@ require('./server/config/mongoose');
 const router = express.Router();
 require('./server/routes/auth.js')(router);
 require('./server/routes/user.js')(router);
-require('./server/routes/manager.js')(router);
 app.use('/api', router);
 
 // redirect all URL errors to Angular index

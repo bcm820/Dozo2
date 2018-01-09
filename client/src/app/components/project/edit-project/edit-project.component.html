@@ -1,3 +1,13 @@
-<p>
-  edit-project works!
-</p>
+
+<div layout=column layout-margin layout-padding>
+
+  <h2 mat-dialog-title align=center>Edit Project</h2>
+
+  <project-form
+  [project]=project
+  [action]=action
+  [users]=users
+  (send)=editProject($event)>
+  </project-form>
+
+</div>
