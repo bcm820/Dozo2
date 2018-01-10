@@ -39,7 +39,7 @@
             <span matLine>Delete Project</span>
         </mat-list-item>
     </span>
-    <mat-list-item *ngIf="user.agenda !== project._id">
+    <mat-list-item *ngIf="project.contributors?.length > 1">
         <mat-slide-toggle (click)=filterTasks()>
         <span matLine class=item> &nbsp; &nbsp; My Tasks Only</span>
         </mat-slide-toggle>

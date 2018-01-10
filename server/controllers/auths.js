@@ -90,8 +90,8 @@ module.exports = {
 
                     // create 'agenda' project
                     const agenda = new Project({
-                        title: 'Agenda',
-                        description:'My To Do List'
+                        title: 'My Agenda',
+                        description:'Add a description.'
                     });
                     user.agenda = agenda._id;
                     user.project_ids = [agenda._id];

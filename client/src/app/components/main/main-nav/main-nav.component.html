@@ -1,29 +1,6 @@
 
-
-
-<!-- <div class="example-container mat-elevation-z8">
-  <mat-table #table [dataSource]="dataSource" matSort>
-
-    <ng-container matColumnDef="name">
-      <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="weight">
-      <mat-header-cell *matHeaderCellDef mat-sort-header> Weight </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.weight}} </mat-cell>
-    </ng-container>
-
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-  </mat-table>
-</div> -->
-
-
-
-
 <mat-nav-list>
-  <h3 matSubheader>Projects</h3>
+  <h3 matSubheader>My Projects</h3>
   <span *ngFor="let project of projects">
   <mat-list-item id="project" (click)=goToProject(project)>
     <mat-icon [ngClass]="{txtAccent: project._id === current}" matListIcon>
@@ -43,7 +20,6 @@
 </mat-nav-list>
 
 <span *ngIf=user.isManager>
-<!-- <mat-divider></mat-divider> -->
 <mat-nav-list>
   <mat-list-item (click)=openNewProject()>
     <mat-icon>playlist_add</mat-icon>

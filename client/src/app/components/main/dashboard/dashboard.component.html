@@ -23,17 +23,18 @@
                     (click)="openDeleteTask(task._id)">
                     cancel
                 </mat-icon>
-
-                <svg class=handle
-                *ngIf="(task.contributor && user._id === task.contributor._id) && !filter
-                    || (task.creator && user._id === task.creator._id) && !filter"
-                xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="0 0 96 120" enable-background="new 0 0 96 96" xml:space="preserve"><polygon points="86.953,46.952 74.944,34.944 73.462,36.426 83.99,46.952 49.048,46.952 49.048,12.01 59.574,22.538 61.056,21.056   49.048,9.046 48,8 46.952,9.046 34.944,21.056 36.426,22.538 46.952,12.01 46.952,46.952 12.01,46.952 22.538,36.426 21.056,34.944   9.046,46.952 8,48 9.046,49.048 21.056,61.056 22.538,59.574 12.01,49.048 46.952,49.048 46.952,83.99 36.426,73.462 34.944,74.944   46.952,86.953 48,88 49.048,86.953 61.056,74.944 59.574,73.462 49.048,83.99 49.048,49.048 83.99,49.048 73.462,59.574   74.944,61.056 86.953,49.048 88,48 "/>
-                </svg>
-
                 <mat-card-content class=mat-card-button (click)=openEditTask(task)>
                 <span class="card-title">{{task.title}}</span>
                 <span class="card-subtitle">{{task.description}}</span>
                 </mat-card-content>
+                <svg class=handle
+                *ngIf="(task.contributor && user._id === task.contributor._id) && !filter
+                    || (task.creator && user._id === task.creator._id) && !filter; else noDrag"
+                xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="0 0 96 120" enable-background="new 0 0 96 96" xml:space="preserve"><polygon points="86.953,46.952 74.944,34.944 73.462,36.426 83.99,46.952 49.048,46.952 49.048,12.01 59.574,22.538 61.056,21.056   49.048,9.046 48,8 46.952,9.046 34.944,21.056 36.426,22.538 46.952,12.01 46.952,46.952 12.01,46.952 22.538,36.426 21.056,34.944   9.046,46.952 8,48 9.046,49.048 21.056,61.056 22.538,59.574 12.01,49.048 46.952,49.048 46.952,83.99 36.426,73.462 34.944,74.944   46.952,86.953 48,88 49.048,86.953 61.056,74.944 59.574,73.462 49.048,83.99 49.048,49.048 83.99,49.048 73.462,59.574   74.944,61.056 86.953,49.048 88,48 "/>
+                </svg>
+                <ng-template #noDrag>
+                    <div></div>
+                </ng-template>
             </mat-card>
         </div>
     </div>

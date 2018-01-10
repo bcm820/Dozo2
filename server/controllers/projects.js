@@ -116,6 +116,17 @@ module.exports = {
         Project.findByIdAndUpdate(req.params.id, req.body,
             {runValidators:true, new:true, context: 'query'})
         .then(project => {
+            if(project.contributor_ids.length > 0){
+                for(let id of project.contributor_ids){
+                    User.findById(id)
+                    .then(user => {
+                        user.project_ids.addToSet(project._id);
+                        user.save()
+                        .then(user => console.log(user.project_ids))
+                        .catch(err => console.log('Unable to update user'))
+                    })
+                }
+            }
             res.json(sendMsg(true, `"${project.title}" updated.`));
         })
     },

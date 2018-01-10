@@ -1,6 +1,8 @@
 <form #form=ngForm (submit)=sendTask()>
 
-<div mat-dialog-content>
+<div layout=row layout-padding>
+
+  <div flex=35>
 
     <mat-form-field>
       <input matInput placeholder="Title"
@@ -12,9 +14,9 @@
     </mat-form-field>
 
     <mat-form-field>
-      <textarea matInput placeholder="Description"
+      <textarea matInput placeholder="Short Description"
         name=description [(ngModel)]='task.description' #description='ngModel'
-        rows=3 maxlength=200></textarea>
+        rows=4 maxlength=100></textarea>
     </mat-form-field>
 
     <mat-form-field>
@@ -28,10 +30,14 @@
       </mat-select>
     </mat-form-field>
 
+  </div>
+
+  <div flex=65>
     <mat-form-field>
       <textarea matInput placeholder="Details" name=details
-        [(ngModel)]='task.details' #details='ngModel' rows=3></textarea>
+        [(ngModel)]='task.details' #details='ngModel' rows=12></textarea>
     </mat-form-field>
+  </div>
 
 </div>
 

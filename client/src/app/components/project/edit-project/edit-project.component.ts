@@ -19,7 +19,7 @@ export class EditProjectComponent implements OnInit {
     private snackbar: MatSnackBar,
     private _ps: ProjectService,
     private _us: UserService,
-    @Inject(MAT_DIALOG_DATA) private project
+    @Inject(MAT_DIALOG_DATA) public project
   ) {}
 
   ngOnInit() {

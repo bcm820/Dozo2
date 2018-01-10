@@ -4,7 +4,7 @@
 
   <!-- other attrs: logo="assets:logo" -->
   <td-navigation-drawer *ngIf=user.status flex sidenavTitle="{{dashboard}}" name="{{user.name}}" email="{{user.email}}" color=primary>
-    <app-main-nav #nav [user]=user></app-main-nav>
+    <app-main-nav [user]=user></app-main-nav>
     <div *ngIf=user.isManager td-navigation-drawer-menu>
       <app-main-nav2 [user]=user></app-main-nav2>
     </div>
@@ -17,7 +17,7 @@
       <mat-icon>menu</mat-icon>
     </button>
     <div td-sidenav-content>
-      <app-sidebar *ngIf=user.status [user]=user [nav]="nav"></app-sidebar>
+      <app-sidebar *ngIf=user.status [user]=user></app-sidebar>
     </div>
 
     <div td-toolbar-content layout="row" layout-align="center center" flex>

@@ -17,7 +17,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
   
   project$;
   @Input() user;
-  @Input() nav;
   
   project;
   filter = false; // only show assigned items
@@ -47,14 +46,16 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   openNewTask(){
     let dialogRef = this._dialog.open(NewTaskComponent, {
-      width: '500px',
+      width: '50%',
       data: {
         lane_id: this.project.grid[0]._id,
         contributors: this.project['contributors']
       }
     });
     dialogRef.beforeClose().subscribe(result => {
-      if(result) this._ps.updateProject(this.project._id);
+      if(result){
+        this._ps.updateProject(this.project._id);
+      }
     });
   }
 
@@ -64,16 +65,28 @@ export class SidebarComponent implements OnInit, OnDestroy {
       data: this.project
     });
     dialogRef.beforeClose().subscribe(result => {
-      if(result) this._ps.updateProject(this.project._id);
+      if(result){
+        console.log(result);
+        this._ps.updateProject(this.project._id);
+      }
     });
   }
 
   deleteProject(){
-    this._ps.remove(this.project._id)
-    .subscribe(result => {
-      this._router.navigate(['dashboard']);
-      this._ps.getUserProjects();
-    })
+    this._tdDialog.openConfirm({
+      message: `Are you sure you want to delete "${this.project.title}"?`,
+      title: `Delete "${this.project.title}" Lane`,
+      acceptButton: 'Delete',
+    }).afterClosed().subscribe((accept) => {
+      if(accept) {
+        this._ps.remove(this.project._id)
+        .subscribe(result => {
+          console.log(result);
+          this._router.navigate(['dashboard']);
+          this._ps.getUserProjects();
+        })
+      }
+    });
   }
 
   renameAgenda(){

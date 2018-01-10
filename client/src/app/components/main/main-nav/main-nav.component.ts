@@ -35,7 +35,7 @@ export class MainNavComponent implements OnInit {
 
   openNewProject(){
     let dialogRef = this._dialog.open(NewProjectComponent, {
-      width: '500px',
+      width: '600px',
       data: this.user
     });
     dialogRef.beforeClose().subscribe(result => {
