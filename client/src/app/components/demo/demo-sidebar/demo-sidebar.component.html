@@ -1,0 +1,28 @@
+<mat-list>
+    <mat-list-item>
+        <h4 matLine><strong>Welcome to Dozo!</strong></h4>
+    </mat-list-item>
+    <span>
+        <div class=info>
+          This is a demo version of Dozo. In this demo, you can can add items to the board, edit them, and drag them from one lane to the next.
+          <br><br>
+          Feel free to sign up for an account using the bottom at the top-right corner of the page. By signing up, you'll have access to additional features.
+          <br><br>
+          To get started, click the first button below to clear the board, and then click the next button to add your first task.
+        <br><br>
+        </div>
+    </span>
+    <mat-divider></mat-divider>
+</mat-list>
+
+<mat-nav-list>
+  <mat-list-item (click)=clearBoard()>
+    <mat-icon matListIcon>clear_all</mat-icon>
+    <span matLine>Clear Board</span>
+  </mat-list-item>
+  <mat-list-item (click)=openNewTask()>
+    <svg matListIcon class=add matListIcon xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" viewBox="0 0 511.99998 639.999975" version="1.1" x="0px" y="0px"><g transform="translate(-88.749289,-131.31133)"><path style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:11.95540333;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" d="M 256 0 A 256 256 0 0 0 0 256 A 256 256 0 0 0 256 512 A 256 256 0 0 0 512 256 A 256 256 0 0 0 256 0 z M 256 96.427734 C 259.45322 96.427734 267.23241 99.208879 267.23242 102.66211 L 267.23242 244.76758 L 409.33789 244.76758 C 412.79076 244.71898 415.57227 252.54677 415.57227 256 C 415.57227 259.45322 412.79111 267.23242 409.33789 267.23242 L 267.23242 267.23242 L 267.23242 409.33789 C 267.28033 412.79078 259.45322 415.57227 256 415.57227 C 252.54677 415.57227 244.76758 412.79111 244.76758 409.33789 L 244.76758 267.23242 L 102.66211 267.23242 C 99.209229 267.28102 96.427734 259.45322 96.427734 256 C 96.427734 252.54677 99.208879 244.76758 102.66211 244.76758 L 244.76758 244.76758 L 244.76758 102.66211 C 244.71966 99.209209 252.54677 96.427734 256 96.427734 z " transform="translate(88.749289,131.31133)"/></g></svg>
+    <mat-icon matListIcon></mat-icon>
+    <span matLine>Add an Item</span>
+  </mat-list-item>
+</mat-nav-list>

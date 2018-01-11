@@ -11,12 +11,13 @@
   </td-navigation-drawer>
 
   <!-- For individual project pages, have a stationary list on the side? -->
-  <!-- other attrs:  navigationRoute="/", logo="assets:logo",  toolbarTitle="Title" -->
-  <td-layout-nav-list opened={{user.status}} mode=side sidenavWidth=225px>
-    <button mat-icon-button td-menu-button tdLayoutToggle matTooltip="Dashboard">
+  <!-- other attrs:  navigationRoute="/", logo="assets:logo" -->
+  <td-layout-nav-list opened=true mode=side sidenavWidth=225px toolbarTitle="Dozo">
+    <button *ngIf=user.status mat-icon-button td-menu-button tdLayoutToggle matTooltip="Dashboard">
       <mat-icon>menu</mat-icon>
     </button>
     <div td-sidenav-content>
+      <app-demo-sidebar *ngIf=!user.status></app-demo-sidebar>
       <app-sidebar *ngIf=user.status [user]=user></app-sidebar>
     </div>
 
@@ -24,7 +25,6 @@
       <a *ngIf=user.status mat-icon-button tdLayoutNavListToggle>
         <mat-icon matTooltip="Show / Hide">chrome_reader_mode</mat-icon>
       </a>
-      <h1 *ngIf=!user.status>Dozo</h1>
       <span flex></span>
       <span *ngIf=!user.status>
         <a mat-icon-button matTooltip="Log In" (click)=openLogIn()><mat-icon>exit_to_app</mat-icon></a>
@@ -39,7 +39,11 @@
     <td-layout-footer color="primary">
       <div layout=row layout-margin>
         <div flex class=footer>Copyright © 2017</div>
-        <div flex align=right class=footer>Powered by Dozo</div>
+        <div flex align=right class=footer>
+          <a href="https://www.linkedin.com/in/bcmendoza/"><img src="assets/linkedin.png"></a> &nbsp;
+          <a href="https://github.com/bcmendoza"><img src="assets/github.png"></a> &nbsp;
+          <a href="mailto:bcmendoza@gmail.com"><mat-icon class=email>email</mat-icon></a>
+        </div>
       </div>
     </td-layout-footer>
   </td-layout-nav-list>

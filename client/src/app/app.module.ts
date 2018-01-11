@@ -20,6 +20,10 @@ import { TaskService } from './services/task.service';
 // AppComponent
 import { AppComponent } from './components/app.component';
 
+// Demo Components
+import { DemoComponent } from './components/demo/demo.component';
+import { DemoSidebarComponent } from './components/demo/demo-sidebar/demo-sidebar.component';
+
 // Auth Components
 import { UserFormComponent } from './components/auth/user-form/user-form.component';
 import { RegisterComponent } from './components/auth/register/register.component';
@@ -32,7 +36,6 @@ import { MainComponent } from './components/main/main.component';
 import { MainNavComponent } from './components/main/main-nav/main-nav.component';
 import { MainNav2Component } from './components/main/main-nav2/main-nav2.component';
 import { SidebarComponent } from './components/main/sidebar/sidebar.component';
-import { LandingComponent } from './components/main/landing/landing.component';
 import { DashboardComponent } from './components/main/dashboard/dashboard.component';
 
 // Project Components
@@ -51,9 +54,9 @@ import { EditTaskComponent } from './components/task/edit-task/edit-task.compone
     AppComponent,
     RegisterComponent,
     LoginComponent,
-    LandingComponent,
     AccountComponent,
     DashboardComponent,
+    DemoComponent,
     UserFormComponent,
     MainNavComponent,
     MainComponent,
@@ -66,6 +69,7 @@ import { EditTaskComponent } from './components/task/edit-task/edit-task.compone
     TaskFormComponent,
     EditProjectComponent,
     EditTaskComponent,
+    DemoSidebarComponent,
   ],
   imports: [
     MaterialModule,

@@ -1,13 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material';
-import { NewTaskComponent } from '../../task/new-task/new-task.component';
 import { EditTaskComponent } from '../../task/edit-task/edit-task.component';
 import { ProjectService } from '../../../services/project.service';
 import { TaskService } from '../../../services/task.service';
 import { DragulaService } from 'ng2-dragula';
 import { UserService } from '../../../services/user.service';
 import { FormControl } from '@angular/forms';
-import { ViewContainerRef } from '@angular/core';
 import { TdDialogService } from '@covalent/core';
 import { ActivatedRoute } from '@angular/router';
 
@@ -36,8 +34,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private _ds: DragulaService,
     private _route: ActivatedRoute,
     private _dialog: MatDialog,
-    private _tdDialog: TdDialogService,
-    private _tdDialogRef: ViewContainerRef
+    private _tdDialog: TdDialogService
   ){}
 
   ngOnInit() {

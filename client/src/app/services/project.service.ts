@@ -7,11 +7,13 @@ export class ProjectService implements OnDestroy {
 
   constructor(private _http: HttpClient) { }
 
-  // store current project
-  // if none, log out!
   project$ = new Subject();
   projects$ = new Subject();
 
+  updateDemo(demo){
+    this.project$.next(demo);
+  }
+  
   updateProject(id){
     this._http.get(`/api/projects/${id}`)
     .subscribe(project => {
