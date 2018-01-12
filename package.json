@@ -5,7 +5,7 @@
     "start": "nodemon server.js"
   },
   "dependencies": {
-    "bcrypt-as-promised": "^1.1.0",
+    "bcrypt": "^1.0.3",
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
     "express-session": "^1.15.6",
