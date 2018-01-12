@@ -1,15 +1,11 @@
 
-<div *ngIf="userID === task.creator._id" layout=column>
+<h2 mat-dialog-title align=center>Update Item</h2>
 
-    <h2 mat-dialog-title align=center>Update Item</h2>
-
-    <task-form
-    [task]=task
-    [action]=action
-    [contributors]=contributors
-    (send)=updateTask($event)
-    ></task-form>
-
-</div>
-
-<td-json-formatter *ngIf="userID !== task.creator._id" [data]="task" [levelsOpen]="1"></td-json-formatter>
+<task-form
+[ownerID]=ownerID
+[userID]=userID
+[task]=task
+[action]=action
+[contributors]=contributors
+(send)=updateTask($event)
+></task-form>

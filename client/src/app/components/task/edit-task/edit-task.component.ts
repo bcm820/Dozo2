@@ -12,7 +12,8 @@ export class EditTaskComponent implements OnInit {
   action = 'Save Changes';
   task;
   contributors;
-  userID; // compare against task creator to see if they can update
+  userID;
+  ownerID;
   
   constructor(
     private dialog: MatDialogRef<EditTaskComponent>,
@@ -24,6 +25,7 @@ export class EditTaskComponent implements OnInit {
   ngOnInit() {
     this.task = this.data.task;
     this.userID = this.data.userID;
+    this.ownerID = this.data.ownerID;
     this.contributors = this.data.contributors;
   }
 

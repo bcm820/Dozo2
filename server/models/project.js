@@ -7,13 +7,11 @@ const ProjectSchema = new Schema({
     
     title: { type: String, required: [true] },
     description: { type: String },
+    type: { type: String, enum: ['Team', 'Individual'] },
+    pw: { type: String },
     startDate: { type: Date },
     targetDate: { type: Date },
-
-    endDate: { type: Date },
-    // mark as done, archive to list
-    // for last lane in column, show option to archive
-    // *ngIf=!(nextlane) - do this for each lane
+    endDate: { type: Date }, // add later
 
     creator: { type: Object, ref: 'User' },
     contributor_ids: [{ type: Object }],

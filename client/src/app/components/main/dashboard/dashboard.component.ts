@@ -84,36 +84,31 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   onDrop(args) {
 
-    if(args[0].id !== 'project'){
+    /*
+      let [task,
+        newLane,
+        oldLane,
+        next] = args;
+    */
+    
+    const [lane, i1] = args[2].id.split('-');
+    const [newLane, i2] = args[1].id.split('-');
+    const [task, j1] = args[0].id.split('-');
+    let n, j2;
+    if(args[3]) [n, j2] = args[3].id.split('-');
+    let grid_ids = this.getGrid();
 
-      /*
-        let [task,
-          newLane,
-          oldLane,
-          next] = args;
-      */
-      
-      const [lane, i1] = args[2].id.split('-');
-      const [newLane, i2] = args[1].id.split('-');
-      const [task, j1] = args[0].id.split('-');
-
-      let n, j2;
-      if(args[3]) [n, j2] = args[3].id.split('-');
-
-      let grid_ids = this.getGrid();
-  
-      grid_ids[i1].splice(j1, 1);
-      if(j2) grid_ids[i2].splice(j2, 0, task);
-      else grid_ids[i2].push(task);
-
-      this._ts.updateLaneTasks(grid_ids[i1], lane)
+    grid_ids[i1].splice(j1, 1);
+    if(j2) grid_ids[i2].splice(j2, 0, task);
+    else grid_ids[i2].push(task);
+    this._ts.updateLaneTasks(grid_ids[i1], lane)
+    .subscribe(result => {
+      this._ts.updateLaneTasks(grid_ids[i2], newLane)
       .subscribe(result => {
-        this._ts.updateLaneTasks(grid_ids[i2], newLane)
-        .subscribe(result => {
-          this._ps.updateProject(this.project._id);
-        });
+        this._ps.updateProject(this.project._id);
       });
-    }
+    });
+    
   }
 
   getLaneTaskIDs(lane){
@@ -196,6 +191,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       data: {
         task: task,
         userID: this.user._id,
+        ownerID: this.project['creator']._id,
         contributors: this.project['contributors']
       }
     });

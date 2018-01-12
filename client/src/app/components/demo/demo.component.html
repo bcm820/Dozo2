@@ -8,8 +8,8 @@
             </mat-card-title>
         </mat-card>
         <div class=drag [dragula]='"lane"'>
-            <mat-card class=mat-card-button *ngFor="let task of lane.tasks, let j = index" id={{j}}>
-                <mat-card-content class=mat-card-button (click)=openEditTask(task)>
+            <mat-card class=mat-card-button *ngFor="let task of lane.tasks, let j = index" id={{j}} (click)=openEditTask(task)>
+                <mat-card-content class=mat-card-button>
                 <span class="card-title">{{task.title}}</span>
                 <span class="card-subtitle">{{task.description}}</span>
                 </mat-card-content>

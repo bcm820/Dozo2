@@ -23,13 +23,15 @@ import { AppComponent } from './components/app.component';
 // Demo Components
 import { DemoComponent } from './components/demo/demo.component';
 import { DemoSidebarComponent } from './components/demo/demo-sidebar/demo-sidebar.component';
+import { DemoFormComponent } from './components/demo/demo-form/demo-form.component';
+import { DemoAddComponent } from './components/demo/demo-add/demo-add.component';
+import { DemoEditComponent } from './components/demo/demo-edit/demo-edit.component';
 
 // Auth Components
 import { UserFormComponent } from './components/auth/user-form/user-form.component';
 import { RegisterComponent } from './components/auth/register/register.component';
 import { AccountComponent } from './components/auth/account/account.component';
 import { LoginComponent } from './components/auth/login/login.component';
-import { ProfileComponent } from './components/auth/profile/profile.component';
 
 // Layout Components
 import { MainComponent } from './components/main/main.component';
@@ -42,6 +44,7 @@ import { DashboardComponent } from './components/main/dashboard/dashboard.compon
 import { ProjectFormComponent } from './components/project/project-form/project-form.component';
 import { NewProjectComponent } from './components/project/new-project/new-project.component';
 import { EditProjectComponent } from './components/project/edit-project/edit-project.component';
+import { JoinProjectComponent } from './components/project/join-project/join-project.component';
 
 // Task Components
 import { TaskFormComponent } from './components/task/task-form/task-form.component';
@@ -61,7 +64,7 @@ import { EditTaskComponent } from './components/task/edit-task/edit-task.compone
     MainNavComponent,
     MainComponent,
     ProjectFormComponent,
-    ProfileComponent,
+    JoinProjectComponent,
     MainNav2Component,
     SidebarComponent,
     NewProjectComponent,
@@ -70,6 +73,9 @@ import { EditTaskComponent } from './components/task/edit-task/edit-task.compone
     EditProjectComponent,
     EditTaskComponent,
     DemoSidebarComponent,
+    DemoFormComponent,
+    DemoAddComponent,
+    DemoEditComponent,
   ],
   imports: [
     MaterialModule,
@@ -86,11 +92,13 @@ import { EditTaskComponent } from './components/task/edit-task/edit-task.compone
     RegisterComponent,
     LoginComponent,
     AccountComponent,
-    ProfileComponent,
+    JoinProjectComponent,
     NewProjectComponent,
     NewTaskComponent,
     EditProjectComponent,
     EditTaskComponent,
+    DemoAddComponent,
+    DemoEditComponent
   ],
   providers: [
     UserService,

@@ -10,9 +10,11 @@ import { TaskService } from '../../../services/task.service';
 export class NewTaskComponent implements OnInit {
 
   task = { title:'', description:'', details:'', contributor:'' }
-  lane_id;
+  userID;
+  ownerID;
   contributors;
-  action = 'Add'
+  lane_id;
+  action = 'Add Item';
 
   constructor(
     private dialog: MatDialogRef<NewTaskComponent>,
@@ -24,9 +26,13 @@ export class NewTaskComponent implements OnInit {
   ngOnInit(){
     this.lane_id = this.data.lane_id;
     this.contributors = this.data.contributors;
+    this.ownerID = this.data.ownerID;
+    this.userID = this.data.userID;
   }
 
   createTask(task){
+    if(this.ownerID !== this.userID)
+      this.task.contributor = this.userID;
     this._ts.createTask(task, this.lane_id)
       .subscribe(result => {
         this.snackbar.open(result['msg'], 'x', {duration: 3000});

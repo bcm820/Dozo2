@@ -1,0 +1,29 @@
+
+<span *ngIf="project">
+
+<form (submit)=joinProject()>
+
+<div mat-dialog-content>
+
+    <h2 mat-dialog-title align=center>Join "{{project.title}}"</h2>
+
+    <mat-form-field>
+      <input [type]="hidePW ? 'password' : 'text'"
+        matInput placeholder="Password"
+        name=pw [(ngModel)]='attempt.pw' #pw='ngModel'>
+      <mat-icon matSuffix (click)="hidePW = !hidePW">
+        {{hidePW ? 'visibility' : 'visibility_off'}}
+      </mat-icon>
+        <mat-hint align=end>Enter password to gain access.</mat-hint>
+    </mat-form-field>
+
+</div>
+
+<div mat-dialog-actions align=center>
+  <button type=submit mat-raised-button color=accent>Join</button>
+</div>
+
+</form>
+
+</span>
+

@@ -2,7 +2,7 @@
 <mat-nav-list>
   <h3 matSubheader>My Projects</h3>
   <span *ngFor="let project of projects">
-  <mat-list-item id="project" (click)=goToProject(project)>
+  <mat-list-item (click)=goToProject(project)>
     <mat-icon [ngClass]="{txtAccent: project._id === current}" matListIcon>
       assignment
     </mat-icon>
@@ -19,7 +19,7 @@
   </span>
 </mat-nav-list>
 
-<span *ngIf=user.isManager>
+<span>
 <mat-nav-list>
   <mat-list-item (click)=openNewProject()>
     <mat-icon>playlist_add</mat-icon>

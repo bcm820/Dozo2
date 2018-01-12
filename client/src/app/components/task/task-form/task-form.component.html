@@ -19,7 +19,7 @@
         rows=4 maxlength=100></textarea>
     </mat-form-field>
 
-    <mat-form-field>
+    <mat-form-field *ngIf="ownerID === userID">
       <mat-select *ngIf=task.contributor name=contributor
         [(ngModel)]='task.contributor' #contributor='ngModel' placeholder="Assigned to {{task.contributor.name}}">
         <mat-option *ngFor="let contributor of contributors" value="{{contributor._id}}">{{contributor.name}}</mat-option>

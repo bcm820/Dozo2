@@ -13,10 +13,15 @@ function sendMsg(status, msg){
 
 module.exports = {
     
+    list(req, res){
+        Project.find({type:'Team', contributor_ids:{$nin:[req.session.uid]}})
+        .then(projects => res.json(projects));
+    },
+    
     getUserProjects(req, res){
         User.findById(req.session.uid, {project_ids:1})
         .populate('projects')
-        .then(projects => res.json(projects))
+        .then(projects => res.json(projects));
     },
 
     create(req, res){
@@ -116,28 +121,23 @@ module.exports = {
         Project.findByIdAndUpdate(req.params.id, req.body,
             {runValidators:true, new:true, context: 'query'})
         .then(project => {
-            if(project.contributor_ids.length > 0){
-                for(let id of project.contributor_ids){
-                    User.findById(id)
-                    .then(user => {
-                        user.project_ids.addToSet(project._id);
-                        user.save()
-                        .then(user => console.log(user.project_ids))
-                        .catch(err => console.log('Unable to update user'))
-                    })
-                }
-            }
             res.json(sendMsg(true, `"${project.title}" updated.`));
         })
     },
 
-    // for updating lane order
-    updateGrid(req, res){
+    join(req, res){
         Project.findById(req.params.id)
         .then(project => {
-            project.grid_ids = req.body;
+            project.contributor_ids.push(req.session.uid);
             project.save()
-            .then(lane => res.json(true));
+            .then(project => {
+                User.findById(req.session.uid)
+                .then(user => {
+                    user.project_ids.push(project._id);
+                    user.save()
+                    .then(user => res.json(sendMsg(true, `"${project.title}" added to your list!`)))
+                })
+            })
         })
     },
 

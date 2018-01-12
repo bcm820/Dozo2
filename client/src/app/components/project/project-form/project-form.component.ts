@@ -11,9 +11,10 @@ export class ProjectFormComponent implements OnInit {
 
   @Input() project;
   @Input() action;
-  @Input() users;
+  @Input() user;
   @Output() send = new EventEmitter;
   minDate = new Date();
+  hidePW = true;
   
   constructor(private _ps: ProjectService) { }
 

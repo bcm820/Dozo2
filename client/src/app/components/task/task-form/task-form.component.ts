@@ -10,13 +10,15 @@ import { UserService } from '../../../services/user.service';
 })
 export class TaskFormComponent {
 
+  @Input() ownerID;
+  @Input() userID;
   @Input() task;
   @Input() action;
   @Input() contributors;
   @Output() send = new EventEmitter;
   
   constructor(private _ts: TaskService, private _us: UserService) {}
-
+  
   sendTask(){
     this.send.emit(this.task);
   }

@@ -14,34 +14,16 @@ import { AccountComponent } from '.././auth/account/account.component';
 export class MainComponent implements OnInit {
 
   user: any = {status: false}
-  title;
-  dashboard = "Project Dashboard";
-  show = true;
 
   constructor(
     private dialog: MatDialog,
     private snackbar: MatSnackBar,
     private _us: UserService,
-    private _router: Router
+    public _router: Router
   ){}
 
   ngOnInit(){
     this.getStatus();
-  }
-
-  showSidebar(){
-    if(this.show){
-      this.show = false;
-      console.log('hide')
-    }
-    else if(!this.show){
-      this.show = true;
-      console.log('show')
-    }
-  }
-
-  updateTitle(title){
-    this.title = title;
   }
 
   getStatus(){
@@ -50,8 +32,6 @@ export class MainComponent implements OnInit {
       .subscribe(result => {
         if(!result['status']) this._router.navigate(['']);
         this.user = result;
-        if(this.user.isManager)
-          this.dashboard = "Manager Dashboard";
       });
   }
   

@@ -16,19 +16,20 @@ module.exports = (router) => {
 
     router.get('/users', users.list);
     router.get('/users/:id', users.lookup);
-    router.post('/m/users/:id', users.promote)
 
     router.route('/projects')
     .get(projects.getUserProjects)
     .post(projects.create)
     .put(projects.updateUserProjects)
 
+    router.get('/projects/list', projects.list)
+
     router.get('/projects/agenda', projects.getAgenda)
     
     router.route('/projects/:id')
     .get(projects.lookup)
     .post(projects.update)
-    .put(projects.updateGrid)
+    .put(projects.join)
     .delete(projects.remove)
 
     router.get('/projects/:id/filter', projects.filter)

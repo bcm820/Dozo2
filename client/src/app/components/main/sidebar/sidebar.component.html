@@ -1,7 +1,7 @@
 
 <!-- <td-json-formatter [data]="project" [levelsOpen]="1"></td-json-formatter> -->
 
-<span *ngIf="project">
+<span *ngIf="user.status && project">
 
 <mat-list>
     <mat-list-item>
@@ -29,7 +29,7 @@
         <mat-icon matListIcon></mat-icon>
         <span matLine>Add an Item</span>
     </mat-list-item>
-    <span *ngIf="user.isManager && user.agenda !== project._id">
+    <span *ngIf="project.creator && project.creator._id === user._id && user.agenda !== project._id">
         <mat-list-item (click)=openEditProject()>
             <mat-icon matListIcon>edit</mat-icon>
             <span matLine>Edit Project</span>

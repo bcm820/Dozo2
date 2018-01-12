@@ -2,6 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { ProjectService } from '../../../services/project.service';
 import { DragulaService } from 'ng2-dragula';
+import { DemoAddComponent } from '../demo-add/demo-add.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-demo-sidebar',
@@ -13,7 +15,11 @@ export class DemoSidebarComponent implements OnInit {
   project$;
   project;
   
-  constructor(private _ps: ProjectService) { }
+  constructor(
+    private _ps: ProjectService,
+    private _dialog: MatDialog,
+    private _router: Router
+  ) { }
 
   ngOnInit() {
     this.project$ = this._ps.project$
@@ -32,8 +38,11 @@ export class DemoSidebarComponent implements OnInit {
     this._ps.updateDemo(this.project);
   }
 
-  openNewTask(){
-    // open modal!
+  addDemoItem(){
+    this._dialog.open(DemoAddComponent, {
+      width: '400px',
+      data: this.project
+    });
   }
 
 }

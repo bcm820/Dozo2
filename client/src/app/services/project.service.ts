@@ -9,6 +9,7 @@ export class ProjectService implements OnDestroy {
 
   project$ = new Subject();
   projects$ = new Subject();
+  team_projects$ = new Subject();
 
   updateDemo(demo){
     this.project$.next(demo);
@@ -36,9 +37,16 @@ export class ProjectService implements OnDestroy {
   }
 
   getUserProjects(){
-    return this._http.get('/api/projects')
+    this._http.get('/api/projects')
     .subscribe(projects => {
       this.projects$.next(projects);
+    })
+  }
+
+  list(){
+    this._http.get('api/projects/list')
+    .subscribe(projects => {
+      this.team_projects$.next(projects);
     })
   }
 
@@ -54,8 +62,8 @@ export class ProjectService implements OnDestroy {
     return this._http.post(`/api/projects/${project._id}`, project);
   }
 
-  updateGrid(id, grid_ids){
-    return this._http.put(`/api/projects/${id}`, grid_ids);
+  join(id){
+    return this._http.put(`/api/projects/${id}`, null);
   }
 
   remove(id){
@@ -64,6 +72,8 @@ export class ProjectService implements OnDestroy {
 
   ngOnDestroy(){
     this.project$.unsubscribe();
+    this.projects$.unsubscribe();
+    this.team_projects$.unsubscribe();
   }
 
 }

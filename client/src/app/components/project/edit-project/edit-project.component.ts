@@ -12,18 +12,15 @@ import { UserService } from '../../../services/user.service';
 export class EditProjectComponent implements OnInit {
 
   action = 'Update Project';
-  users;
 
   constructor(
     private dialog: MatDialogRef<EditProjectComponent>,
     private snackbar: MatSnackBar,
     private _ps: ProjectService,
-    private _us: UserService,
     @Inject(MAT_DIALOG_DATA) public project
   ) {}
 
   ngOnInit() {
-    this.users = this._us.list();
   }
 
   editProject(project){

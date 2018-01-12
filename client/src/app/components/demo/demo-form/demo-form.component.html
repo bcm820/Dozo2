@@ -1,0 +1,27 @@
+<form #form=ngForm (submit)=sendTask()>
+
+<div layout=column layout-padding>
+
+  <mat-form-field>
+    <input matInput placeholder="Title"
+      name=title [(ngModel)]='task.title' #title='ngModel'
+      required maxlength=40>
+      <mat-error *ngIf=title.errors [hidden]=!title.errors.required align=right>
+        A title is required.
+      </mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <textarea matInput placeholder="Description"
+      name=description [(ngModel)]='task.description' #description='ngModel'
+      rows=4 maxlength=500></textarea>
+  </mat-form-field>
+
+  <div mat-dialog-actions align=center>
+  <button mat-raised-button *ngIf=!form.valid disabled>{{action}}</button>
+  <button type=submit mat-raised-button color=accent *ngIf=form.valid>{{action}}</button>
+  </div>
+
+</div>
+
+</form>

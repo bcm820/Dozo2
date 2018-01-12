@@ -1,13 +1,16 @@
 
 <mat-nav-list>
-
-  <h3 matSubheader>Profiles</h3>
-  <span *ngFor="let user of users|async">
-    <a mat-list-item (click)=viewUser(user._id)>
-      <mat-icon matListIcon>person</mat-icon>
-      <span matLine>{{user.name}}</span>
-      <span matLine>{{user.email}}</span>
-    </a>
+  <h3 matSubheader>All Projects Available</h3>
+  <span *ngFor="let project of projects">
+    <mat-list-item (click)=openJoinProject(project)>
+      <mat-icon matListIcon>assignment</mat-icon>
+      <span matLine>{{project.title}}</span>
+    </mat-list-item>
   </span>
-  
+  <mat-list-item *ngIf="projects?.length === 0">
+    <mat-icon matListIcon>cancel</mat-icon>
+    <span matLine>No Projects Available</span>
+  </mat-list-item>
 </mat-nav-list>
+
+<!-- <td-json-formatter [data]="projects" [levelsOpen]="1"></td-json-formatter> -->

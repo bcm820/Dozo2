@@ -1,8 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material';
-import { EditTaskComponent } from '../task/edit-task/edit-task.component';
+import { DemoEditComponent } from '../demo/demo-edit/demo-edit.component';
 import { ProjectService } from '../../services/project.service';
 import { DragulaService } from 'ng2-dragula';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-demo',
@@ -11,6 +12,7 @@ import { DragulaService } from 'ng2-dragula';
 })
 export class DemoComponent implements OnInit, OnDestroy {
 
+  user$;
   project$;
   project: any = {
     grid: [
@@ -20,7 +22,7 @@ export class DemoComponent implements OnInit, OnDestroy {
           {title: "A Project Visualization Tool",
           description: "Dozo uses simple Kanban boards for seamless project workflows. Use it to plan, assign, and track each step throughout the course of a project. I used it to track a lot of my progress in building this app!"},
           {title: "Disclaimer!",
-          description: "Dozo's simple interface that likely won't meet every need of most Scrum / Agile practicioners and teams. But it makes for a good introduction! Also, it ideally works well as an internal application. As a public site, it currently lacks the ability to manage multiple group permissions."}
+          description: "Dozo's simple interface that likely won't meet every need of most Scrum / Agile practicioners and teams. But it makes for a good introduction!"}
         ]
       },
       { title: "Credits", tasks: [
@@ -33,9 +35,9 @@ export class DemoComponent implements OnInit, OnDestroy {
       ] },
       { title: "About Me", tasks: [
         {title: "Full-Stack Developer",
-        description: "I'm Brian, a full stack web developer in the Washington D.C. area. I'm able to work with various web frameworks in JavaScript, Python, and Java, but I'm always looking to learn more!"},
+        description: "I'm Brian, a full stack web developer in the Washington D.C. area. I'm able to work with various web frameworks in JavaScript, Python, and Java, and I'm always looking to learn more!"},
         {title: "Looking for a developer?",
-        description: "Shameless plug! If you like what you see and think I might fit your company well, I'd love to hear from you! Please use the links at the bottom-right corner of the page to view my LinkedIn and GitHub, or to send me an email."}
+        description: "If you like what you see and would like to collaborate with me, I'd love to hear from you! Please use the links at the bottom-right corner of the page to view my LinkedIn and GitHub, or to send me an email."}
       ] },
       { title: "Thanks!",
         tasks: [
@@ -51,7 +53,8 @@ export class DemoComponent implements OnInit, OnDestroy {
   constructor(
     private _ps: ProjectService,
     private _ds: DragulaService,
-    private _dialog: MatDialog
+    private _dialog: MatDialog,
+    private _router: Router
   ){}
 
   ngOnInit() {
@@ -61,17 +64,9 @@ export class DemoComponent implements OnInit, OnDestroy {
   }
 
   openEditTask(task){
-    let dialogRef = this._dialog.open(EditTaskComponent, {
-      width: '50%',
-      data: {
-        task: task,
-        contributors: this.project['contributors']
-      }
-    });
-    dialogRef.beforeClose().subscribe(result => {
-      if(result){
-        this._ps.updateProject(this.project._id);
-      }
+    let dialogRef = this._dialog.open(DemoEditComponent, {
+      width: '400px',
+      data: task
     });
   }
 

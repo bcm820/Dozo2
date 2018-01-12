@@ -1,33 +1,40 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { UserService } from '../../../services/user.service';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { ProjectService } from '../../../services/project.service';
+import { JoinProjectComponent } from '../../project/join-project/join-project.component';
 import { MatDialog } from '@angular/material';
-import { ProfileComponent } from '../../auth/profile/profile.component';
 
 @Component({
   selector: 'app-main-nav2',
   templateUrl: './main-nav2.component.html',
   styleUrls: ['./main-nav2.component.css']
 })
-export class MainNav2Component implements OnInit {
+export class MainNav2Component implements OnInit, OnDestroy {
 
   @Input() user;
-  users;
+  projects$;
+  projects;
   
   constructor(
-    private _us: UserService,
+    private _ps: ProjectService,
     private dialog: MatDialog
   ) { }
 
   ngOnInit() {
-    this.users = this._us.list();
+    this._ps.list();
+    this.projects$ = this._ps.team_projects$
+    .subscribe(projects => this.projects = projects);
   }
 
-  viewUser(id){
-    this.dialog.open(ProfileComponent, {
+  openJoinProject(project){
+    this.dialog.open(JoinProjectComponent, {
       width:'500px',
-      data: { id: id, user: this.user },
+      data: project,
       autoFocus: false
     })
+  }
+
+  ngOnDestroy(){
+    this.projects$.unsubscribe();
   }
 
 }

@@ -22,7 +22,7 @@
         </mat-error>
     </mat-form-field>
 
-    <mat-form-field>
+    <mat-form-field *ngIf="action === 'Create Project' || (project.startDate !== '' && minDate < project.startDate)">
       <input matInput [matDatepicker]="startDate" placeholder="Start Date"
         name=startDate [(ngModel)]='project.startDate'
         #startDate='ngModel' required [min]="minDate">
@@ -38,12 +38,28 @@
       <mat-datepicker #targetDate touchUi=true [startAt]=project.start_date></mat-datepicker>
     </mat-form-field>
 
-    <mat-form-field>
-      <mat-select multiple name=contributor_ids [(ngModel)]='project.contributor_ids' #contributor_ids='ngModel' placeholder="Select Team Members">
-        <span *ngFor="let user of users|async">
-        <mat-option value="{{user._id}}">{{user.name}}</mat-option>
-        </span>
+    <mat-form-field *ngIf="action === 'Create Project'">
+      <mat-select name=type [(ngModel)]='project.type' #type='ngModel' placeholder="Project Type" required>
+        <mat-option value="Individual">Individual</mat-option>
+        <mat-option value="Team">Team</mat-option>
       </mat-select>
+      <mat-error align=right *ngIf=type.errors [hidden]=!type.errors.required>
+        Project type must be specified.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="project.type === 'Team'">
+      <input [type]="hidePW ? 'password' : 'text'"
+        matInput placeholder="Password"
+        name=pw [(ngModel)]='project.pw' #pw='ngModel'
+        required minlength=5>
+      <mat-icon matSuffix (click)="hidePW = !hidePW">
+        {{hidePW ? 'visibility' : 'visibility_off'}}
+      </mat-icon>
+        <mat-hint align=end>Minimum 5 characters</mat-hint>
+        <mat-error align=right *ngIf=pw.errors [hidden]=!pw.errors.minlength>
+          Must be 5 characters minimum.
+        </mat-error>
     </mat-form-field>
 
 </div>

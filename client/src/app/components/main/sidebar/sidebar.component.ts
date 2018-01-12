@@ -49,7 +49,9 @@ export class SidebarComponent implements OnInit, OnDestroy {
       width: '50%',
       data: {
         lane_id: this.project.grid[0]._id,
-        contributors: this.project['contributors']
+        contributors: this.project['contributors'],
+        userID: this.user._id,
+        ownerID: this.project['creator']._id
       }
     });
     dialogRef.beforeClose().subscribe(result => {
@@ -66,7 +68,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
     });
     dialogRef.beforeClose().subscribe(result => {
       if(result){
-        console.log(result);
         this._ps.updateProject(this.project._id);
       }
     });
@@ -96,7 +97,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
       value: `${this.project.title}`,
       acceptButton: 'Rename',
     }).afterClosed().subscribe(title => {
-      if(title.length > 2) {
+      if(title && title.length > 2) {
         this.project.title = title;
         this._ps.update(this.project)
         .subscribe(result => this._ps.getUserProjects());

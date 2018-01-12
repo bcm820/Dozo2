@@ -3,22 +3,22 @@
 <td-layout>
 
   <!-- other attrs: logo="assets:logo" -->
-  <td-navigation-drawer *ngIf=user.status flex sidenavTitle="{{dashboard}}" name="{{user.name}}" email="{{user.email}}" color=primary>
+  <td-navigation-drawer *ngIf=user.status flex sidenavTitle="Project Dashboard" name="{{user.name}}" email="{{user.email}}" color=primary>
     <app-main-nav [user]=user></app-main-nav>
-    <div *ngIf=user.isManager td-navigation-drawer-menu>
+    <div td-navigation-drawer-menu>
       <app-main-nav2 [user]=user></app-main-nav2>
     </div>
   </td-navigation-drawer>
 
   <!-- For individual project pages, have a stationary list on the side? -->
-  <!-- other attrs:  navigationRoute="/", logo="assets:logo" -->
-  <td-layout-nav-list opened=true mode=side sidenavWidth=225px toolbarTitle="Dozo">
+  <!-- other attrs: logo="assets:logo" -->
+  <td-layout-nav-list opened=true mode=side sidenavWidth=225px toolbarTitle="Dozo" navigationRoute="/">
     <button *ngIf=user.status mat-icon-button td-menu-button tdLayoutToggle matTooltip="Dashboard">
       <mat-icon>menu</mat-icon>
     </button>
     <div td-sidenav-content>
-      <app-demo-sidebar *ngIf=!user.status></app-demo-sidebar>
-      <app-sidebar *ngIf=user.status [user]=user></app-sidebar>
+      <app-demo-sidebar *ngIf="this._router.isActive('', true)"></app-demo-sidebar>
+      <app-sidebar *ngIf="!this._router.isActive('', true)" [user]=user></app-sidebar>
     </div>
 
     <div td-toolbar-content layout="row" layout-align="center center" flex>
@@ -37,11 +37,11 @@
     </div>
     <router-outlet></router-outlet>
     <td-layout-footer color="primary">
-      <div layout=row layout-margin>
+      <div layout=row>
         <div flex class=footer>Copyright © 2017</div>
         <div flex align=right class=footer>
-          <a href="https://www.linkedin.com/in/bcmendoza/"><img src="assets/linkedin.png"></a> &nbsp;
-          <a href="https://github.com/bcmendoza"><img src="assets/github.png"></a> &nbsp;
+          <a href="https://www.linkedin.com/in/bcmendoza/" target="_blank"><img src="assets/linkedin.png"></a> &nbsp;
+          <a href="https://github.com/bcmendoza" target="_blank"><img src="assets/github.png"></a> &nbsp;
           <a href="mailto:bcmendoza@gmail.com"><mat-icon class=email>email</mat-icon></a>
         </div>
       </div>
