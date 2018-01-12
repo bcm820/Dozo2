@@ -17,7 +17,7 @@ app.use('/api', router);
 
 // redirect all URL errors to Angular index
 const path = require('path');
-app.all("*", (req, res) => { res.sendFile(path.resolve("./client/dist/index.html")) });
+// app.all("*", (req, res) => { res.sendFile(path.resolve("./client/dist/index.html")) });
 
 // launch server
 app.listen(8000);
