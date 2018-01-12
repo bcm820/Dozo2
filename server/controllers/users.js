@@ -1,7 +1,7 @@
 
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 function sendMsg(type, msg){
     return {

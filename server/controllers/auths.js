@@ -3,7 +3,7 @@ const User = require('mongoose').model('User');
 const Project = require('mongoose').model('Project');
 const Lane = require('mongoose').model('Lane');
 const Task = require('mongoose').model('Task');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 function sendMsg(status, msg){
     return {
